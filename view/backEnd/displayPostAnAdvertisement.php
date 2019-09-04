@@ -104,7 +104,7 @@ ob_start();
                             <label for="contactNameForVisit" class="font-weight-bold">Nom du contact pour les
                                 visites</label>
                             <input id="contactNameForVisit" type="text" name="contactNameForVisit" class="form-control"
-                                placeholder="Nom">
+                                placeholder="Nom" required>
                         </div>
                         <!-- Telephone du contact pour les visites -->
                         <div class="form-group col-md-4">
@@ -112,14 +112,14 @@ ob_start();
                                 pour
                                 les visites</label>
                             <input id="contactPhoneNumberForVisit" type="tel" name="contactPhoneNumberForVisit"
-                                class="form-control" placeholder="Téléphone">
+                                class="form-control" placeholder="Téléphone" required>
                         </div>
                         <!-- Mail du contact pour les visites -->
                         <div class="form-group col-md-4">
                             <label for="contactMailForVisit" class="font-weight-bold">Mail du contact pour les
                                 visites</label>
                             <input id="contactMailForVisit" type="email" name="contactMailForVisit" class="form-control"
-                                placeholder="Mail">
+                                placeholder="Mail" required>
                         </div>
                     </div>
                     <div class="row">
@@ -127,7 +127,7 @@ ob_start();
                         <div class="form-group col-md-4">
                             <label for="renterSituation" class="font-weight-bold">Situation du loueur </label>
                             <select id="renterSituation" name="renterSituation" class="custom-select">
-                                <option value="Propriétaire">Propriétaire</option>
+                                <option value="Propriétaire" selected>Propriétaire</option>
                                 <option value="Locataire">Locataire</option>
                             </select>
                         </div>
@@ -136,7 +136,7 @@ ob_start();
                             <label for="locationMinDuration" class="font-weight-bold">Durée minimum de
                                 séjour</label>
                             <select id="locationMinDuration" name="locationMinDuration" class="custom-select">
-                                <option value="1 mois">1 mois</option>
+                                <option value="1 mois" selected>1 mois</option>
                                 <option value="3 mois">3 mois</option>
                                 <option value="6 mois">6 mois</option>
                                 <option value="9 mois">9 mois</option>
@@ -161,9 +161,9 @@ ob_start();
                             <label for="idealRoommateSex" class="font-weight-bold">Colocataire idéal
                                 (sexe)</label>
                             <select id="idealRoommateSex" name="idealRoommateSex" class="custom-select">
+                                <option value="PeuImporte" selected>Peu importe</option>
                                 <option value="Femme">Femme</option>
                                 <option value="Homme">Homme</option>
-                                <option value="PeuImporte">Peu importe</option>
                             </select>
                         </div>
                         <!-- Colocataire idéal (situation) -->
@@ -171,9 +171,9 @@ ob_start();
                             <label for="idealRoommateSituation" class="font-weight-bold">Colocataire idéal
                                 (situation)</label>
                             <select id="idealRoommateSituation" name="idealRoommateSituation" class="custom-select">
+                                <option value="PeuImporte" selected>Peu importe</option>
                                 <option value="Etudiant">Etudiant</option>
                                 <option value="Salarié">Salarié(e)</option>
-                                <option value="PeuImporte">Peu importe</option>
                             </select>
                         </div>
                         <!-- Age minimum -->
@@ -374,28 +374,28 @@ ob_start();
                 <div class="container">
                     <!-- Adresse -->
                     <div class="form-group">
-                        <label for="address_street" class="font-weight-bold">Numéro et nom de rue</label>
-                        <input id="address_street" type="text" name="address_street" class="form-control"
+                        <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
+                        <input id="street" type="text" name="street" class="form-control"
                             placeholder="Saisir l'adresse du logement">
                     </div>
                     <!-- Code postal, ville, pays -->
                     <div class="row">
                         <!-- Code postal -->
                         <div class="form-group col-md-2">
-                            <label for="address_zipcode" class="font-weight-bold">Code postal</label>
-                            <input id="address_zipcode" type="text" name="address_zipcode" class="form-control"
+                            <label for="zipcode" class="font-weight-bold">Code postal</label>
+                            <input id="zipcode" type="text" name="zipcode" class="form-control"
                                 placeholder="Code postal">
                         </div>
                         <!-- Ville -->
                         <div class="form-group col-md-6">
-                            <label for="address_city" class="font-weight-bold">Ville</label>
-                            <input id="address_city" type="text" name="address_city" class="form-control"
+                            <label for="city" class="font-weight-bold">Ville</label>
+                            <input id="city" type="text" name="city" class="form-control"
                                 placeholder="Ville">
                         </div>
                         <!-- Pays -->
                         <div class="form-group col-md-4">
-                            <label for="address_country" class="font-weight-bold">Pays</label>
-                            <input id="address_country" type="text" name="address_country" class="form-control"
+                            <label for="country" class="font-weight-bold">Pays</label>
+                            <input id="country" type="text" name="country" class="form-control"
                                 placeholder="Pays">
                         </div>
                     </div>
@@ -897,7 +897,7 @@ ob_start();
                             <select id="bedType" name="bedType" class="custom-select">
                                 <option value="Simple" selected>Simple</option>
                                 <option value="Double">Double</option>
-                                <option value="Clic-clac">Clic-clac</option>
+                                <option value="Canapé-lit">Canapé-lit</option>
                             </select>
                         </div>
                     </div>
