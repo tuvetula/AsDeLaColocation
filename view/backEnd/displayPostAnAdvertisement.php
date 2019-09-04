@@ -5,14 +5,15 @@ ob_start();
 <div id="addAnAdvertisementForm" class="container">
     <div class="jumbotron">
         <h1 class="text-center">Ajouter une nouvelle annonce</h1>
-        <form method="post" action="index.php?page=newAdvertisement"  enctype="multipart/form-data">
+        <form method="post" action="index.php?page=newAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Annonce</h2>
                 <!-- Titre, Description -->
                 <div class="container">
                     <!--Titre-->
-                    <div class="form-group">
+                    <div class="form-group"
+                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
                             required>
@@ -26,7 +27,7 @@ ob_start();
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
                         <!--Type de logement-->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="type" value="Maison" checked>
@@ -42,7 +43,7 @@ ob_start();
                             </div>
                         </div>
                         <!--Catégorie du logement-->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3" title="Sélectionner la catégorie correspondante">
                             <label class="font-weight-bold">Catégorie</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
@@ -74,7 +75,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Disponible le -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
                             <input class="form-control" type="date" id="availableDate" name="availableDate" required>
                         </div>
@@ -86,7 +87,8 @@ ob_start();
                                 <label class="custom-control-label font-weight-bold" for="isFurnished">Meublé</label>
                             </div>
                             <!-- Location sans visite -->
-                            <div class=" custom-control custom-checkbox ">
+                            <div class="custom-control custom-checkbox"
+                                title="J'accepte le dossier d'un candidat qui n'a pas visité">
                                 <input type="checkbox" class="custom-control-input" id="rentWithoutVisit"
                                     name="rentWithoutVisit">
                                 <label class="custom-control-label font-weight-bold" for="rentWithoutVisit">Location
@@ -368,7 +370,7 @@ ob_start();
                 <div class="container">
                     <div class="row">
                         <!-- Montant HC -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4" title="Loyer Hors Charges">
                             <label class="font-weight-bold" for="monthlyRentExcludingCharges">Montant du loyer Hors
                                 charges</label>
                             <div id="monthlyRentExcludingChargesDiv" class="input-group mb-3">
@@ -414,7 +416,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Ratio de solvabilité -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4" title="A combien de loyers le revenu doit-il être supérieur?">
                             <label for="solvencyRatio" class="font-weight-bold">Ratio de solvabilité</label>
                             <select id="solvencyRatio" name="solvencyRatio" class="custom-select">
                                 <option value="PeuImporte" selected>Peu importe</option>
@@ -429,8 +431,8 @@ ob_start();
                         </div>
                     </div>
                     <div class="row">
-                        <!-- financialRequirements -->
-                        <div class="form-group col-md-4">
+                        <!-- Exigences financières -->
+                        <div class="form-group col-md-4" title="J'ai des exigences financières pour le candidat">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="financialRequirements"
                                     name="financialRequirements">
@@ -539,7 +541,7 @@ ob_start();
                 <h2>Logement</h2>
                 <div class="container">
                     <!-- Adresse -->
-                    <div class="form-group">
+                    <div class="form-group" title="Numéro, nom de rue">
                         <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
                         <input id="street" type="text" name="street" class="form-control"
                             placeholder="Saisir l'adresse du logement">
@@ -547,25 +549,25 @@ ob_start();
                     <!-- Code postal, ville, pays -->
                     <div class="row">
                         <!-- Code postal -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-md-2" title="Code postal">
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
                             <input id="zipcode" type="text" name="zipcode" class="form-control"
                                 placeholder="Code postal">
                         </div>
                         <!-- Ville -->
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6" title="Ville">
                             <label for="city" class="font-weight-bold">Ville</label>
                             <input id="city" type="text" name="city" class="form-control" placeholder="Ville">
                         </div>
                         <!-- Pays -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4" title="Pays">
                             <label for="country" class="font-weight-bold">Pays</label>
                             <input id="country" type="text" name="country" class="form-control" placeholder="Pays">
                         </div>
                     </div>
                     <div class="row">
                         <!-- Surface habitable -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4" title="Surface totale du logement">
                             <label class="font-weight-bold" for="accomodationLivingAreaSize">Surface habitable du
                                 logement</label>
                             <div id="accomodationLivingAreaSizeDiv" class="input-group mb-3">
@@ -671,7 +673,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Nombre de chambres -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4" title="Nombre de chambres que contient au total le logement">
                             <label class="font-weight-bold" for="accomodationNbOfBedrooms">Nombre de chambres</label>
                             <select id="accomodationNbOfBedrooms" name="accomodationNbOfBedrooms" class="custom-select">
                                 <option value="0" selected>0</option>
@@ -691,7 +693,8 @@ ob_start();
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="accomodationNbOfBathrooms">Nombre de salles de
                                 bain</label>
-                                <select id="accomodationNbOfBathrooms" name="accomodationNbOfBathrooms" class="custom-select">
+                            <select id="accomodationNbOfBathrooms" name="accomodationNbOfBathrooms"
+                                class="custom-select">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -708,7 +711,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Nombre de chambres à louer-->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-4" title="Nombre de chambres disponibles">
                             <label class="font-weight-bold" for="nbOfBedroomsToRent">Nombre de chambres à louer</label>
                             <select id="nbOfBedroomsToRent" name="nbOfBedroomsToRent" class="custom-select">
                                 <option value="0" selected>0</option>
@@ -728,16 +731,16 @@ ob_start();
                         <div class="form-group col-md-4">
                             <label for="kitchenUse" class="font-weight-bold">Utilisation de la cuisine</label>
                             <select id="kitchenUse" name="kitchenUse" class="custom-select">
-                                <option value="Privée" selected>Privée</option>
-                                <option value="Commun">Commun</option>
+                                <option value="Commun" selected>Commun</option>
+                                <option value="Privée">Privée</option>
                             </select>
                         </div>
                         <!-- Utilisation du salon -->
                         <div class="form-group col-md-4">
                             <label for="livingRoomUse" class="font-weight-bold">Utilisation du salon</label>
                             <select id="livingRoomUse" name="livingRoomUse" class="custom-select">
-                                <option value="Privée" selected>Privée</option>
-                                <option value="Commun">Commun</option>
+                                <option value="Commun" selected>Commun</option>
+                                <option value="Privée">Privée</option>
                                 <option value="Aucun">Aucun</option>
                             </select>
                         </div>
