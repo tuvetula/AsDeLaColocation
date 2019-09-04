@@ -26,6 +26,7 @@ function displayAddAnAdvertisementForm()
 //Ajouter une nouvelle annonce
 function addANewAdvertisement()
 {
+    var_dump($_FILES);
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai)
     foreach($_POST as $key => $value){
         if ($value === "on"){

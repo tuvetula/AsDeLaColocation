@@ -5,7 +5,7 @@ ob_start();
 <div id="addAnAdvertisementForm" class="container">
     <div class="jumbotron">
         <h1 class="text-center">Ajouter une nouvelle annonce</h1>
-        <form method="post" action="index.php?page=newAdvertisement">
+        <form method="post" action="index.php?page=newAdvertisement"  enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Annonce</h2>
@@ -14,8 +14,8 @@ ob_start();
                     <!--Titre-->
                     <div class="form-group">
                         <label class="font-weight-bold" for="title">Titre</label>
-                        <input type="text" name="title" class="form-control" id="title"
-                            placeholder="Titre de l'annonce" required>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
+                            required>
                     </div>
                     <!--Description-->
                     <div class="form-group">
@@ -29,15 +29,13 @@ ob_start();
                         <div class="form-group col-md-3">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type"
-                                    value="Maison" checked>
+                                <input class="form-check-input" type="radio" name="type" value="Maison" checked>
                                 <label class="form-check-label" for="type">
                                     Maison
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type"
-                                    value="Appartement">
+                                <input class="form-check-input" type="radio" name="type" value="Appartement">
                                 <label class="form-check-label" for="type">
                                     Appartement
                                 </label>
@@ -149,10 +147,18 @@ ob_start();
                                 colocataires
                                 déja
                                 présent</label>
-                            <div id="nbOfOtherRoommatePresentDiv" class="input-group mb-3">
-                                <input id="nbOfOtherRoommatePresent" type="number" min="0" max="9"
-                                    name="nbOfOtherRoommatePresent" class="form-control" placeholder="0" required>
-                            </div>
+                            <select id="nbOfOtherRoommatePresent" name="nbOfOtherRoommatePresent" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -179,18 +185,178 @@ ob_start();
                         <!-- Age minimum -->
                         <div class="form-group col-md-2">
                             <label class="font-weight-bold" for="idealRoommateMinAge">Age minimum</label>
-                            <div id="idealRoommateMinAgeDiv" class="input-group mb-3">
-                                <input id="idealRoommateMinAge" type="number" min="18" max="100"
-                                    name="idealRoommateMinAge" class="form-control" placeholder="18" required>
-                            </div>
+                            <select id="idealRoommateMinAge" name="idealRoommateMinAge" class="custom-select">
+                                <option value="18" selected>18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                                <option value="32">32</option>
+                                <option value="33">33</option>
+                                <option value="34">34</option>
+                                <option value="35">35</option>
+                                <option value="36">36</option>
+                                <option value="37">37</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                                <option value="45">45</option>
+                                <option value="46">46</option>
+                                <option value="47">47</option>
+                                <option value="48">48</option>
+                                <option value="49">49</option>
+                                <option value="50">50</option>
+                                <option value="51">51</option>
+                                <option value="52">52</option>
+                                <option value="53">53</option>
+                                <option value="54">54</option>
+                                <option value="55">55</option>
+                                <option value="56">56</option>
+                                <option value="57">57</option>
+                                <option value="58">58</option>
+                                <option value="59">59</option>
+                                <option value="60">60</option>
+                                <option value="61">61</option>
+                                <option value="62">62</option>
+                                <option value="63">63</option>
+                                <option value="64">64</option>
+                                <option value="65">65</option>
+                                <option value="66">66</option>
+                                <option value="67">67</option>
+                                <option value="68">68</option>
+                                <option value="69">69</option>
+                                <option value="70">70</option>
+                                <option value="71">71</option>
+                                <option value="72">72</option>
+                                <option value="73">73</option>
+                                <option value="74">74</option>
+                                <option value="75">75</option>
+                                <option value="76">76</option>
+                                <option value="77">77</option>
+                                <option value="78">78</option>
+                                <option value="79">79</option>
+                                <option value="80">80</option>
+                                <option value="81">81</option>
+                                <option value="82">82</option>
+                                <option value="83">83</option>
+                                <option value="84">84</option>
+                                <option value="85">85</option>
+                                <option value="86">86</option>
+                                <option value="87">87</option>
+                                <option value="88">88</option>
+                                <option value="89">89</option>
+                                <option value="90">90</option>
+                                <option value="91">91</option>
+                                <option value="92">92</option>
+                                <option value="93">93</option>
+                                <option value="94">94</option>
+                                <option value="95">95</option>
+                                <option value="96">96</option>
+                                <option value="97">97</option>
+                                <option value="98">98</option>
+                                <option value="99">99</option>
+                            </select>
                         </div>
                         <!-- Age maximum -->
                         <div class="form-group col-md-2">
                             <label class="font-weight-bold" for="idealRoommateMaxAge">Age maximum</label>
-                            <div id="idealRoommateMaxAgeDiv" class="input-group mb-3">
-                                <input id="idealRoommateMaxAge" type="number" min="18" max="100"
-                                    name="idealRoommateMaxAge" class="form-control" placeholder="100" required>
-                            </div>
+                            <select id="idealRoommateMaxAge" name="idealRoommateMaxAge" class="custom-select">
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                                <option value="32">32</option>
+                                <option value="33">33</option>
+                                <option value="34">34</option>
+                                <option value="35">35</option>
+                                <option value="36">36</option>
+                                <option value="37">37</option>
+                                <option value="38">38</option>
+                                <option value="39">39</option>
+                                <option value="40">40</option>
+                                <option value="41">41</option>
+                                <option value="42">42</option>
+                                <option value="43">43</option>
+                                <option value="44">44</option>
+                                <option value="45">45</option>
+                                <option value="46">46</option>
+                                <option value="47">47</option>
+                                <option value="48">48</option>
+                                <option value="49">49</option>
+                                <option value="50">50</option>
+                                <option value="51">51</option>
+                                <option value="52">52</option>
+                                <option value="53">53</option>
+                                <option value="54">54</option>
+                                <option value="55">55</option>
+                                <option value="56">56</option>
+                                <option value="57">57</option>
+                                <option value="58">58</option>
+                                <option value="59">59</option>
+                                <option value="60">60</option>
+                                <option value="61">61</option>
+                                <option value="62">62</option>
+                                <option value="63">63</option>
+                                <option value="64">64</option>
+                                <option value="65">65</option>
+                                <option value="66">66</option>
+                                <option value="67">67</option>
+                                <option value="68">68</option>
+                                <option value="69">69</option>
+                                <option value="70">70</option>
+                                <option value="71">71</option>
+                                <option value="72">72</option>
+                                <option value="73">73</option>
+                                <option value="74">74</option>
+                                <option value="75">75</option>
+                                <option value="76">76</option>
+                                <option value="77">77</option>
+                                <option value="78">78</option>
+                                <option value="79">79</option>
+                                <option value="80">80</option>
+                                <option value="81">81</option>
+                                <option value="82">82</option>
+                                <option value="83">83</option>
+                                <option value="84">84</option>
+                                <option value="85">85</option>
+                                <option value="86">86</option>
+                                <option value="87">87</option>
+                                <option value="88">88</option>
+                                <option value="89">89</option>
+                                <option value="90">90</option>
+                                <option value="91">91</option>
+                                <option value="92">92</option>
+                                <option value="93">93</option>
+                                <option value="94">94</option>
+                                <option value="95">95</option>
+                                <option value="96">96</option>
+                                <option value="97">97</option>
+                                <option value="98">98</option>
+                                <option value="99" selected>99</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -207,7 +373,7 @@ ob_start();
                                 charges</label>
                             <div id="monthlyRentExcludingChargesDiv" class="input-group mb-3">
                                 <input id="monthlyRentExcludingCharges" type="number" min="0"
-                                    name="monthlyRentExcludingCharges" class="form-control" placeholder="0"
+                                    name="monthlyRentExcludingCharges" class="form-control"
                                     aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
@@ -219,7 +385,7 @@ ob_start();
                             <label class="font-weight-bold" for="charges">Montant des charges</label>
                             <div id="chargesDiv" class="input-group mb-3">
                                 <input id="charges" type="number" min="0" name="charges" class="form-control"
-                                    placeholder="0" aria-describedby="basic-addon2" required>
+                                    aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
                                 </div>
@@ -230,7 +396,7 @@ ob_start();
                             <label class="font-weight-bold" for="suretyBond">Montant de la caution</label>
                             <div id="suretyBondDiv" class="input-group mb-3">
                                 <input id="suretyBond" type="number" min="0" name="suretyBond" class="form-control"
-                                    placeholder="0" aria-describedby="basic-addon2" required>
+                                    aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
                                 </div>
@@ -251,14 +417,14 @@ ob_start();
                         <div class="form-group col-md-4">
                             <label for="solvencyRatio" class="font-weight-bold">Ratio de solvabilité</label>
                             <select id="solvencyRatio" name="solvencyRatio" class="custom-select">
-                                <option value="1X" selected>1X</option>
+                                <option value="PeuImporte" selected>Peu importe</option>
+                                <option value="1X">1X</option>
                                 <option value="1.5X">1.5X</option>
                                 <option value="2X">2X</option>
                                 <option value="2.5X">2.5X</option>
                                 <option value="3X">3X</option>
                                 <option value="4X">4X</option>
                                 <option value="5X">5X</option>
-                                <option value="PeuImporte">Peu importe</option>
                             </select>
                         </div>
                     </div>
@@ -389,14 +555,12 @@ ob_start();
                         <!-- Ville -->
                         <div class="form-group col-md-6">
                             <label for="city" class="font-weight-bold">Ville</label>
-                            <input id="city" type="text" name="city" class="form-control"
-                                placeholder="Ville">
+                            <input id="city" type="text" name="city" class="form-control" placeholder="Ville">
                         </div>
                         <!-- Pays -->
                         <div class="form-group col-md-4">
                             <label for="country" class="font-weight-bold">Pays</label>
-                            <input id="country" type="text" name="country" class="form-control"
-                                placeholder="Pays">
+                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays">
                         </div>
                     </div>
                     <div class="row">
@@ -406,7 +570,7 @@ ob_start();
                                 logement</label>
                             <div id="accomodationLivingAreaSizeDiv" class="input-group mb-3">
                                 <input id="accomodationLivingAreaSize" type="number" min="1"
-                                    name="accomodationLivingAreaSize" class="form-control" placeholder="0"
+                                    name="accomodationLivingAreaSize" class="form-control"
                                     aria-describedby="basic-addon2" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">m²</span>
@@ -416,75 +580,149 @@ ob_start();
                         <!-- Etage du logement -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="accomodationFloor">Etage du logement</label>
-                            <div id="accomodationFloorDiv" class="input-group mb-3">
-                                <input id="accomodationFloor" type="number" min="0" name="accomodationFloor"
-                                    class="form-control" placeholder="0" aria-describedby="basic-addon2" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">étage</span>
-                                </div>
-                            </div>
+                            <select id="accomodationFloor" name="accomodationFloor" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                            </select>
                         </div>
                         <!-- Nombre d'étages -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="buildingNbOfFloors">Nombre d'etages (immeuble)</label>
-                            <div id="buildingNbOfFloorsDiv" class="input-group mb-3">
-                                <input id="buildingNbOfFloors" type="number" min="0" name="buildingNbOfFloors"
-                                    class="form-control" placeholder="0" aria-describedby="basic-addon2" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">étage(s)</span>
-                                </div>
-                            </div>
+                            <select id="buildingNbOfFloors" name="buildingNbOfFloors" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Nombre de pièces -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="accomodationNbOfRooms">Nombre de pièces</label>
-                            <div id="accomodationNbOfRoomsDiv" class="input-group mb-3">
-                                <input id="accomodationNbOfRooms" type="number" min="0" name="accomodationNbOfRooms"
-                                    class="form-control" placeholder="0" aria-describedby="basic-addon2" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">pièces</span>
-                                </div>
-                            </div>
+                            <select id="accomodationNbOfRooms" name="accomodationNbOfRooms" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
                         </div>
                         <!-- Nombre de chambres -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="accomodationNbOfBedrooms">Nombre de chambres</label>
-                            <div id="accomodationNbOfBedroomsDiv" class="input-group mb-3">
-                                <input id="accomodationNbOfBedrooms" type="number" min="0"
-                                    name="accomodationNbOfBedrooms" class="form-control" placeholder="0"
-                                    aria-describedby="basic-addon2" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">chambre(s)</span>
-                                </div>
-                            </div>
+                            <select id="accomodationNbOfBedrooms" name="accomodationNbOfBedrooms" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
                         </div>
                         <!-- Nombre de salles de bains -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="accomodationNbOfBathrooms">Nombre de salles de
                                 bain</label>
-                            <div id="accomodationNbOfBathroomsDiv" class="input-group mb-3">
-                                <input id="accomodationNbOfBathrooms" type="number" min="0"
-                                    name="accomodationNbOfBathrooms" class="form-control" placeholder="0"
-                                    aria-describedby="basic-addon2" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">salle(s) de bain</span>
-                                </div>
-                            </div>
+                                <select id="accomodationNbOfBathrooms" name="accomodationNbOfBathrooms" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Nombre de chambres à louer-->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="nbOfBedroomsToRent">Nombre de chambres à louer</label>
-                            <div id="nbOfBedroomsToRentDiv" class="input-group mb-3">
-                                <input id="nbOfBedroomsToRent" type="number" min="0" name="nbOfBedroomsToRent"
-                                    class="form-control" placeholder="0" aria-describedby="basic-addon2" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="basic-addon2">chambre(s)</span>
-                                </div>
-                            </div>
+                            <select id="nbOfBedroomsToRent" name="nbOfBedroomsToRent" class="custom-select">
+                                <option value="0" selected>0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
                         </div>
                         <!-- Utilisation de la cuisine -->
                         <div class="form-group col-md-4">
