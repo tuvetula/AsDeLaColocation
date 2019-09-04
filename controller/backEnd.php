@@ -27,6 +27,9 @@ function displayAddAnAdvertisementForm()
 function addANewAdvertisement()
 {
     var_dump($_FILES);
+    require_once('controller/functionRearrangeFilesArray.php');
+    $filesArray = reArrayFiles($_FILES);
+    var_dump($filesArray);
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai)
     foreach($_POST as $key => $value){
         if ($value === "on"){

@@ -1235,7 +1235,7 @@ ob_start();
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Photos</h2>
                 <div class="container">
-                    <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file"></div>
+                    <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]"></div>
                     <div><label for="upload"><span id="preview"></span></label></div>
                 </div>
             </div>
