@@ -8,6 +8,7 @@ function login()
     if ($login) {
         if (password_verify($_POST['password'], $login['user_password'])) {
             $_SESSION['login'] = $login['user_mail'];
+            $_SESSION['id'] = $login['user_id'];
             $_SESSION['isAdmin'] = $login['user_isAdmin'];
         }
     }
@@ -15,17 +16,37 @@ function login()
 //Affichage page d'accueil utilisateur connecté
 function displayHomeUser()
 {
-    require('view/backEnd/displayHomeUser.php');
+    require_once('view/backEnd/displayHomeUser.php');
 }
 //Affichage Formulaire d'ajout d'une nouvelle annonce
 function displayAddAnAdvertisementForm()
 {
-    require('view/backEnd/displayPostAnAdvertisement.php');
+    require_once('view/backEnd/displayPostAnAdvertisement.php');
 }
 //Ajouter une nouvelle annonce
 function addANewAdvertisement()
 {
-    if (isset($_POST['availableDate'])){
+    //Boucle pour transformer les valeurs "on" en 1 (valeur vrai)
+    foreach($_POST as $key => $value){
+        if ($value === "on"){
+            $_POST[$key] = 1;
+        }
+    }
+    //Address $_POST
+    if (isset($_POST['street'])) {
+        $addressStreet = $_POST['street'];
+    }
+    if (isset($_POST['zipcode'])) {
+        $addressZipcode = $_POST['zipcode'];
+    }
+    if (isset($_POST['city'])) {
+        $addressCity = $_POST['city'];
+    }
+    if (isset($_POST['country'])) {
+        $addressCountry = $_POST['country'];
+    }
+    //Advertisement $_POST//Advertisement
+    if (isset($_POST['availableDate'])) {
         $availableDate = $_POST['availableDate'];
     }
     if (isset($_POST['title'])) {
@@ -84,8 +105,8 @@ function addANewAdvertisement()
     }
     if (isset($_POST['financialRequirements'])) {
         $financialRequirements = $_POST['financialRequirements'];
-    }else{
-        $financialRequirements = false;
+    } else {
+        $financialRequirements = 0;
     }
     if (isset($_POST['guarantorLiving'])) {
         $guarantorLiving = $_POST['guarantorLiving'];
@@ -95,58 +116,58 @@ function addANewAdvertisement()
     }
     if (isset($_POST['eligibleForAids'])) {
         $eligibleForAids = $_POST['eligibleForAids'];
-    }else{
-        $eligibleForAids = false;
+    } else {
+        $eligibleForAids = 0;
     }
     if (isset($_POST['chargesIncludeCoOwnershipCharges'])) {
         $chargesIncludeCoOwnershipCharges = $_POST['chargesIncludeCoOwnershipCharges'];
-    }else{
-        $chargesIncludeCoOwnershipCharges = false;
+    } else {
+        $chargesIncludeCoOwnershipCharges = 0;
     }
     if (isset($_POST['chargesIncludeElectricity'])) {
         $chargesIncludeElectricity = $_POST['chargesIncludeElectricity'];
-    }else{
-        $chargesIncludeElectricity = false;
+    } else {
+        $chargesIncludeElectricity = 0;
     }
     if (isset($_POST['chargesIncludeHotWater'])) {
         $chargesIncludeHotWater = $_POST['chargesIncludeHotWater'];
-    }else{
-        $chargesIncludeHotWater = false;
+    } else {
+        $chargesIncludeHotWater = 0;
     }
     if (isset($_POST['chargesIncludeHeating'])) {
         $chargesIncludeHeating = $_POST['chargesIncludeHeating'];
-    }else{
-        $chargesIncludeHeating = false;
+    } else {
+        $chargesIncludeHeating = 0;
     }
     if (isset($_POST['chargesIncludeInternet'])) {
         $chargesIncludeInternet = $_POST['chargesIncludeInternet'];
-    }else{
-        $chargesIncludeInternet = false;
+    } else {
+        $chargesIncludeInternet = 0;
     }
     if (isset($_POST['chargesIncludeHomeInsurance'])) {
         $chargesIncludeHomeInsurance = $_POST['chargesIncludeHomeInsurance'];
-    }else{
-        $chargesIncludeHomeInsurance = false;
+    } else {
+        $chargesIncludeHomeInsurance = 0;
     }
     if (isset($_POST['chargesIncludeBoilerInspection'])) {
         $chargesIncludeBoilerInspection = $_POST['chargesIncludeBoilerInspection'];
-    }else{
-        $chargesIncludeBoilerInspection = false;
+    } else {
+        $chargesIncludeBoilerInspection = 0;
     }
     if (isset($_POST['chargesIncludeHouseholdGarbageTaxes'])) {
         $chargesIncludeHouseholdGarbageTaxes = $_POST['chargesIncludeHouseholdGarbageTaxes'];
-    }else{
-        $chargesIncludeHouseholdGarbageTaxes = false;
+    } else {
+        $chargesIncludeHouseholdGarbageTaxes = 0;
     }
     if (isset($_POST['chargesIncludeCleaningService'])) {
         $chargesIncludeCleaningService = $_POST['chargesIncludeCleaningService'];
-    }else{
-        $chargesIncludeCleaningService = false;
+    } else {
+        $chargesIncludeCleaningService = 0;
     }
     if (isset($_POST['isFurnished'])) {
         $isFurnished = $_POST['isFurnished'];
-    }else{
-        $isFurnished = false;
+    } else {
+        $isFurnished = 0;
     }
     if (isset($_POST['kitchenUse'])) {
         $kitchenUse = $_POST['kitchenUse'];
@@ -165,233 +186,286 @@ function addANewAdvertisement()
     }
     if (isset($_POST['bedroomHasDesk'])) {
         $bedroomHasDesk = $_POST['bedroomHasDesk'];
-    }else{
-        $bedroomHasDesk = false;
+    } else {
+        $bedroomHasDesk = 0;
     }
     if (isset($_POST['bedroomHasWardrobe'])) {
         $bedroomHasWardrobe = $_POST['bedroomHasWardrobe'];
-    }else{
-        $bedroomHasWardrobe = false;
+    } else {
+        $bedroomHasWardrobe = 0;
     }
     if (isset($_POST['bedroomHasChair'])) {
         $bedroomHasChair = $_POST['bedroomHasChair'];
-    }else{
-        $bedroomHasChair = false;
+    } else {
+        $bedroomHasChair = 0;
     }
     if (isset($_POST['bedroomHasTv'])) {
         $bedroomHasTv = $_POST['bedroomHasTv'];
-    }else{
-        $bedroomHasTv = false;
+    } else {
+        $bedroomHasTv = 0;
     }
     if (isset($_POST['bedroomHasArmchair'])) {
         $bedroomHasArmchair = $_POST['bedroomHasArmchair'];
-    }else{
-        $bedroomHasArmchair = false;
+    } else {
+        $bedroomHasArmchair = 0;
     }
     if (isset($_POST['bedroomHasCoffeeTable'])) {
         $bedroomHasCoffeeTable = $_POST['bedroomHasCoffeeTable'];
-    }else{
-        $bedroomHasCoffeeTable = false;
+    } else {
+        $bedroomHasCoffeeTable = 0;
     }
     if (isset($_POST['bedroomHasBedside'])) {
         $bedroomHasBedside = $_POST['bedroomHasBedside'];
-    }else{
-        $bedroomHasBedside = false;
+    } else {
+        $bedroomHasBedside = 0;
     }
     if (isset($_POST['bedroomHasLamp'])) {
         $bedroomHasLamp = $_POST['bedroomHasLamp'];
-    }else{
-        $bedroomHasLamp = false;
+    } else {
+        $bedroomHasLamp = 0;
     }
     if (isset($_POST['bedroomHasCloset'])) {
         $bedroomHasCloset = $_POST['bedroomHasCloset'];
-    }else{
-        $bedroomHasCloset = false;
+    } else {
+        $bedroomHasCloset = 0;
     }
     if (isset($_POST['bedroomHasShelf'])) {
         $bedroomHasShelf = $_POST['bedroomHasShelf'];
+    } else {
+        $bedroomHasShelf = 0;
+    }
+    if (isset($_POST['handicapedAccessibility'])) {
+        $handicapedAccessibility = $_POST['handicapedAccessibility'];
+    } else {
+        $handicapedAccessibility = 0;
+    }
+    if (isset($_POST['accomodationHasElevator'])) {
+        $accomodationHasElevator = $_POST['accomodationHasElevator'];
+    } else {
+        $accomodationHasElevator = 0;
+    }
+    if (isset($_POST['accomodationHasCommonParkingLot'])) {
+        $accomodationHasCommonParkingLot = $_POST['accomodationHasCommonParkingLot'];
+    } else {
+        $accomodationHasCommonParkingLot = 0;
+    }
+    if (isset($_POST['accomodationHasPrivateParkingPlace'])) {
+        $accomodationHasPrivateParkingPlace = $_POST['accomodationHasPrivateParkingPlace'];
+    } else {
+        $accomodationHasPrivateParkingPlace = 0;
+    }
+    if (isset($_POST['accomodationHasGarden'])) {
+        $accomodationHasGarden = $_POST['accomodationHasGarden'];
+    } else {
+        $accomodationHasGarden = 0;
+    }
+    if (isset($_POST['accomodationHasBalcony'])) {
+        $accomodationHasBalcony = $_POST['accomodationHasBalcony'];
+    } else {
+        $accomodationHasBalcony = 0;
+    }
+    if (isset($_POST['accomodationHasTerrace'])) {
+        $accomodationHasTerrace = $_POST['accomodationHasTerrace'];
+    } else {
+        $accomodationHasTerrace = 0;
+    }
+    if (isset($_POST['accomodationHasSwimmingPool'])) {
+        $accomodationHasSwimmingPool = $_POST['accomodationHasSwimmingPool'];
+    } else {
+        $accomodationHasSwimmingPool = 0;
+    }
+    if (isset($_POST['accomodationHasTv'])) {
+        $accomodationHasTv = $_POST['accomodationHasTv'];
+    } else {
+        $accomodationHasTv = 0;
+    }
+    if (isset($_POST['accomodationHasInternet'])) {
+        $accomodationHasInternet = $_POST['accomodationHasInternet'];
+    } else {
+        $accomodationHasInternet = 0;
+    }
+    if (isset($_POST['accomodationHasWifi'])) {
+        $accomodationHasWifi = $_POST['accomodationHasWifi'];
+    } else {
+        $accomodationHasWifi = 0;
+    }
+    if (isset($_POST['accomodationHasFiberOpticInternet'])) {
+        $accomodationHasFiberOpticInternet = $_POST['accomodationHasFiberOpticInternet'];
+    } else {
+        $accomodationHasFiberOpticInternet = 0;
+    }
+    if (isset($_POST['accomodationHasNetflix'])) {
+        $accomodationHasNetflix = $_POST['accomodationHasNetflix'];
+    } else {
+        $accomodationHasNetflix = 0;
+    }
+    if (isset($_POST['accomodationHasDoubleGlazing'])) {
+        $accomodationHasDoubleGlazing = $_POST['accomodationHasDoubleGlazing'];
+    } else {
+        $accomodationHasDoubleGlazing = 0;
+    }
+    if (isset($_POST['accomodationHasAirConditioning'])) {
+        $accomodationHasAirConditioning = $_POST['accomodationHasAirConditioning'];
+    } else {
+        $accomodationHasAirConditioning = 0;
+    }
+    if (isset($_POST['accomodationHasElectricHeating'])) {
+        $accomodationHasElectricHeating = $_POST['accomodationHasElectricHeating'];
+    } else {
+        $accomodationHasElectricHeating = 0;
+    }
+    if (isset($_POST['accomodationHasIndividualGasHeating'])) {
+        $accomodationHasIndividualGasHeating = $_POST['accomodationHasIndividualGasHeating'];
+    } else {
+        $accomodationHasIndividualGasHeating = 0;
+    }
+    if (isset($_POST['accomodationHasCollectiveGasHeating'])) {
+        $accomodationHasCollectiveGasHeating = $_POST['accomodationHasCollectiveGasHeating'];
+    } else {
+        $accomodationHasCollectiveGasHeating = 0;
+    }
+    if (isset($_POST['accomodationHasHotWaterTank'])) {
+        $accomodationHasHotWaterTank = $_POST['accomodationHasHotWaterTank'];
+    } else {
+        $accomodationHasHotWaterTank = 0;
+    }
+    if (isset($_POST['accomodationHasGasWaterHeater'])) {
+        $accomodationHasGasWaterHeater = $_POST['accomodationHasGasWaterHeater'];
+    } else {
+        $accomodationHasGasWaterHeater = 0;
+    }
+    if (isset($_POST['accomodationHasFridge'])) {
+        $accomodationHasFridge = $_POST['accomodationHasFridge'];
+    } else {
+        $accomodationHasFridge = 0;
+    }
+    if (isset($_POST['accomodationHasFreezer'])) {
+        $accomodationHasFreezer = $_POST['accomodationHasFreezer'];
+    } else {
+        $accomodationHasFreezer = 0;
+    }
+    if (isset($_POST['accomodationHasOven'])) {
+        $accomodationHasOven = $_POST['accomodationHasOven'];
+    } else {
+        $accomodationHasOven = 0;
+    }
+    if (isset($_POST['accomodationHasBakingTray'])) {
+        $accomodationHasBakingTray = $_POST['accomodationHasBakingTray'];
+    } else {
+        $accomodationHasBakingTray = 0;
+    }
+    if (isset($_POST['accomodationHasWashingMachine'])) {
+        $accomodationHasWashingMachine = $_POST['accomodationHasWashingMachine'];
+    } else {
+        $accomodationHasWashingMachine = 0;
+    }
+    if (isset($_POST['accomodationHasDishwasher'])) {
+        $accomodationHasDishwasher = $_POST['accomodationHasDishwasher'];
+    } else {
+        $accomodationHasDishwasher = 0;
+    }
+    if (isset($_POST['accomodationHasMicrowaveOven'])) {
+        $accomodationHasMicrowaveOven = $_POST['accomodationHasMicrowaveOven'];
+    } else {
+        $accomodationHasMicrowaveOven = 0;
+    }
+    if (isset($_POST['accomodationHasCoffeeMachine'])) {
+        $accomodationHasCoffeeMachine = $_POST['accomodationHasCoffeeMachine'];
+    } else {
+        $accomodationHasCoffeeMachine = 0;
+    }
+    if (isset($_POST['accomodationHasPodCoffeeMachine'])) {
+        $accomodationHasPodCoffeeMachine = $_POST['accomodationHasPodCoffeeMachine'];
+    } else {
+        $accomodationHasPodCoffeeMachine = 0;
+    }
+    if (isset($_POST['accomodationHasKettle'])) {
+        $accomodationHasKettle = $_POST['accomodationHasKettle'];
+    } else {
+        $accomodationHasKettle = 0;
+    }
+    if (isset($_POST['accomodationHasToaster'])) {
+        $accomodationHasToaster = $_POST['accomodationHasToaster'];
+    } else {
+        $accomodationHasToaster = 0;
+    }
+    if (isset($_POST['accomodationHasExtractorHood'])) {
+        $accomodationHasExtractorHood = $_POST['accomodationHasExtractorHood'];
+    } else {
+        $accomodationHasExtractorHood = 0;
+    }
+    if (isset($_POST['animalsAllowed'])) {
+        $animalsAllowed = $_POST['animalsAllowed'];
+    } else {
+        $animalsAllowed = 0;
+    }
+    if (isset($_POST['smokingIsAllowed'])) {
+        $smokingIsAllowed = $_POST['smokingIsAllowed'];
+    } else {
+        $smokingIsAllowed = 0;
+    }
+    if (isset($_POST['authorizedParty'])) {
+        $authorizedParty = $_POST['authorizedParty'];
+    } else {
+        $authorizedParty = 0;
+    }
+    if (isset($_POST['authorizedVisit'])) {
+        $authorizedVisit = $_POST['authorizedVisit'];
+    } else {
+        $authorizedVisit = 0;
+    }
+    if (isset($_POST['nbOfOtherRoommatePresent'])) {
+        $nbOfOtherRoommatePresent = $_POST['nbOfOtherRoommatePresent'];
+    }
+    if (isset($_POST['renterSituation'])) {
+        $renterSituation = $_POST['renterSituation'];
+    }
+    if (isset($_POST['idealRoommateSex'])) {
+        $idealRoommateSex = $_POST['idealRoommateSex'];
+    }
+    if (isset($_POST['idealRoommateSituation'])) {
+        $idealRoommateSituation = $_POST['idealRoommateSituation'];
+    }
+    if (isset($_POST['idealRoommateMinAge'])) {
+        $idealRoommateMinAge = $_POST['idealRoommateMinAge'];
+    }
+    if (isset($_POST['idealRoommateMaxAge'])) {
+        $idealRoommateMaxAge = $_POST['idealRoommateMaxAge'];
+    }
+    if (isset($_POST['locationMinDuration'])) {
+        $locationMinDuration = $_POST['locationMinDuration'];
+    }
+    if (isset($_POST['rentWithoutVisit'])) {
+        $rentWithoutVisit = $_POST['rentWithoutVisit'];
+    } else {
+        $rentWithoutVisit = 0;
+    }
+    if (isset($_POST['contactNameForVisit'])) {
+        $contactNameForVisit = $_POST['contactNameForVisit'];
+    }
+    if (isset($_POST['contactPhoneNumberForVisit'])) {
+        $contactPhoneNumberForVisit = $_POST['contactPhoneNumberForVisit'];
+    }
+    if (isset($_POST['contactMailForVisit'])) {
+        $contactMailForVisit = $_POST['contactMailForVisit'];
+    }
+    //Vérification si l'adresse existe déja
+    $addressVerif = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
+    //Action (si l'adresse existe déja=>insertion annonce en base de donnée, sinon insertion addresse puis insertion annonce)
+    if ($addressVerif) {
+        $addressId = $addressVerif['address_id'];
+        insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId);
     }else{
-        $bedroomHasShelf = false;
+        if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
+            //Recup adress-id de l'annonce à ajouter
+            $addressArray = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
+            $addressId = $addressArray['address_id'];
+            
+            insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId);
+        }
     }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    if (isset($_POST['guarantorLiving'])) {
-        $guarantorLiving = $_POST['guarantorLiving'];
-    }
-    insertNewAdvertisement($availableDate,$title,$description,$type,$category,$energyClassLetter,$energyClassNumber,$gesLetter,$gesNumber,$accomodationLivingAreaSize,$accomodationFloor,$buildingNbOfFloors);
-    print_r($_POST);
+    require_once('view/backEnd/displayHomeUser.php');
+   
 }
 
 
