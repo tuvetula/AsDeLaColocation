@@ -4,7 +4,7 @@ require_once('model/bdd/bddConfig.php');
 //Vérifie si le login existe en base de donnée
 function getUser($postLogin)
 {
-    $postLogin = htmlentities(strip_tags($postLogin));
+    $postLogin = htmlspecialchars(strip_tags($postLogin));
     $db = connectBdd();
     $answer = $db->prepare('SELECT * FROM users WHERE user_mail=:login');
     $answer->execute([
@@ -13,12 +13,129 @@ function getUser($postLogin)
     return $answer->fetch();
 }
 
-//Ajoute une nouvelle adresse
-function insertNewAdress($addressStreet,$addressZipcode,$addressCity,$addressCountry){
-    $addressStreet = htmlentities(strip_tags($addressStreet));
-    $addressZipcode = htmlentities(strip_tags($addressZipcode));
-    $addressCity = htmlentities(strip_tags($addressCity));
-    $addressCountry = htmlentities(strip_tags($addressCountry));
+//Récupére adresse_id si le nom de la rue, le code postal, la ville et le pays correspondent.
+function getAddressId($addressStreet,$addressZipcode,$addressCity,$addressCountry){
+    $db = connectBdd();
+    $request = $db->query('SELECT address_id FROM addresses 
+    WHERE address_street="'.$addressStreet.'" 
+    AND address_zipcode="'.$addressZipcode.'" 
+    AND address_city="'.$addressCity.'" 
+    AND address_country="'.$addressCountry.'"');
+    $addressIdRequest = $request->fetch(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $addressIdRequest;
+}
+
+//Récupère advertisement_id
+function getAdvertisementId($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId){
+    $db = connectBdd();
+    $request = $db->query('SELECT advertisement_id FROM advertisements 
+    WHERE advertisement_availableDate="'.$availableDate.'" AND
+        advertisement_title="'.$title.'" AND
+        advertisement_description="'.$description.'" AND
+        advertisement_type="'.$type.'" AND
+        advertisement_category="'.$category.'" AND
+        advertisement_energyClassLetter="'.$energyClassLetter.'" AND
+        advertisement_energyClassNumber="'.$energyClassNumber.'" AND
+        advertisement_gesLetter="'.$gesLetter.'" AND
+        advertisement_gesNumber="'.$gesNumber.'" AND
+        advertisement_accomodationLivingAreaSize="'.$accomodationLivingAreaSize.'" AND
+        advertisement_accomodationFloor="'.$accomodationFloor.'" AND
+        advertisement_buildingNbOfFloors="'.$buildingNbOfFloors.'" AND
+        advertisement_accomodationNbOfRooms="'.$accomodationNbOfRooms.'" AND
+        advertisement_accomodationNbOfBedrooms="'.$accomodationNbOfBedrooms.'" AND
+        advertisement_accomodationNbOfBathrooms="'.$accomodationNbOfBathrooms.'" AND
+        advertisement_nbOfBedroomsToRent="'.$nbOfBedroomsToRent.'" AND
+        advertisement_monthlyRentExcludingCharges="'.$monthlyRentExcludingCharges.'" AND
+        advertisement_charges="'.$charges.'" AND
+        advertisement_suretyBond="'.$suretyBond.'" AND
+        advertisement_financialRequirements="'.$financialRequirements.'" AND
+        advertisement_guarantorLiving="'.$guarantorLiving.'" AND
+        advertisement_solvencyRatio="'.$solvencyRatio.'" AND
+        advertisement_eligibleForAids="'.$eligibleForAids.'" AND
+        advertisement_chargesIncludeCoOwnershipCharges="'.$chargesIncludeCoOwnershipCharges.'" AND
+        advertisement_chargesIncludeElectricity="'.$chargesIncludeElectricity.'" AND
+        advertisement_chargesIncludeHotWater="'.$chargesIncludeHotWater.'" AND
+        advertisement_chargesIncludeHeating="'.$chargesIncludeHeating.'" AND
+        advertisement_chargesIncludeInternet="'.$chargesIncludeInternet.'" AND
+        advertisement_chargesIncludeHomeInsurance="'.$chargesIncludeHomeInsurance.'" AND
+        advertisement_chargesIncludeBoilerInspection="'.$chargesIncludeBoilerInspection.'" AND
+        advertisement_chargesIncludeHouseholdGarbageTaxes="'.$chargesIncludeHouseholdGarbageTaxes.'" AND
+        advertisement_chargesIncludeCleaningService="'.$chargesIncludeCleaningService.'" AND
+        advertisement_isFurnished="'.$isFurnished.'" AND
+        advertisement_kitchenUse="'.$kitchenUse.'" AND
+        advertisement_livingRoomUse="'.$livingRoomUse.'" AND
+        advertisement_bedroomSize="'.$bedroomSize.'" AND
+        advertisement_bedroomType="'.$bedroomType.'" AND
+        advertisement_bedType="'.$bedType.'" AND
+        advertisement_bedroomHasDesk="'.$bedroomHasDesk.'" AND
+        advertisement_bedroomHasWardrobe="'.$bedroomHasWardrobe.'" AND
+        advertisement_bedroomHasChair="'.$bedroomHasChair.'" AND
+        advertisement_bedroomHasTv="'.$bedroomHasTv.'" AND
+        advertisement_bedroomHasArmchair="'.$bedroomHasArmchair.'" AND
+        advertisement_bedroomHasCoffeeTable="'.$bedroomHasCoffeeTable.'" AND
+        advertisement_bedroomHasBedside="'.$bedroomHasBedside.'" AND
+        advertisement_bedroomHasLamp="'.$bedroomHasLamp.'" AND
+        advertisement_bedroomHasCloset="'.$bedroomHasCloset.'" AND
+        advertisement_bedroomHasShelf="'.$bedroomHasShelf.'" AND
+        advertisement_handicapedAccessibility="'.$handicapedAccessibility.'" AND
+        advertisement_accomodationHasElevator="'.$accomodationHasElevator.'" AND
+        advertisement_accomodationHasCommonParkingLot="'.$accomodationHasCommonParkingLot.'" AND
+        advertisement_accomodationHasPrivateParkingPlace="'.$accomodationHasPrivateParkingPlace.'" AND
+        advertisement_accomodationHasGarden="'.$accomodationHasGarden.'" AND
+        advertisement_accomodationHasBalcony="'.$accomodationHasBalcony.'" AND
+        advertisement_accomodationHasTerrace="'.$accomodationHasTerrace.'" AND
+        advertisement_accomodationHasSwimmingPool="'.$accomodationHasSwimmingPool.'" AND
+        advertisement_accomodationHasTv="'.$accomodationHasTv.'" AND
+        advertisement_accomodationHasInternet="'.$accomodationHasInternet.'" AND
+        advertisement_accomodationHasWifi="'.$accomodationHasWifi.'" AND
+        advertisement_accomodationHasFiberOpticInternet="'.$accomodationHasFiberOpticInternet.'" AND
+        advertisement_accomodationHasNetflix="'.$accomodationHasNetflix.'" AND
+        advertisement_accomodationHasDoubleGlazing="'.$accomodationHasDoubleGlazing.'" AND
+        advertisement_accomodationHasAirConditioning="'.$accomodationHasAirConditioning.'" AND
+        advertisement_accomodationHasElectricHeating="'.$accomodationHasElectricHeating.'" AND
+        advertisement_accomodationHasIndividualGasHeating="'.$accomodationHasIndividualGasHeating.'" AND
+        advertisement_accomodationHasCollectiveGasHeating="'.$accomodationHasCollectiveGasHeating.'" AND
+        advertisement_accomodationHasHotWaterTank="'.$accomodationHasHotWaterTank.'" AND
+        advertisement_accomodationHasGasWaterHeater="'.$accomodationHasGasWaterHeater.'" AND
+        advertisement_accomodationHasFridge="'.$accomodationHasFridge.'" AND
+        advertisement_accomodationHasFreezer="'.$accomodationHasFreezer.'" AND
+        advertisement_accomodationHasOven="'.$accomodationHasOven.'" AND
+        advertisement_accomodationHasBakingTray="'.$accomodationHasBakingTray.'" AND
+        advertisement_accomodationHasWashingMachine="'.$accomodationHasWashingMachine.'" AND
+        advertisement_accomodationHasDishwasher="'.$accomodationHasDishwasher.'" AND
+        advertisement_accomodationHasMicrowaveOven="'.$accomodationHasMicrowaveOven.'" AND
+        advertisement_accomodationHasCoffeeMachine="'.$accomodationHasCoffeeMachine.'" AND
+        advertisement_accomodationHasPodCoffeeMachine="'.$accomodationHasPodCoffeeMachine.'" AND
+        advertisement_accomodationHasKettle="'.$accomodationHasKettle.'" AND
+        advertisement_accomodationHasToaster="'.$accomodationHasToaster.'" AND
+        advertisement_accomodationHasExtractorHood="'.$accomodationHasExtractorHood.'" AND
+        advertisement_animalsAllowed="'.$animalsAllowed.'" AND
+        advertisement_smokingIsAllowed="'.$smokingIsAllowed.'" AND
+        advertisement_authorizedParty="'.$authorizedParty.'" AND
+        advertisement_authorizedVisit="'.$authorizedVisit.'" AND
+        advertisement_nbOfOtherRoommatePresent="'.$nbOfOtherRoommatePresent.'" AND
+        advertisement_renterSituation="'.$renterSituation.'" AND
+        advertisement_idealRoommateSex="'.$idealRoommateSex.'" AND
+        advertisement_idealRoommateSituation="'.$idealRoommateSituation.'" AND
+        advertisement_idealRoommateMinAge="'.$idealRoommateMinAge.'" AND
+        advertisement_idealRoommateMaxAge="'.$idealRoommateMaxAge.'" AND
+        advertisement_locationMinDuration="'.$locationMinDuration.'" AND
+        advertisement_rentWithoutVisit="'.$rentWithoutVisit.'" AND
+        advertisement_contactNameForVisit="'.$contactNameForVisit.'" AND
+        advertisement_contactPhoneNumberForVisit="'.$contactPhoneNumberForVisit.'" AND
+        advertisement_contactMailForVisit="'.$contactMailForVisit.'"');
+        $advertisementIdRequest = $request->fetch(PDO::FETCH_ASSOC);
+        $request->closeCursor();
+        return $advertisementIdRequest;
+    }
+    
+    //Ajoute une nouvelle adresse
+    function insertNewAdress($addressStreet,$addressZipcode,$addressCity,$addressCountry){
+    $addressStreet = htmlspecialchars(strip_tags($addressStreet));
+    $addressZipcode = htmlspecialchars(strip_tags($addressZipcode));
+    $addressCity = htmlspecialchars(strip_tags($addressCity));
+    $addressCountry = htmlspecialchars(strip_tags($addressCountry));
     $db = connectBdd();
     $insertAddress = $db->prepare('INSERT INTO addresses (address_street,address_zipcode,address_city,address_country) VALUES (:addressStreet,:addressZipcode,:addressCity,:addressCountry)');
     $insertAddress->execute(array(
@@ -30,121 +147,108 @@ function insertNewAdress($addressStreet,$addressZipcode,$addressCity,$addressCou
     return true;
 }
 
-//Récupére adresse_id si le nom de la rue, le code postal, la ville et le pays correspondent.
-function getAddressId($addressStreet,$addressZipcode,$addressCity,$addressCountry){
-    $db = connectBdd();
-    $request = $db->query('SELECT address_id FROM addresses 
-    WHERE address_street="'.$addressStreet.'" 
-    AND address_zipcode="'.$addressZipcode.'" 
-    AND address_city="'.$addressCity.'" 
-    AND address_country="'.$addressCountry.'"');
-    $requestOk = $request->fetch(PDO::FETCH_ASSOC);
-    $request->closeCursor();
-    return $requestOk;
-}
-
 //Ajoute une nouvelle annonce en base de données
 function insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId)
 {
     $isActive = 0;
     $dateOfLastDiffusion = null;
-    $availableDate = htmlentities(strip_tags($availableDate));
-    $title = htmlentities(strip_tags($title));
-    $description = htmlentities(strip_tags($description));
-    $type = htmlentities(strip_tags($type));
-    $category = htmlentities(strip_tags($category));
-    $energyClassLetter = htmlentities(strip_tags($energyClassLetter));
-    $energyClassNumber = htmlentities(strip_tags($energyClassNumber));
-    $gesLetter = htmlentities(strip_tags($gesLetter));
-    $gesNumber = htmlentities(strip_tags($gesNumber));
-    $accomodationLivingAreaSize = htmlentities(strip_tags($accomodationLivingAreaSize));
-    $accomodationFloor = htmlentities(strip_tags($accomodationFloor));
-    $buildingNbOfFloors = htmlentities(strip_tags($buildingNbOfFloors));
-    $accomodationNbOfRooms = htmlentities(strip_tags($accomodationNbOfRooms));
-    $accomodationNbOfBedrooms = htmlentities(strip_tags($accomodationNbOfBedrooms));
-    $accomodationNbOfBathrooms = htmlentities(strip_tags($accomodationNbOfBathrooms));
-    $nbOfBedroomsToRent = htmlentities(strip_tags($nbOfBedroomsToRent));
-    $monthlyRentExcludingCharges = htmlentities(strip_tags($monthlyRentExcludingCharges));
-    $charges = htmlentities(strip_tags($charges));
-    $suretyBond = htmlentities(strip_tags($suretyBond));
-    $financialRequirements = htmlentities(strip_tags($financialRequirements));
-    $guarantorLiving = htmlentities(strip_tags($guarantorLiving));
-    $solvencyRatio = htmlentities(strip_tags($solvencyRatio));
-    $eligibleForAids = htmlentities(strip_tags($eligibleForAids));
-    $chargesIncludeCoOwnershipCharges = htmlentities(strip_tags($chargesIncludeCoOwnershipCharges));
-    $chargesIncludeElectricity = htmlentities(strip_tags($chargesIncludeElectricity));
-    $chargesIncludeHotWater = htmlentities(strip_tags($chargesIncludeHotWater));
-    $chargesIncludeHeating = htmlentities(strip_tags($chargesIncludeHeating));
-    $chargesIncludeInternet = htmlentities(strip_tags($chargesIncludeInternet));
-    $chargesIncludeHomeInsurance = htmlentities(strip_tags($chargesIncludeHomeInsurance));
-    $chargesIncludeBoilerInspection = htmlentities(strip_tags($chargesIncludeBoilerInspection));
-    $chargesIncludeHouseholdGarbageTaxes = htmlentities(strip_tags($chargesIncludeHouseholdGarbageTaxes));
-    $chargesIncludeCleaningService = htmlentities(strip_tags($chargesIncludeCleaningService));
-    $isFurnished = htmlentities(strip_tags($isFurnished));
-    $kitchenUse = htmlentities(strip_tags($kitchenUse));
-    $livingRoomUse = htmlentities(strip_tags($livingRoomUse));
-    $bedroomSize = htmlentities(strip_tags($bedroomSize));
-    $bedroomType = htmlentities(strip_tags($bedroomType));
-    $bedType = htmlentities(strip_tags($bedType));
-    $bedroomHasDesk = htmlentities(strip_tags($bedroomHasDesk));
-    $bedroomHasWardrobe = htmlentities(strip_tags($bedroomHasWardrobe));
-    $bedroomHasChair = htmlentities(strip_tags($bedroomHasChair));
-    $bedroomHasTv = htmlentities(strip_tags($bedroomHasTv));
-    $bedroomHasArmchair = htmlentities(strip_tags($bedroomHasArmchair));
-    $bedroomHasCoffeeTable = htmlentities(strip_tags($bedroomHasCoffeeTable));
-    $bedroomHasBedside = htmlentities(strip_tags($bedroomHasBedside));
-    $bedroomHasLamp = htmlentities(strip_tags($bedroomHasLamp));
-    $bedroomHasCloset = htmlentities(strip_tags($bedroomHasCloset));
-    $bedroomHasShelf = htmlentities(strip_tags($bedroomHasShelf));
-    $handicapedAccessibility = htmlentities(strip_tags($handicapedAccessibility));
-    $accomodationHasElevator = htmlentities(strip_tags($accomodationHasElevator));
-    $accomodationHasCommonParkingLot = htmlentities(strip_tags($accomodationHasCommonParkingLot));
-    $accomodationHasPrivateParkingPlace = htmlentities(strip_tags($accomodationHasPrivateParkingPlace));
-    $accomodationHasGarden = htmlentities(strip_tags($accomodationHasGarden));
-    $accomodationHasBalcony = htmlentities(strip_tags($accomodationHasBalcony));
-    $accomodationHasTerrace = htmlentities(strip_tags($accomodationHasTerrace));
-    $accomodationHasSwimmingPool = htmlentities(strip_tags($accomodationHasSwimmingPool));
-    $accomodationHasTv = htmlentities(strip_tags($accomodationHasTv));
-    $accomodationHasInternet = htmlentities(strip_tags($accomodationHasInternet));
-    $accomodationHasWifi = htmlentities(strip_tags($accomodationHasWifi));
-    $accomodationHasFiberOpticInternet = htmlentities(strip_tags($accomodationHasFiberOpticInternet));
-    $accomodationHasNetflix = htmlentities(strip_tags($accomodationHasNetflix));
-    $accomodationHasDoubleGlazing = htmlentities(strip_tags($accomodationHasDoubleGlazing));
-    $accomodationHasAirConditioning = htmlentities(strip_tags($accomodationHasAirConditioning));
-    $accomodationHasElectricHeating = htmlentities(strip_tags($accomodationHasElectricHeating));
-    $accomodationHasIndividualGasHeating = htmlentities(strip_tags($accomodationHasIndividualGasHeating));
-    $accomodationHasCollectiveGasHeating = htmlentities(strip_tags($accomodationHasCollectiveGasHeating));
-    $accomodationHasHotWaterTank = htmlentities(strip_tags($accomodationHasHotWaterTank));
-    $accomodationHasGasWaterHeater = htmlentities(strip_tags($accomodationHasGasWaterHeater));
-    $accomodationHasFridge = htmlentities(strip_tags($accomodationHasFridge));
-    $accomodationHasFreezer = htmlentities(strip_tags($accomodationHasFreezer));
-    $accomodationHasOven = htmlentities(strip_tags($accomodationHasOven));
-    $accomodationHasBakingTray = htmlentities(strip_tags($accomodationHasBakingTray));
-    $accomodationHasWashingMachine = htmlentities(strip_tags($accomodationHasWashingMachine));
-    $accomodationHasDishwasher = htmlentities(strip_tags($accomodationHasDishwasher));
-    $accomodationHasMicrowaveOven = htmlentities(strip_tags($accomodationHasMicrowaveOven));
-    $accomodationHasCoffeeMachine = htmlentities(strip_tags($accomodationHasCoffeeMachine));
-    $accomodationHasPodCoffeeMachine = htmlentities(strip_tags($accomodationHasPodCoffeeMachine));
-    $accomodationHasKettle = htmlentities(strip_tags($accomodationHasKettle));
-    $accomodationHasToaster = htmlentities(strip_tags($accomodationHasToaster));
-    $accomodationHasExtractorHood = htmlentities(strip_tags($accomodationHasExtractorHood));
-    $animalsAllowed = htmlentities(strip_tags($animalsAllowed));
-    $smokingIsAllowed = htmlentities(strip_tags($smokingIsAllowed));
-    $authorizedParty = htmlentities(strip_tags($authorizedParty));
-    $authorizedVisit = htmlentities(strip_tags($authorizedVisit));
-    $nbOfOtherRoommatePresent = htmlentities(strip_tags($nbOfOtherRoommatePresent));
-    $renterSituation = htmlentities(strip_tags($renterSituation));
-    $idealRoommateSex = htmlentities(strip_tags($idealRoommateSex));
-    $idealRoommateSituation = htmlentities(strip_tags($idealRoommateSituation));
-    $idealRoommateMinAge = htmlentities(strip_tags($idealRoommateMinAge));
-    $idealRoommateMaxAge = htmlentities(strip_tags($idealRoommateMaxAge));
-    $locationMinDuration = htmlentities(strip_tags($locationMinDuration));
-    $rentWithoutVisit = htmlentities(strip_tags($rentWithoutVisit));
-    $contactNameForVisit = htmlentities(strip_tags($contactNameForVisit));
-    $contactPhoneNumberForVisit = htmlentities(strip_tags($contactPhoneNumberForVisit));
-    $contactMailForVisit = htmlentities(strip_tags($contactMailForVisit));
-    $addressId = htmlentities(strip_tags($addressId));
-    $userId = htmlentities(strip_tags($_SESSION['id']));
+    $availableDate = htmlspecialchars(strip_tags($availableDate));
+    $title = htmlspecialchars(strip_tags($title));
+    $description = htmlspecialchars(strip_tags($description));
+    $type = htmlspecialchars(strip_tags($type));
+    $category = htmlspecialchars(strip_tags($category));
+    $energyClassLetter = htmlspecialchars(strip_tags($energyClassLetter));
+    $energyClassNumber = htmlspecialchars(strip_tags($energyClassNumber));
+    $gesLetter = htmlspecialchars(strip_tags($gesLetter));
+    $gesNumber = htmlspecialchars(strip_tags($gesNumber));
+    $accomodationLivingAreaSize = htmlspecialchars(strip_tags($accomodationLivingAreaSize));
+    $accomodationFloor = htmlspecialchars(strip_tags($accomodationFloor));
+    $buildingNbOfFloors = htmlspecialchars(strip_tags($buildingNbOfFloors));
+    $accomodationNbOfRooms = htmlspecialchars(strip_tags($accomodationNbOfRooms));
+    $accomodationNbOfBedrooms = htmlspecialchars(strip_tags($accomodationNbOfBedrooms));
+    $accomodationNbOfBathrooms = htmlspecialchars(strip_tags($accomodationNbOfBathrooms));
+    $nbOfBedroomsToRent = htmlspecialchars(strip_tags($nbOfBedroomsToRent));
+    $monthlyRentExcludingCharges = htmlspecialchars(strip_tags($monthlyRentExcludingCharges));
+    $charges = htmlspecialchars(strip_tags($charges));
+    $suretyBond = htmlspecialchars(strip_tags($suretyBond));
+    $financialRequirements = htmlspecialchars(strip_tags($financialRequirements));
+    $guarantorLiving = htmlspecialchars(strip_tags($guarantorLiving));
+    $solvencyRatio = htmlspecialchars(strip_tags($solvencyRatio));
+    $eligibleForAids = htmlspecialchars(strip_tags($eligibleForAids));
+    $chargesIncludeCoOwnershipCharges = htmlspecialchars(strip_tags($chargesIncludeCoOwnershipCharges));
+    $chargesIncludeElectricity = htmlspecialchars(strip_tags($chargesIncludeElectricity));
+    $chargesIncludeHotWater = htmlspecialchars(strip_tags($chargesIncludeHotWater));
+    $chargesIncludeHeating = htmlspecialchars(strip_tags($chargesIncludeHeating));
+    $chargesIncludeInternet = htmlspecialchars(strip_tags($chargesIncludeInternet));
+    $chargesIncludeHomeInsurance = htmlspecialchars(strip_tags($chargesIncludeHomeInsurance));
+    $chargesIncludeBoilerInspection = htmlspecialchars(strip_tags($chargesIncludeBoilerInspection));
+    $chargesIncludeHouseholdGarbageTaxes = htmlspecialchars(strip_tags($chargesIncludeHouseholdGarbageTaxes));
+    $chargesIncludeCleaningService = htmlspecialchars(strip_tags($chargesIncludeCleaningService));
+    $isFurnished = htmlspecialchars(strip_tags($isFurnished));
+    $kitchenUse = htmlspecialchars(strip_tags($kitchenUse));
+    $livingRoomUse = htmlspecialchars(strip_tags($livingRoomUse));
+    $bedroomSize = htmlspecialchars(strip_tags($bedroomSize));
+    $bedroomType = htmlspecialchars(strip_tags($bedroomType));
+    $bedType = htmlspecialchars(strip_tags($bedType));
+    $bedroomHasDesk = htmlspecialchars(strip_tags($bedroomHasDesk));
+    $bedroomHasWardrobe = htmlspecialchars(strip_tags($bedroomHasWardrobe));
+    $bedroomHasChair = htmlspecialchars(strip_tags($bedroomHasChair));
+    $bedroomHasTv = htmlspecialchars(strip_tags($bedroomHasTv));
+    $bedroomHasArmchair = htmlspecialchars(strip_tags($bedroomHasArmchair));
+    $bedroomHasCoffeeTable = htmlspecialchars(strip_tags($bedroomHasCoffeeTable));
+    $bedroomHasBedside = htmlspecialchars(strip_tags($bedroomHasBedside));
+    $bedroomHasLamp = htmlspecialchars(strip_tags($bedroomHasLamp));
+    $bedroomHasCloset = htmlspecialchars(strip_tags($bedroomHasCloset));
+    $bedroomHasShelf = htmlspecialchars(strip_tags($bedroomHasShelf));
+    $handicapedAccessibility = htmlspecialchars(strip_tags($handicapedAccessibility));
+    $accomodationHasElevator = htmlspecialchars(strip_tags($accomodationHasElevator));
+    $accomodationHasCommonParkingLot = htmlspecialchars(strip_tags($accomodationHasCommonParkingLot));
+    $accomodationHasPrivateParkingPlace = htmlspecialchars(strip_tags($accomodationHasPrivateParkingPlace));
+    $accomodationHasGarden = htmlspecialchars(strip_tags($accomodationHasGarden));
+    $accomodationHasBalcony = htmlspecialchars(strip_tags($accomodationHasBalcony));
+    $accomodationHasTerrace = htmlspecialchars(strip_tags($accomodationHasTerrace));
+    $accomodationHasSwimmingPool = htmlspecialchars(strip_tags($accomodationHasSwimmingPool));
+    $accomodationHasTv = htmlspecialchars(strip_tags($accomodationHasTv));
+    $accomodationHasInternet = htmlspecialchars(strip_tags($accomodationHasInternet));
+    $accomodationHasWifi = htmlspecialchars(strip_tags($accomodationHasWifi));
+    $accomodationHasFiberOpticInternet = htmlspecialchars(strip_tags($accomodationHasFiberOpticInternet));
+    $accomodationHasNetflix = htmlspecialchars(strip_tags($accomodationHasNetflix));
+    $accomodationHasDoubleGlazing = htmlspecialchars(strip_tags($accomodationHasDoubleGlazing));
+    $accomodationHasAirConditioning = htmlspecialchars(strip_tags($accomodationHasAirConditioning));
+    $accomodationHasElectricHeating = htmlspecialchars(strip_tags($accomodationHasElectricHeating));
+    $accomodationHasIndividualGasHeating = htmlspecialchars(strip_tags($accomodationHasIndividualGasHeating));
+    $accomodationHasCollectiveGasHeating = htmlspecialchars(strip_tags($accomodationHasCollectiveGasHeating));
+    $accomodationHasHotWaterTank = htmlspecialchars(strip_tags($accomodationHasHotWaterTank));
+    $accomodationHasGasWaterHeater = htmlspecialchars(strip_tags($accomodationHasGasWaterHeater));
+    $accomodationHasFridge = htmlspecialchars(strip_tags($accomodationHasFridge));
+    $accomodationHasFreezer = htmlspecialchars(strip_tags($accomodationHasFreezer));
+    $accomodationHasOven = htmlspecialchars(strip_tags($accomodationHasOven));
+    $accomodationHasBakingTray = htmlspecialchars(strip_tags($accomodationHasBakingTray));
+    $accomodationHasWashingMachine = htmlspecialchars(strip_tags($accomodationHasWashingMachine));
+    $accomodationHasDishwasher = htmlspecialchars(strip_tags($accomodationHasDishwasher));
+    $accomodationHasMicrowaveOven = htmlspecialchars(strip_tags($accomodationHasMicrowaveOven));
+    $accomodationHasCoffeeMachine = htmlspecialchars(strip_tags($accomodationHasCoffeeMachine));
+    $accomodationHasPodCoffeeMachine = htmlspecialchars(strip_tags($accomodationHasPodCoffeeMachine));
+    $accomodationHasKettle = htmlspecialchars(strip_tags($accomodationHasKettle));
+    $accomodationHasToaster = htmlspecialchars(strip_tags($accomodationHasToaster));
+    $accomodationHasExtractorHood = htmlspecialchars(strip_tags($accomodationHasExtractorHood));
+    $animalsAllowed = htmlspecialchars(strip_tags($animalsAllowed));
+    $smokingIsAllowed = htmlspecialchars(strip_tags($smokingIsAllowed));
+    $authorizedParty = htmlspecialchars(strip_tags($authorizedParty));
+    $authorizedVisit = htmlspecialchars(strip_tags($authorizedVisit));
+    $nbOfOtherRoommatePresent = htmlspecialchars(strip_tags($nbOfOtherRoommatePresent));
+    $renterSituation = htmlspecialchars(strip_tags($renterSituation));
+    $idealRoommateSex = htmlspecialchars(strip_tags($idealRoommateSex));
+    $idealRoommateSituation = htmlspecialchars(strip_tags($idealRoommateSituation));
+    $idealRoommateMinAge = htmlspecialchars(strip_tags($idealRoommateMinAge));
+    $idealRoommateMaxAge = htmlspecialchars(strip_tags($idealRoommateMaxAge));
+    $locationMinDuration = htmlspecialchars(strip_tags($locationMinDuration));
+    $rentWithoutVisit = htmlspecialchars(strip_tags($rentWithoutVisit));
+    $contactNameForVisit = htmlspecialchars(strip_tags($contactNameForVisit));
+    $contactPhoneNumberForVisit = htmlspecialchars(strip_tags($contactPhoneNumberForVisit));
+    $contactMailForVisit = htmlspecialchars(strip_tags($contactMailForVisit));
+    $addressId = htmlspecialchars(strip_tags($addressId));
+    $userId = htmlspecialchars(strip_tags($_SESSION['id']));
     
     $db = connectBdd();
     $insert = $db->prepare('INSERT INTO advertisements (
@@ -449,9 +553,33 @@ function insertNewAdvertisement($availableDate, $title, $description, $type, $ca
     ':addressId'=> $addressId,
     ':userId'=> $userId
     ));
+    return true;
+}
+
+//Enregistrement photo(s) dans la table pictures
+function insertPictures($fileUpload,$advertisementId){
+    foreach($fileUpload as $key => $value){
+        $pictureFileName = $fileUpload[$key];
+        $db = connectBdd();
+        $insertPicture = $db->prepare('INSERT INTO pictures (picture_fileName,advertisement_id) VALUES (:pictureFileName,:advertisementId)');
+        $insertPicture->execute(array(
+            ':pictureFileName'=>$pictureFileName,
+            ':advertisementId'=>$advertisementId
+        ));
+    }
+    return true;
 }
 
 
+
+
+
+
+
+
+
+
+//TP VOYAGES
 //Enregistrement image dans le dossier public/images
 function uploadImage($namePictureTmp, $namePicture, $uploadPictureDir)
 {
@@ -473,8 +601,8 @@ function uploadImage($namePictureTmp, $namePicture, $uploadPictureDir)
 //Ajouter un voyage
 function insertNewTravel($title, $content, $image=null)
 {
-    $titleOk = htmlentities(strip_tags($title));
-    $contentOk = htmlentities(strip_tags($content));
+    $titleOk = htmlspecialchars(strip_tags($title));
+    $contentOk = htmlspecialchars(strip_tags($content));
 
     $db = connectBdd();
     $insert = $db->prepare('INSERT INTO voyagespost (title,content,image) VALUES (:title,:content,:image)');
@@ -486,21 +614,10 @@ function insertNewTravel($title, $content, $image=null)
     return true;
 }
 
-
-//Récupérer un voyage ciblé par son id
-function getTravel($id)
-{
-    $db = connectBdd();
-    $request = $db->query('SELECT * FROM voyagespost WHERE id="'.$id.'"');
-    $requestOk = $request->fetch();
-    $request->closeCursor();
-    return $requestOk;
-}
-
 //Supprimer un voyage dans la base dedonnée
 function deleteTravelInBdd($postTravelToDelete)
 {
-    $postTravelToDelete = htmlentities(strip_tags($postTravelToDelete));
+    $postTravelToDelete = htmlspecialchars(strip_tags($postTravelToDelete));
     $db = connectBdd();
     
     //Supprime l'image du dossier ou elle est stockée
@@ -515,9 +632,9 @@ function deleteTravelInBdd($postTravelToDelete)
 //Modifier un voyage dans le base dedonnée
 function modifyTravelInBdd($title, $content, $id)
 {
-    $title = htmlentities(strip_tags($title));
-    $content = htmlentities(strip_tags($content));
-    $id = htmlentities(strip_tags($id));
+    $title = htmlspecialchars(strip_tags($title));
+    $content = htmlspecialchars(strip_tags($content));
+    $id = htmlspecialchars(strip_tags($id));
 
     $db = connectBdd();
     $modify = $db->prepare('UPDATE voyagespost SET title=:title,content=:content WHERE id=:id');
