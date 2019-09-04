@@ -16,9 +16,7 @@
     <?=$content?>
     <script src="public/js/energy.js"></script>
     <script src="public/js/uploadFile.js"></script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=<?=$apikey?>&signed_in=true&libraries=places&callback=initMap"
-        async defer></script>
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
