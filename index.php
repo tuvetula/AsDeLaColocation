@@ -1,38 +1,37 @@
 <?php
 session_start();
-require_once('controller/frontEnd.php');
+require_once('controller/frontEnd/c_frontEnd.php');
 
 //Si utilisateur connecté
-if(isset($_SESSION['login'])){
-    require_once('controller/backEnd.php');
-
-    if (isset($_GET['disconnect']) && $_GET['disconnect']==1){
-    session_destroy();
-    session_start();
-    displayLoginPage();
-
-    }else if(isset($_GET['page']) && $_GET['page']=="addAnAdvertisement"){
+if (isset($_SESSION['login'])) {
+    require_once('controller/backEnd/c_backEnd.php');
+    
+    if (isset($_GET['disconnect']) && $_GET['disconnect']==1) {
+        session_destroy();
+        session_start();
+        displayLoginPage();
+    } elseif (isset($_GET['page']) && $_GET['page']=="displayAddAnAdvertisement") {
         displayAddAnAdvertisementForm();
-    }else if(isset($_GET['page']) && $_GET['page']=="homeUser"){
+    } elseif (isset($_GET['page']) && $_GET['page']=="homeUser") {
         displayHomeUser();
-    }else if (isset($_GET['page']) && $_GET['page']=="newAdvertisement"){
+    } elseif (isset($_GET['page']) && $_GET['page']=="addAdvertisement") {
+        require_once('controller/backend/c_addNewAdvertisement.php');
         addANewAdvertisement();
-    }else{
+    } else {
         displayHomeUser();
     }
 
     //Si utilisateur non-connecté
-}else if(isset($_POST['login']) && isset($_POST['password'])){
-        //backendControl
-        require_once('controller/backEnd.php');
-        login();
+} elseif (isset($_POST['login']) && isset($_POST['password'])) {
+    require_once('controller/backEnd/c_backEnd.php');
     
-        if(isset($_SESSION['login'])){
-            displayHomeUser();
-        }else{
-            echo 'erreur de connexion';
-        }
-
-}else{
+    login();
+    
+    if (isset($_SESSION['login'])) {
+        displayHomeUser();
+    } else {
+        echo 'erreur de connexion';
+    }
+} else {
     displayLoginPage();
 }

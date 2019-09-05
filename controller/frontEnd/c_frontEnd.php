@@ -1,5 +1,4 @@
 <?php
-require_once('model/frontEnd.php');
 
 function displayLoginPage(){
     require('view/frontEnd/displayLoginForm.php');

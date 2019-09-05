@@ -1,28 +1,12 @@
 <?php
-require_once('model/backEnd/modelBackEnd.php');
+require_once('model/backEnd/m_insertNewAdvertisement.php');
+require_once('model/backEnd/m_insertNewPicture.php');
+require_once('model/backend/m_insertNewAddress.php');
+require_once('model/backend/m_getAddress.php');
+require_once('model/backEnd/m_getAdvertisement.php');
+require_once('model/backEnd/m_getUser.php');
+require_once('controller/backEnd/functions/rearrangeDataFilesArray.php');
 
-//Vérification login et mot de passe
-function login()
-{
-    $login = getUser($_POST['login']);
-    if ($login) {
-        if (password_verify($_POST['password'], $login['user_password'])) {
-            $_SESSION['login'] = $login['user_mail'];
-            $_SESSION['id'] = $login['user_id'];
-            $_SESSION['isAdmin'] = $login['user_isAdmin'];
-        }
-    }
-}
-//Affichage page d'accueil utilisateur connecté
-function displayHomeUser()
-{
-    require_once('view/backEnd/displayHomeUser.php');
-}
-//Affichage Formulaire d'ajout d'une nouvelle annonce
-function displayAddAnAdvertisementForm()
-{
-    require_once('view/backEnd/displayPostAnAdvertisement.php');
-}
 //Ajouter une nouvelle annonce
 function addANewAdvertisement()
 {
@@ -450,8 +434,9 @@ function addANewAdvertisement()
         $contactMailForVisit = $_POST['contactMailForVisit'];
     }
     
+    //TRAITEMENT PHOTOS
+    
     //Réorganisation du tableau $_FILES
-    require_once('controller/functionRearrangeFilesArray.php');
     $filesArray = reArrayFiles($_FILES);
 
     //Définition constante
@@ -500,7 +485,7 @@ function addANewAdvertisement()
             $fileMimeType = $finfo->file($namePictureTmp);
         
             // Retourne la taille d'une image
-            list($width, $height, $type, $attr) = getimagesize($namePictureTmp);
+            //list($width, $height, $type, $attr) = getimagesize($namePictureTmp);
         
             // On vérifie la taille, en octets, du fichier téléchargé
             if ($filesArray[$i]['size'] > UPLOAD_SIZEMAX_PHOTO) {
@@ -530,7 +515,7 @@ function addANewAdvertisement()
         }
     }
 
-    //Enregistrement en base de donnée
+    //ENREGISTREMENT EN BASE DE DONNEE
 
     //Vérification si l'adresse postale renseignée existe déja et si oui renvoi l'id
     $addressVerification = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
@@ -540,12 +525,12 @@ function addANewAdvertisement()
         $addressId = $addressVerification['address_id'];
         //Si l'annonce a bien été enregistré alors vérification s'il y a des photos
         if (insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId)) {
-            //Si $fileUpload contient des photos (n'est pas vide) alors recupération id de l'annonce
+            //Si $fileUpload contient des photos (n'est pas vide) alors recupération id de la dernière annonce
             if (!empty($fileUpload)) {
-                $advertisementIdVerification = getAdvertisementId($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId);
+                $advertisementIdVerification = getLastAdvertisementId();
                 //Si on a bien récupéré l'id de l'annonce alors enregistrement photo en bdd
                 if ($advertisementIdVerification) {
-                    $advertisementId = $advertisementIdVerification['advertisement_id'];
+                    $advertisementId = $advertisementIdVerification['MAX(advertisement_id)'];
                     //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                     if (insertPictures($fileUpload, $advertisementId)) {
                         $_SESSION['complete']['addAvertisementComplete'] = 'Votre nouvelle annonce a bien été ajouté';
@@ -565,12 +550,12 @@ function addANewAdvertisement()
             $addressId = $addressArray['address_id'];
             //Si l'annonce a bien été enregistré alors vérification s'il y a des photos
             if (insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId)) {
-                //Si $fileUpload contient des photos (n'est pas vide) alors recupération id de l'annonce
+                //Si $fileUpload contient des photos (n'est pas vide) alors recupération id de la dernière annonce
                 if (!empty($fileUpload)) {
-                    $advertisementIdVerification = getAdvertisementId($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId);
+                    $advertisementIdVerification = getLastAdvertisementId();
                     //Si on a bien récupéré l'id de l'annonce alors enregistrement photo en bdd
                     if ($advertisementIdVerification) {
-                        $advertisementId = $advertisementIdVerification['advertisement_id'];
+                        $advertisementId = $advertisementIdVerification['MAX(advertisement_id)'];
                         //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                         if (insertPictures($fileUpload, $advertisementId)) {
                             $_SESSION['complete']['addAvertisementComplete'] = 'Votre nouvelle annonce a bien été ajouté';
@@ -587,87 +572,4 @@ function addANewAdvertisement()
         }
     }
     require_once('view/backEnd/displayHomeUser.php');
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-//VOYAGES TP
-function displayTravelsConnected()
-{
-    $travels = getTravels();
-    $pageEnCours="index";
-    require('view/backEnd/displayTravelsConnected.php');
-}
-//VOAYGES TP
-function displayAddTravel($message=null)
-{
-    $pageEnCours = "ajouter";
-    require('view/backEnd/displayAddTravel.php');
-}
-//VOAYGES TP
-function displayDeleteTravel()
-{
-    $pageEnCours = "supprimer";
-    $insert = getTravelsName();
-    require('view/backEnd/displayDeleteTravel.php');
-}
-//VOAYGES TP
-function deleteTravel()
-{
-    $postTravelToDelete= $_POST['deleteTravel'];
-    deleteTravelInBdd($postTravelToDelete);
-    displayDeleteTravel();
-}
-//VOAYGES TP
-function displayModifyTravel()
-{
-    $pageEnCours = "modifier";
-    $insert = getTravelsName();
-    require('view/backEnd/displayModifyTravel.php');
-}
-//VOAYGES TP
-function displayModifyTravelOk()
-{
-    $pageEnCours = "modifier";
-    $postTravelToModify= $_POST['modifyTravel'];
-    $requestOk = (getTravel($postTravelToModify));
-    require('view/backEnd/displayModifyTravel.php');
-}
-//VOAYGES TP
-function modifyTravel()
-{
-    $id = $_GET['idTravel'];
-    $title = $_POST['titleModify'];
-    $content = $_POST['contentModify'];
-    modifyTravelInBdd($title, $content, $id);
-    displayModifyTravel();
-}
-//VOAYGES TP
-function writeNewTravelInBdd()
-{
-    if (!empty($_FILES['image']['name'])) {
-        $uploadPictureDir = 'public/images/';
-        $namePictureTmp = $_FILES['image']['tmp_name'];
-        $namePicture = uniqid().$_FILES['image']['name'];
-        $extensions = array('png', 'gif', 'jpg', 'jpeg');
-        if (uploadImage($namePictureTmp, $namePicture, $uploadPictureDir)) {
-            if (insertNewTravel($_POST['title'], $_POST['content'], $namePicture)) {
-                displayAddTravel('insertion Ok');
-            }
-        }
-    } else {
-        if (insertNewTravel($_POST['title'], $_POST['content'])) {
-            displayAddTravel('insertion Ok');
-        }
-    }
 }
