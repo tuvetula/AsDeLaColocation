@@ -1246,6 +1246,7 @@ ob_start();
         </form>
     </div>
 </div>
+<script src="public/js/energy.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');

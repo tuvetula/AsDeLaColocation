@@ -1,5 +1,6 @@
 <?php
 require_once('model/backEnd/m_getUser.php');
+require_once('model/backEnd/m_getAdvertisement.php');
 
 //Vérification login et mot de passe
 function login()
@@ -17,6 +18,8 @@ function login()
 //Affichage page d'accueil utilisateur connecté
 function displayHomeUser()
 {
+    $userAdvertisements = getUserAdvertisement($_SESSION['id']);
+    
     require_once('view/backEnd/displayHomeUser.php');
 }
 
