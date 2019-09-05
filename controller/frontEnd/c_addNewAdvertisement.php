@@ -1,11 +1,11 @@
 <?php
-require_once('model/backEnd/m_insertNewAdvertisement.php');
-require_once('model/backEnd/m_insertNewPicture.php');
-require_once('model/backend/m_insertNewAddress.php');
-require_once('model/backend/m_getAddress.php');
-require_once('model/backEnd/m_getAdvertisement.php');
-require_once('model/backEnd/m_getUser.php');
-require_once('controller/backEnd/functions/rearrangeDataFilesArray.php');
+require_once('model/frontEnd/m_insertNewAdvertisement.php');
+require_once('model/frontEnd/m_insertNewPicture.php');
+require_once('model/frontEnd/m_insertNewAddress.php');
+require_once('model/frontEnd/m_getAddress.php');
+require_once('model/frontEnd/m_getAdvertisement.php');
+require_once('model/frontEnd/m_getUser.php');
+require_once('controller/frontEnd/functions/rearrangeDataFilesArray.php');
 
 //Ajouter une nouvelle annonce
 function addANewAdvertisement()
@@ -572,5 +572,5 @@ function addANewAdvertisement()
             $_SESSION['error']['addAddress'] = 'L\'adresse du logement et l\'annonce n\'ont pas été enregistré';
         }
     }
-    require_once('view/backEnd/displayHomeUser.php');
+    require_once('view/frontEnd/displayHomeUser.php');
 }

@@ -1,13 +1,16 @@
 <?php
 header('Content-Type: application/json');
-require_once('model/bdd/bddConfig.php');
-
+//require_once('../bdd/bddConfig.php');
 //Stocke la date - 7 jours
 $date = date('Y-m-d', strtotime('-7 day'));
 // echo $date;
 
 //Connexion Base de donnée
-$bdd = connectBdd();
+try {
+    $bdd = new PDO('mysql:host=localhost;dbname=asdelacolocation;charset=utf8', 'root', '',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+} catch (Exception $e) {
+    die('Erreur : '.$e->getMessage());
+}
 
 //Requete Suppression: Annonce inactive + date non null
 $request=$bdd->prepare('SELECT * FROM advertisements 
@@ -18,6 +21,7 @@ $request=$bdd->prepare('SELECT * FROM advertisements
 $request->execute([
     ':isActive' => false,
 ]);
+
 $deletion = $request->fetchAll(PDO::FETCH_ASSOC);
 $json['Deletion'] = $deletion;
 
