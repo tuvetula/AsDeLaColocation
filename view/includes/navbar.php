@@ -20,7 +20,7 @@
                     <a class="nav-link" href="index.php?page=homeUser">Mon profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=addAnAdvertisement">Déposer une annonce</a>
+                    <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
                 </li>
             </ul>
             <a href="index.php?disconnect=1" class="btn btn btn-danger pull-right" role="button" aria-pressed="true">Se
@@ -34,7 +34,7 @@
                 <a class="nav-link" href="#">Mon profil</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index.php?page=addAnAdvertisement">Déposer une annonce</a>
+                <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Supprimer un utilisateur</a>

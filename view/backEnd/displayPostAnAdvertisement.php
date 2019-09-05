@@ -5,7 +5,7 @@ ob_start();
 <div id="addAnAdvertisementForm" class="container">
     <div class="jumbotron">
         <h1 class="text-center">Ajouter une nouvelle annonce</h1>
-        <form method="post" action="index.php?page=newAdvertisement" enctype="multipart/form-data">
+        <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Annonce</h2>
@@ -30,14 +30,14 @@ ob_start();
                         <div class="form-group col-md-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
-                                <input id="type" class="form-check-input" type="radio" name="type" value="Maison" checked>
-                                <label class="form-check-label" for="type">
+                                <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison" checked>
+                                <label class="form-check-label" for="radioType1">
                                     Maison
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input id="type" class="form-check-input" type="radio" name="type" value="Appartement">
-                                <label class="form-check-label" for="type">
+                                <input id="radioType2" class="form-check-input" type="radio" name="type" value="Appartement">
+                                <label class="form-check-label" for="radioType2">
                                     Appartement
                                 </label>
                             </div>
