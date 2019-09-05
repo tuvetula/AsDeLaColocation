@@ -1247,6 +1247,7 @@ ob_start();
     </div>
 </div>
 <script src="public/js/energy.js"></script>
+<script src="public/js/uploadFilePreview.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');

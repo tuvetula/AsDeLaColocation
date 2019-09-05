@@ -13,31 +13,43 @@
                 </li>
 
                 <?php
-      if (isset($_SESSION['login']) && isset($_SESSION['isAdmin'])){
+      if (isset($_SESSION['login']) && isset($_SESSION['isAdmin'])) {
           // <!--Menu Utilisateur connecté et non-admin-->
-        if (!$_SESSION['isAdmin']){?>
+          if (!$_SESSION['isAdmin']) {?>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=homeUser">Mon profil</a>
+                    <a class="nav-link" href="index.php?page=homeUser">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?page=myAdvertisements">Mes annonces</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Mon compte</a>
                 </li>
             </ul>
             <a href="index.php?disconnect=1" class="btn btn btn-danger pull-right" role="button" aria-pressed="true">Se
                 déconnecter</a>
 
             <?php
-        }else{
-          //Menu utilisateur connecté et admin
+        } else {
+            //Menu utilisateur connecté et admin
           ?>
             <li class="nav-item">
                 <a class="nav-link" href="#">Mon profil</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="index.php">Mes annonces</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Supprimer un utilisateur</a>
+                <a class="nav-link" href="#">Utilisateurs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">Mon compte</a>
             </li>
 
             </ul>
@@ -45,12 +57,12 @@
                 déconnecter</a>
             <?php
         }
-      }else{
-        //Menu utilisateur non-connecté
+      } else {
+          //Menu utilisateur non-connecté
         ?>
             </ul>
             <?php
-            }
+      }
             ?>
         </div>
     </nav>
