@@ -1,6 +1,15 @@
 <?php
 require_once('model/bdd/bddConfig.php');
 
+//récupère MAX(address_id) de la dernière addresse saisie en bdd
+function getLastAddressId(){
+    $db = connectBdd();
+    $request = $db->query('SELECT MAX(address_id) FROM addresses');
+    $lastAddressId = $request->fetch(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $lastAddressId;
+}
+
 //Récupére adresse_id si le nom de la rue, le code postal, la ville et le pays correspondent.
 function getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry)
 {

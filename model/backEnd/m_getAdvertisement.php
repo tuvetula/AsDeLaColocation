@@ -1,7 +1,7 @@
 <?php
 require_once('model/bdd/bddConfig.php');
 
-//Récupère advertisement_id de la dernière saisie
+//Récupère MAX(advertisement_id) de la dernière annonce saisie en bdd
 function getLastAdvertisementId(){
     $db = connectBdd();
     $request = $db->query('SELECT MAX(advertisement_id) FROM advertisements');
