@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once('model/bdd/bddConfig.php')
+require_once('model/bdd/bddConfig.php');
 
 //Stocke la date - 7 jours
 $date = date('Y-m-d', strtotime('-7 day'));
