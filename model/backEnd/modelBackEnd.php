@@ -558,7 +558,7 @@ function insertNewAdvertisement($availableDate, $title, $description, $type, $ca
 
 //Enregistrement photo(s) dans la table pictures
 function insertPictures($fileUpload,$advertisementId){
-    foreach($fileUpload as $key => $value){
+    foreach($fileUpload as $key => $value){ 
         $pictureFileName = $fileUpload[$key];
         $db = connectBdd();
         $insertPicture = $db->prepare('INSERT INTO pictures (picture_fileName,advertisement_id) VALUES (:pictureFileName,:advertisementId)');
