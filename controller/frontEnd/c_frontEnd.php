@@ -21,11 +21,19 @@ function displayLoginPage(){
 //Affichage page d'accueil utilisateur connecté
 function displayHomeUser()
 {
-    $userAdvertisements = getUserAdvertisement($_SESSION['id']);
-    
     require_once('view/frontEnd/displayHomeUser.php');
 }
 
+//Affichage de la page "Mes annonces"
+function displayMyAdvertisements(){
+    require_once('controller/frontEnd/functions/rearrangeListOfAdvertisements.php');
+    //Récupération annonces utilisateurs et réarrangement liste des annonces en tableau
+    $userAdvertisements = getUserAdvertisement($_SESSION['id']);
+    $userAdvertisementRearrange = reArrangeListOfAdvertisement($userAdvertisements);
+    //$userPictures = getUserPicture($_SESSION['id']);
+    require_once('view/frontEnd/displayMyAdvertisements.php');
+
+}
 //Affichage Formulaire d'ajout d'une nouvelle annonce
 function displayAddAnAdvertisementForm()
 {

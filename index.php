@@ -4,11 +4,12 @@ require_once('controller/frontEnd/c_frontEnd.php');
 
 //Si utilisateur connecté
 if(isset($_SESSION['login'])){
-    
     if (isset($_GET['disconnect']) && $_GET['disconnect']==1) {
         session_destroy();
         session_start();
         displayLoginPage();
+    } else if(isset($_GET['page']) && $_GET['page']=="myAdvertisements"){
+        displayMyAdvertisements();
     } elseif (isset($_GET['page']) && $_GET['page']=="displayAddAnAdvertisement") {
         displayAddAnAdvertisementForm();
     } elseif (isset($_GET['page']) && $_GET['page']=="homeUser") {
@@ -20,8 +21,10 @@ if(isset($_SESSION['login'])){
         displayHomeUser();
     }
     //Si l'utilisateur est un admin
-    if ($_SESSION['isAdmin']){
-        require_once('controller/backEnd/c_backEnd.php');
+    if (isset($_SESSION['isAdmin'])){
+        if($_SESSION['isAdmin']){
+            require_once('controller/backEnd/c_backEnd.php');
+        }
     }
 
 }else{
