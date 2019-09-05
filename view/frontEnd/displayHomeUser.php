@@ -4,7 +4,7 @@ ob_start();
 ?>
 <div class="container">
     <div id="myadvertisements" class="jumbotron">
-
+        
     </div>
 
 </div>
