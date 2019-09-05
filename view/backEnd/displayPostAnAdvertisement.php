@@ -30,13 +30,13 @@ ob_start();
                         <div class="form-group col-md-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type" value="Maison" checked>
+                                <input id="type" class="form-check-input" type="radio" name="type" value="Maison" checked>
                                 <label class="form-check-label" for="type">
                                     Maison
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="type" value="Appartement">
+                                <input id="type" class="form-check-input" type="radio" name="type" value="Appartement">
                                 <label class="form-check-label" for="type">
                                     Appartement
                                 </label>
