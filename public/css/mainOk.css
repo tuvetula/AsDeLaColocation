@@ -26,6 +26,10 @@ body {
     width: 100%;
 }
 
+#buttonsAdvertisement {
+    min-height: 100%;
+}
+
 #screen {
     display: flex;
     min-height: 100%;
@@ -45,3 +49,6 @@ body {
 a {
     color: black;
 } */
+
+
+/* switchButton */
