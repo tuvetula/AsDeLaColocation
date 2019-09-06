@@ -9,7 +9,7 @@ ob_start();
             <div class="row mt-4">
                 <div class="card col-md-4 text-center p-3">
                     <div class="container offset-md-3 col-md-6">
-                        <img src="public/images/Icons/iconeAnnonce.png" class="card-img img-responsive" alt="Mes Annonces" style="width:50px">
+                        <img src="public/pictures/Icons/iconeAnnonce.png" class="card-img img-responsive" alt="Mes Annonces" style="width:50px">
                     </div>
                     <div class="card-body p-1">
                         <a href="index.php?page=myAdvertisements" class="stretched-link">
@@ -19,7 +19,7 @@ ob_start();
                 </div>
                 <div class="card col-md-4 text-center p-3">
                     <div class="container offset-md-3 col-md-6">
-                        <img src="public/images/Icons/iconeDeposerAnnonce.png" class="card-img img-responsive" alt="Mes Annonces" style="width:50px">
+                        <img src="public/pictures/Icons/iconeDeposerAnnonce.png" class="card-img img-responsive" alt="Mes Annonces" style="width:50px">
                     </div>
                     <div class="card-body p-1">
                         <a href="index.php?page=displayAddAnAdvertisement" class="stretched-link">
@@ -29,7 +29,7 @@ ob_start();
                 </div>
                 <div class="card col-md-4 text-center p-3">
                     <div class="container offset-md-3 col-md-6">
-                        <img src="public/images/Icons/iconeMonCompte.png" class="card-img img-responsive " alt="Mes Annonces" style="width:50px">
+                        <img src="public/pictures/Icons/iconeMonCompte.png" class="card-img img-responsive " alt="Mes Annonces" style="width:50px">
                     </div>
                     <div class="card-body">
                         <a href="index.php" class="stretched-link">

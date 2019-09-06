@@ -29,7 +29,8 @@ function displayMyAdvertisements(){
     require_once('controller/frontEnd/functions/rearrangeListOfAdvertisements.php');
     //Récupération annonces utilisateurs et réarrangement liste des annonces en tableau
     $userAdvertisements = getUserAdvertisement($_SESSION['id']);
-    $userAdvertisementRearrange = reArrangeListOfAdvertisement($userAdvertisements);
+    
+    //$userAdvertisementRearrange = reArrangeListOfAdvertisement($userAdvertisements,4);
     //$userPictures = getUserPicture($_SESSION['id']);
     require_once('view/frontEnd/displayMyAdvertisements.php');
 

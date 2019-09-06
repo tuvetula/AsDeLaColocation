@@ -1,11 +1,11 @@
 <?php
-function reArrangeListOfAdvertisement($userAdvertisements)
+function reArrangeListOfAdvertisement($userAdvertisements,$modulo)
 {
     $arrangeListOfAdvertisements = array();
     $count = 0;
     $key = 0;
     for ($i = 0 ; $i < count($userAdvertisements) ; $i++) {
-        if ($i%3 == 0) {
+        if ($i%$modulo == 0) {
             if ($i!=0) {
                 $count++;
                 $key = 0;
