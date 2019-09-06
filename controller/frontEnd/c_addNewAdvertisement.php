@@ -440,7 +440,7 @@ function addANewAdvertisement()
     $filesArray = reArrayFiles($_FILES);
 
     //Définition constante
-    define("UPLOAD_REP_PHOTO", "public/images/");
+    define("UPLOAD_REP_PHOTO", "public/pictures/users/");
     define("UPLOAD_SIZEMAX_PHOTO", 3000000); // La taille, en octets.
     define("UPLOAD_EXTENSION_PHOTO", "jpg,jpeg,png,gif");
     define("UPLOAD_MIMETYPE_PHOTO", "image/jpeg,image/png,image/gif");
