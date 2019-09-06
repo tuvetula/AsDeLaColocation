@@ -20,7 +20,7 @@ ob_start();
                 </div>
                 <div id="buttonsAdvertisement" class="col-md-3 text-center m-0 p-O">
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>,<?=$countForIdButton?>)" class="custom-control-input" id="customSwitches<?=$countForIdButton?>" 
+                        <input type="checkbox" onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>)" class="custom-control-input" id="customSwitches<?=$countForIdButton?>" 
                         <?php
                         if($userAdvertisements[$key]['advertisement_isActive']){
                             echo 'checked';
@@ -47,7 +47,7 @@ ob_start();
 
 
 
-<script src="public/js/postIsActive.js"></script>
+<script src="public/js/changeIsActiveState.js"></script>
         <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
