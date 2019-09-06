@@ -12,7 +12,15 @@ ob_start();
         <div class="card row mt-4 p-3">
             <div class="row">
                 <div class="media col-md-9">
-                    <img class="mr-3" src="public/pictures/icons/iconePhoto64.png" alt="Generic placeholder image">
+                    <img class="mr-3" src="
+                    <?php
+                    if (array_key_exists('picture_fileName',$userAdvertisements[$key])){
+                        echo 'public/pictures/users/'.$userAdvertisements[$key]['picture_fileName'].'';
+                    }else{
+                        echo 'public/pictures/icons/iconePhoto64.png';
+                    }
+                    ?>
+                    " alt="Generic placeholder image">
                     <div class="media-body col-md-9">
                         <h5 class="mt-0"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
                         <?=$userAdvertisements[$key]['advertisement_description']?>
@@ -27,7 +35,7 @@ ob_start();
                         }
                         ?>
                         >
-                        <label class="custom-control-label" for="customSwitches<?=$countForIdButton?>">Activer annonce</label>
+                        <label class="custom-control-label" for="customSwitches<?=$countForIdButton?>"></label>
                     </div>
                     <a href="index.php"><img src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
                             title="Modifier"></a>
@@ -40,13 +48,7 @@ ob_start();
         <?php
         $countForIdButton++;
     }
-    
-
-
         ?>
-
-
-
 <script src="public/js/changeIsActiveState.js"></script>
         <?php
 $content = ob_get_clean();
