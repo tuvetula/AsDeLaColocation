@@ -13,7 +13,7 @@ function getLastAdvertisementId(){
 //Récupère titre, description, isActive de toutes les annonces d'un utilisateur
 function getUserAdvertisement($userId){
     $db = connectBdd();
-    $request = $db->query('SELECT advertisement_title,advertisement_description,advertisement_isActive FROM advertisements WHERE user_id="'.$userId.'"');
+    $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive FROM advertisements WHERE user_id="'.$userId.'"');
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();
     return $userAdvertisements;

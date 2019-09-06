@@ -5,35 +5,49 @@ ob_start();
 <div id="displayHomeUser" class="container">
     <div class="jumbotron">
         <h1 class="text-center">Mes annonces</h1>
-        <div class="row mt-4">
-            <div class="card col-md-4 text-center p-3">
-                <div class="container offset-md-3 col-md-6">
-                    <img src="public/images/Icons/iconeMonCompte.png" class="card-img" alt="Mes Annonces"
-                        style="width:60px">
+        <?php
+        $countForIdButton = 0;
+    foreach ($userAdvertisements as $key => $value) {
+        ?>
+        <div class="card row mt-4 p-3">
+            <div class="row">
+                <div class="media col-md-9">
+                    <img class="mr-3" src="public/pictures/icons/iconePhoto64.png" alt="Generic placeholder image">
+                    <div class="media-body col-md-9">
+                        <h5 class="mt-0"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
+                        <?=$userAdvertisements[$key]['advertisement_description']?>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <a href="index.php" class="stretched-link">
-                        <h4>Mon compte</h4>
-                    </a>
+                <div id="buttonsAdvertisement" class="col-md-3 text-center m-0 p-O">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>,<?=$countForIdButton?>)" class="custom-control-input" id="customSwitches<?=$countForIdButton?>" 
+                        <?php
+                        if($userAdvertisements[$key]['advertisement_isActive']){
+                            echo 'checked';
+                        }
+                        ?>
+                        >
+                        <label class="custom-control-label" for="customSwitches<?=$countForIdButton?>">Activer annonce</label>
+                    </div>
+                    <a href="index.php"><img src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
+                            title="Modifier"></a>
+                    <a href="index.php"><img src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
+                            title="Supprimer"></a>
                 </div>
             </div>
 
         </div>
         <?php
-    // foreach($userAdvertisements as $key => $value){
-    //     echo '<div class="container font-weight-bold">
-    //             '.$userAdvertisements[$key]['advertisement_title'].'</div>';
-    // }
-
+        $countForIdButton++;
+    }
     
-    
-    var_dump($userAdvertisementRearrange);
 
-    
-    ?>
+
+        ?>
 
 
 
+<script src="public/js/postIsActive.js"></script>
         <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
