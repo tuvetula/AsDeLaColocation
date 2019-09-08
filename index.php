@@ -22,6 +22,9 @@ if(isset($_SESSION['login'])){
     }elseif (isset($_GET['page']) && $_GET['page']=="deleteAdvertisement" && isset($_GET['id'])) {
         require_once('controller/frontEnd/c_deleteAdvertisement.php');
         deleteAdvertisement($_GET['id']);
+    }elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id'])) {
+        require_once('controller/frontEnd/c_modifyAdvertisement.php');
+        modifyAdvertisement($_GET['id']);
     } else {
         displayHomeUser();
     }

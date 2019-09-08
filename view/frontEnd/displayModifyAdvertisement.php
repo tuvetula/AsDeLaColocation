@@ -4,7 +4,7 @@ ob_start();
 ?>
 <div id="addAnAdvertisementForm" class="container">
     <div class="jumbotron">
-        <h1 class="text-center">Ajouter une nouvelle annonce</h1>
+        <h1 class="text-center">Modifier votre annonce</h1>
         <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
@@ -16,13 +16,14 @@ ob_start();
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
-                            required>
+                            value="<?=$advertisementData[0]['advertisement_title']?>" required>
                     </div>
                     <!--Description-->
                     <div class="form-group">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
-                            placeholder="maximum 3000 charactères" required></textarea>
+                            placeholder="maximum 3000 charactères"
+                            required><?=$advertisementData[0]['advertisement_description']?></textarea>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
@@ -30,13 +31,16 @@ ob_start();
                         <div class="form-group col-md-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
-                                <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison" checked>
+                                <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison"
+                                    <?php if ($advertisementData[0]['advertisement_type'] == 'Maison'){echo 'checked';}?>>
                                 <label class="form-check-label" for="radioType1">
                                     Maison
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input id="radioType2" class="form-check-input" type="radio" name="type" value="Appartement">
+                                <input id="radioType2" class="form-check-input" type="radio" name="type"
+                                    value="Appartement"
+                                    <?php if ($advertisementData[0]['advertisement_type'] == 'Appartement'){echo 'checked';}?>>
                                 <label class="form-check-label" for="radioType2">
                                     Appartement
                                 </label>
@@ -47,28 +51,32 @@ ob_start();
                             <label class="font-weight-bold">Catégorie</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
-                                    id="radioButtonAccomodationCategory1" value="Location" checked>
+                                    id="radioButtonAccomodationCategory1" value="Location"
+                                    <?php if ($advertisementData[0]['advertisement_category'] == 'Location'){echo 'checked';}?>>
                                 <label class="form-check-label" for="radioButtonAccomodationCategory1">
                                     Location
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
-                                    id="radioButtonAccomodationCategory2" value="Colocation">
+                                    id="radioButtonAccomodationCategory2" value="Colocation"
+                                    <?php if ($advertisementData[0]['advertisement_category'] == 'Colocation'){echo 'checked';}?>>
                                 <label class="form-check-label" for="radioButtonAccomodationCategory2">
                                     Colocation
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
-                                    id="radioButtonAccomodationCategory3" value="Sous-location">
+                                    id="radioButtonAccomodationCategory3" value="Sous-location"
+                                    <?php if ($advertisementData[0]['advertisement_category'] == 'Sous-location'){echo 'checked';}?>>
                                 <label class="form-check-label" for="radioButtonAccomodationCategory3">
                                     Sous-location
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
-                                    id="radioButtonAccomodationCategory4" value="Courte-durée">
+                                    id="radioButtonAccomodationCategory4" value="Courte-durée"
+                                    <?php if ($advertisementData[0]['advertisement_category'] == 'Courte-durée'){echo 'checked';}?>>
                                 <label class="form-check-label" for="radioButtonAccomodationCategory4">
                                     Courte-durée
                                 </label>
@@ -77,20 +85,20 @@ ob_start();
                         <!-- Disponible le -->
                         <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
-                            <input class="form-control" type="date" id="availableDate" name="availableDate" required>
+                            <input class="form-control" type="date" id="availableDate" name="availableDate" value="<?=$advertisementData[0]['advertisement_availableDate']?>" required>
                         </div>
                         <!-- Location sans visite + meublé -->
                         <div class="form-group col-md-3">
                             <!-- Meublé -->
                             <div class=" custom-control custom-checkbox ">
-                                <input type="checkbox" class="custom-control-input" id="isFurnished" name="isFurnished">
+                                <input type="checkbox" class="custom-control-input" id="isFurnished" name="isFurnished" <?php if($advertisementData[0]['advertisement_isFurnished']){echo 'checked';}?>>
                                 <label class="custom-control-label font-weight-bold" for="isFurnished">Meublé</label>
                             </div>
                             <!-- Location sans visite -->
                             <div class="custom-control custom-checkbox"
                                 title="J'accepte le dossier d'un candidat qui n'a pas visité">
                                 <input type="checkbox" class="custom-control-input" id="rentWithoutVisit"
-                                    name="rentWithoutVisit">
+                                    name="rentWithoutVisit" <?php if($advertisementData[0]['advertisement_rentWithoutVisit']){echo 'checked';}?>>
                                 <label class="custom-control-label font-weight-bold" for="rentWithoutVisit">Location
                                     sans
                                     visite</label>
@@ -562,7 +570,8 @@ ob_start();
                         <!-- Pays -->
                         <div class="form-group col-md-4" title="Pays">
                             <label for="country" class="font-weight-bold">Pays</label>
-                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays" required>
+                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays"
+                                required>
                         </div>
                     </div>
                     <div class="row">
