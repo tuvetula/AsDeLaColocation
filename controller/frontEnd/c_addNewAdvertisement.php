@@ -435,13 +435,12 @@ function addANewAdvertisement()
     }
     
     //TRAITEMENT PHOTOS
-    
     //Réorganisation du tableau $_FILES
     $filesArray = reArrayFiles($_FILES);
 
     //Définition constante
     define("UPLOAD_REP_PHOTO", "public/pictures/users/");
-    define("UPLOAD_SIZEMAX_PHOTO", 3000000); // La taille, en octets.
+    define("UPLOAD_SIZEMAX_PHOTO", 10000000); // La taille, en octets.
     define("UPLOAD_EXTENSION_PHOTO", "jpg,jpeg,png,gif");
     define("UPLOAD_MIMETYPE_PHOTO", "image/jpeg,image/png,image/gif");
         
@@ -457,14 +456,11 @@ function addANewAdvertisement()
         UPLOAD_ERR_EXTENSION => "Une extension PHP a arrêté l'envoi de fichier. PHP ne propose aucun moyen de déterminer quelle extension est en cause.",
         ];
 
-    //Compte combien de photos dans le fichier $filesArray
-    $filesArrayLength = count($filesArray);
-
     //Création Tableau pour stocker nom des photos uploadées
     $fileUpload = array();
 
     //Boucle upload photos
-    for ($i = 0 ; $i < $filesArrayLength ; $i++) {
+    for ($i = 0 ; $i < count($filesArray) ; $i++) {
         $namePictureTmp = $filesArray[$i]['tmp_name'];
         $namePicture = $filesArray[$i]['name'];
 
@@ -478,39 +474,70 @@ function addANewAdvertisement()
             // Récupère l'extension d'un fichier
             $splFileInfo = new SplFileInfo($namePicture);
             $fileExtension = strtolower($splFileInfo->getExtension());
-        
-            // Retourne le type mime à l'extension mimetype
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            /* Récupère le mime-type d'un fichier spécifique */
-            $fileMimeType = $finfo->file($namePictureTmp);
-        
-            // Retourne la taille d'une image
-            //list($width, $height, $type, $attr) = getimagesize($namePictureTmp);
-        
+            
+            //Verification nombre de pixels png
+            $pixelImage = getimagesize($namePictureTmp);
+            if ($pixelImage[0]*$pixelImage[1]>1000000 && $fileExtension == 'png'){
+                $errors['pixel_err'] = "L'image png sera déformée";
+            }
+
+            // Récupère le type mime du fichier
+            $fileMimeType = mime_content_type($namePictureTmp);
+            
             // On vérifie la taille, en octets, du fichier téléchargé
             if ($filesArray[$i]['size'] > UPLOAD_SIZEMAX_PHOTO) {
                 $errors['size'] = 'Taille de fichier supérieure à la taille maxi autorisée';
             }
- 
+            
             // On vérifie l'extension
             if (!in_array($fileExtension, explode(',', constant('UPLOAD_EXTENSION_PHOTO')))) {
                 $errors['ext'] = 'L\'extension ne correspond pas aux extensions acceptées';
             }
-        
+            
             // On vérifie le type mime
             if (!in_array($fileMimeType, explode(',', constant('UPLOAD_MIMETYPE_PHOTO')))) {
                 $errors['ext'] = 'L\'extension ne correspond pas aux extensions acceptées';
             }
- 
+            
             if (empty($errors)) {
-                //On génère un nom unique pour la photo
+                //On génère un nom unique pour la photo                
                 $namePicture = uniqid().'.'.$fileExtension;
+                //Calcul pourcentage qualité à appliquer
+                $quality=floor((1000000*100)/$filesArray[$i]['size']);
+                //Récupère la taille de la photo
+                $pictureSize = $filesArray[$i]['size'];
+
+                //On enregistre la photo dans le dossier
                 if (move_uploaded_file($namePictureTmp, UPLOAD_REP_PHOTO . $namePicture)) {
+                    if($pictureSize>1000000){
+                        if($fileExtension == 'jpg' || $fileExtension == 'jpeg'){
+                            $img = imagecreatefromjpeg(UPLOAD_REP_PHOTO . $namePicture);
+                            imagejpeg($img,UPLOAD_REP_PHOTO . $namePicture,$quality);
+                            imagedestroy($img);
+                        }else if ($fileExtension == 'png'){
+                            $pngQuality = ($quality - 100) / 11.111111;
+                            $pngQuality = round(abs($pngQuality));
+                            echo $pngQuality;
+                            ini_set('memory_limit', '-1');
+                            $img = imagecreatefrompng(UPLOAD_REP_PHOTO . $namePicture);
+                            imagepng($img,UPLOAD_REP_PHOTO . $namePicture,0,9);
+                            imagedestroy($img);                   
+                        }else if ($fileExtension == 'gif'){
+                            $img = imagecreatefromgif(UPLOAD_REP_PHOTO . $namePicture);
+                            imagegif($img,UPLOAD_REP_PHOTO . $namePicture,$quality);
+                            imagedestroy($img);
+                        }
+                    }
                     $_SESSION['fileUploadSuccess'][$i] = 'Upload effectué avec succès !';
+                    //Enregistrement nom de la photo dans tableau pour ensuite enregistrer en bdd
                     $fileUpload[$i] = $namePicture;
                 } else {
                     $_SESSION['fileUploadEchec'] = 'Echec de l\'upload !';
                 }
+            }else{
+                $_SESSION['error'] = array();
+                array_push($_SESSION['error'],$errors);
+                // header("Location: index.php?page=errorNewAdvertisement");
             }
         }
     }

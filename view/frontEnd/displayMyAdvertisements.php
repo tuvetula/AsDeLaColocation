@@ -20,7 +20,7 @@ ob_start();
                         echo 'public/pictures/icons/iconePhoto64.png';
                     }
                     ?>
-                    " alt="Generic placeholder image">
+                    " alt="Generic placeholder image" style="width:64px">
                     <div class="media-body col-md-9">
                         <h5 class="mt-0"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
                         <?=$userAdvertisements[$key]['advertisement_description']?>
@@ -28,19 +28,23 @@ ob_start();
                 </div>
                 <div id="buttonsAdvertisement" class="col-md-3 text-center m-0 p-O">
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>)" class="custom-control-input" id="customSwitches<?=$countForIdButton?>" 
-                        <?php
+                        <input type="checkbox"
+                            onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>)"
+                            class="custom-control-input" id="customSwitches<?=$countForIdButton?>" <?php
                         if($userAdvertisements[$key]['advertisement_isActive']){
                             echo 'checked';
                         }
-                        ?>
-                        >
-                        <label class="custom-control-label" for="customSwitches<?=$countForIdButton?>"></label>
+                        ?>>
+                        <label class="custom-control-label" title="Activer/Désactiver"
+                            for="customSwitches<?=$countForIdButton?>"></label>
                     </div>
                     <a href="index.php"><img src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
                             title="Modifier"></a>
-                    <a href="index.php"><img src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
+
+                    <a href="#" ; onclick="confirmation(<?=$userAdvertisements[$key]['advertisement_id']?>)"><img
+                            src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
                             title="Supprimer"></a>
+
                 </div>
             </div>
 
@@ -49,7 +53,8 @@ ob_start();
         $countForIdButton++;
     }
         ?>
-<script src="public/js/changeIsActiveState.js"></script>
+        <script src="public/js/confirmBeforeDelete.js"></script>
+        <script src="public/js/changeIsActiveState.js"></script>
         <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
