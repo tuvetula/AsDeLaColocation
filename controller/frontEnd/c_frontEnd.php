@@ -52,8 +52,8 @@ function displayMyAdvertisements(){
             }
         }
     }
-   
-
+    //Déclaration variable url bouton supprimer
+    $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
     require_once('view/frontEnd/displayMyAdvertisements.php');
 }
 //Affichage Formulaire d'ajout d'une nouvelle annonce

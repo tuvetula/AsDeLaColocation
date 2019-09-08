@@ -38,13 +38,13 @@ ob_start();
                         <label class="custom-control-label" title="Activer/Désactiver"
                             for="customSwitches<?=$countForIdButton?>"></label>
                     </div>
-                    <a href="index.php"><img src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
+                    
+                    <a href="index.php?page=modifyAdvertisement&id=<?=$userAdvertisements[$key]['advertisement_id']?>"><img src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
                             title="Modifier"></a>
-
-                    <a href="#" ; onclick="confirmation(<?=$userAdvertisements[$key]['advertisement_id']?>)"><img
+                    <a href="#"
+                        onclick="confirmation('<?=$deleteUrl?>','<?=$userAdvertisements[$key]['advertisement_id']?>')"><img
                             src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
                             title="Supprimer"></a>
-
                 </div>
             </div>
 
