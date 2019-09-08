@@ -14,6 +14,8 @@ function login()
         }
     }
 }
+
+//Affichage page de connexion
 function displayLoginPage(){
     require('view/frontEnd/displayLoginForm.php');
 }
@@ -23,7 +25,10 @@ function displayHomeUser()
 {
     require_once('view/frontEnd/displayHomeUser.php');
 }
-
+//Affichage page d'erreur
+function displayErrorNewAdvertisement(){
+    require_once('view/frontEnd/displayErrorPage.php');
+}
 //Affichage de la page "Mes annonces"
 function displayMyAdvertisements(){
     require_once('model/frontEnd/m_getPicture.php');
