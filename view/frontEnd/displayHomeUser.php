@@ -45,10 +45,6 @@ ob_start();
     </div>
 
 </div>
-
-
-
-<script src="public/js/displayUserAdvertisement.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
