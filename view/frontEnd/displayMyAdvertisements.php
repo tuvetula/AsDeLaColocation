@@ -9,45 +9,50 @@ ob_start();
         $countForIdButton = 0;
     foreach ($userAdvertisements as $key => $value) {
         ?>
-        <div class="card row mt-4 p-3">
+        <div class="card m-0 p-3 m-md-3">
             <div class="row">
-                <div class="media col-md-9">
+                <div class="media col-sm-12 col-md-8 col-lg-9">
                     <img class="mr-3" src="
                     <?php
-                    if (array_key_exists('picture_fileName',$userAdvertisements[$key])){
+                    if (array_key_exists('picture_fileName', $userAdvertisements[$key])) {
                         echo 'public/pictures/users/'.$userAdvertisements[$key]['picture_fileName'].'';
-                    }else{
+                    } else {
                         echo 'public/pictures/icons/iconePhoto64.png';
-                    }
-                    ?>
+                    } ?>
                     " alt="Generic placeholder image" style="width:64px">
-                    <div class="media-body col-md-9">
+                    <div class="media-body">
                         <h5 class="mt-0"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
                         <?=$userAdvertisements[$key]['advertisement_description']?>
                     </div>
                 </div>
-                <div id="buttonsAdvertisement" class="col-md-3 text-center m-0 p-O">
-                    <div class="custom-control custom-switch">
-                        <input type="checkbox"
-                            onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>)"
-                            class="custom-control-input" id="customSwitches<?=$countForIdButton?>" <?php
-                        if($userAdvertisements[$key]['advertisement_isActive']){
+                <!--BOUTTONS-->
+                <div id="buttonsAdvertisement" class="col-sm-12 col-md-4 col-lg-3 pt-3 pt-md-0">
+                    <div class="row">
+                        <div class="col-4 text-center custom-control custom-switch">
+                            <input type="checkbox"
+                                onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>)"
+                                class="custom-control-input" id="customSwitches<?=$countForIdButton?>" <?php
+                        if ($userAdvertisements[$key]['advertisement_isActive']) {
                             echo 'checked';
-                        }
-                        ?>>
-                        <label class="custom-control-label" title="Activer/Désactiver"
-                            for="customSwitches<?=$countForIdButton?>"></label>
+                        } ?>>
+                            <label class="custom-control-label" title="Activer/Désactiver"
+                                for="customSwitches<?=$countForIdButton?>"></label>
+                        </div>
+                        <div class="col-4 text-center">
+                            <a
+                                href="index.php?page=modifyAdvertisement&id=<?=$userAdvertisements[$key]['advertisement_id']?>"><img
+                                    src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
+                                    title="Modifier"></a>
+                        </div>
+                        <div class="col-4 text-center">
+                            <a href="#"
+                                onclick="confirmation('<?=$deleteUrl?>','<?=$userAdvertisements[$key]['advertisement_id']?>')"><img
+                                    src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
+                                    title="Supprimer"></a>
+                        </div>
                     </div>
-                    
-                    <a href="index.php?page=modifyAdvertisement&id=<?=$userAdvertisements[$key]['advertisement_id']?>"><img src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
-                            title="Modifier"></a>
-                    <a href="#"
-                        onclick="confirmation('<?=$deleteUrl?>','<?=$userAdvertisements[$key]['advertisement_id']?>')"><img
-                            src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
-                            title="Supprimer"></a>
                 </div>
             </div>
-
         </div>
         <?php
         $countForIdButton++;

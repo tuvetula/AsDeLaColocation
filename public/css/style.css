@@ -1,0 +1,36 @@
+html {
+    height: 99%;
+}
+
+body {
+    height: 100%;
+}
+
+#screen {
+    display: flex;
+    min-height: 100%;
+}
+
+#displayHomeUser {
+    min-height: 100%;
+}
+
+
+/* switchButton */
+
+.custom-switch .custom-control-label::before {
+    /* Double-sized Checkboxes */
+    transform: scale(2);
+}
+
+
+/*Affichage preview photo*/
+
+#preview {
+    width: 200px;
+    display: inline-block;
+}
+
+#preview img {
+    width: 100%;
+}
