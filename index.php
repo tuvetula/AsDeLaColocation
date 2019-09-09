@@ -8,23 +8,39 @@ if(isset($_SESSION['login'])){
         session_destroy();
         session_start();
         displayLoginPage();
+
     }else if (isset($_GET['page']) && $_GET['page']=="errorNewAdvertisement"){
         displayErrorNewAdvertisement();
+
     } else if(isset($_GET['page']) && $_GET['page']=="myAdvertisements"){
         displayMyAdvertisements();
+
     } elseif (isset($_GET['page']) && $_GET['page']=="displayAddAnAdvertisement") {
         displayAddAnAdvertisementForm();
+
     } elseif (isset($_GET['page']) && $_GET['page']=="homeUser") {
         displayHomeUser();
+
     } elseif (isset($_GET['page']) && $_GET['page']=="addAdvertisement") {
         require_once('controller/frontEnd/c_addNewAdvertisement.php');
         addANewAdvertisement();
+
     }elseif (isset($_GET['page']) && $_GET['page']=="deleteAdvertisement" && isset($_GET['id'])) {
         require_once('controller/frontEnd/c_deleteAdvertisement.php');
         deleteAdvertisement($_GET['id']);
+
+    }elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id']) && isset($_GET['confirm']) && $_GET['confirm']==1) {
+        require_once('controller/frontEnd/c_modifyAdvertisement.php');
+        modifyAdvertisement($_GET['id'],$_GET['confirm']);
+
     }elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id'])) {
         require_once('controller/frontEnd/c_modifyAdvertisement.php');
         modifyAdvertisement($_GET['id']);
+
+    }elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['id'])) {
+        require_once('controller/frontEnd/c_modifyAdvertisement.php');
+        saveModifyAdvertisement($_GET['id']);
+        
     } else {
         displayHomeUser();
     }

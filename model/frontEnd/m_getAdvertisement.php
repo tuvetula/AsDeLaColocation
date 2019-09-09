@@ -2,7 +2,8 @@
 require_once('model/bdd/bddConfig.php');
 
 //Récupère MAX(advertisement_id) de la dernière annonce saisie en bdd
-function getLastAdvertisementId(){
+function getLastAdvertisementId()
+{
     $db = connectBdd();
     $request = $db->query('SELECT MAX(advertisement_id) FROM advertisements');
     $lastAdvertisementId = $request->fetch(PDO::FETCH_ASSOC);
@@ -11,7 +12,8 @@ function getLastAdvertisementId(){
 }
 
 //Récupère titre, description, isActive de toutes les annonces d'un utilisateur
-function getUserAdvertisement($userId){
+function getUserAdvertisement($userId)
+{
     $db = connectBdd();
     $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive FROM advertisements WHERE user_id="'.$userId.'"');
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
@@ -20,12 +22,23 @@ function getUserAdvertisement($userId){
 }
 
 //Verifie si un id_advertisement et un id_user renvoi bien une annonce
-function verifyAdvertisement($userId,$advertisementId){
-        $db = connectBdd();
-        $request = $db->query('SELECT * FROM advertisements WHERE user_id="'.$userId.'" AND advertisement_id="'.$advertisementId.'"');
-        $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
-        $request->closeCursor();
-        return $userAdvertisements;
+function verifyAdvertisement($userId, $advertisementId)
+{
+    $db = connectBdd();
+    $request = $db->query('SELECT * FROM advertisements WHERE user_id="'.$userId.'" AND advertisement_id="'.$advertisementId.'"');
+    $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $userAdvertisements;
+}
+
+//Récupère une annonce avec son adresse et ses photos
+function getAdvertisementWithAddress($userId, $advertisementId)
+{
+    $db = connectBdd();
+    $request = $db->query('SELECT * FROM advertisements join addresses on advertisements.address_id = addresses.address_id WHERE advertisements.advertisement_id="'.$advertisementId.'" AND advertisements.user_id="'.$userId.'"');
+    $userAdvertisementWithAddress = $request->fetchAll(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $userAdvertisementWithAddress;
 }
 
 //Récupère advertisement_id d'une annonce si tous les paramètres correspondent
