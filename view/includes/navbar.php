@@ -26,7 +26,7 @@
                     <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Mon compte</a>
+                    <a class="nav-link" href="index.php?page=displayMyAccount">Mon compte</a>
                 </li>
             </ul>
             <a href="index.php?disconnect=1" class="btn btn btn-danger pull-right" role="button" aria-pressed="true">Se
@@ -44,6 +44,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="index.php?page=displayMyAccount">Mon compte</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Utilisateurs</a>
