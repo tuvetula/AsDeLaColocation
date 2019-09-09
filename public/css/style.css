@@ -6,9 +6,8 @@ body {
     height: 100%;
 }
 
-#screen {
-    display: flex;
-    min-height: 100%;
+.screen {
+    height: 100%;
 }
 
 #displayHomeUser {
@@ -20,7 +19,7 @@ body {
 
 .custom-switch .custom-control-label::before {
     /* Double-sized Checkboxes */
-    transform: scale(2);
+    transform: scale(1.3);
 }
 
 

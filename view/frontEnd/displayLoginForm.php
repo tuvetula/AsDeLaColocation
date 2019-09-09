@@ -2,9 +2,9 @@
 $title = "Page de connexion";
 ob_start();
 ?>
-<div id="loginContainer" class="container">
+<div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h2 class="text-center">Formulaire de connexion</h2>
+        <h1 class="pb-3 text-center">Formulaire de connexion</h1>
         <div id="loginForm" class="container col-lg-6 col-md-9 col-sm-12">
             <form method="post" action="index.php" class="text-center">
                 <div class="form-group text-left">
