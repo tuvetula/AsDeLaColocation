@@ -31,7 +31,7 @@ ob_start();
                     <div class="container offset-md-3 col-md-6">
                         <img src="public/pictures/Icons/iconeMonCompte.png" class="card-img img-responsive " alt="Mes Annonces" style="width:50px">
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-1">
                         <a href="index.php" class="stretched-link">
                             <h5>Mon compte</h5>
                         </a>

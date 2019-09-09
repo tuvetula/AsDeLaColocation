@@ -37,10 +37,10 @@
             //Menu utilisateur connecté et admin
           ?>
             <li class="nav-item">
-                <a class="nav-link" href="#">Mon profil</a>
+                <a class="nav-link" href="index.php?page=homeUser">Accueil</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Mes annonces</a>
+                <a class="nav-link" href="index.php?page=myAdvertisements">Mes annonces</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
