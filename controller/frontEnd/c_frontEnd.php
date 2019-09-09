@@ -25,6 +25,18 @@ function displayHomeUser()
 {
     require_once('view/frontEnd/displayHomeUser.php');
 }
+//Affichage page Mon compte
+function displayMyAccount(){
+    require_once('model/frontEnd/m_getUser.php');
+    $userData = getUserById($_SESSION['id']);
+    require_once('view/frontEnd/displayMyAccount.php');
+}
+//Affichage page Modifier mon compte
+function modifyMyAccount(){
+    require_once('model/frontEnd/m_getUser.php');
+    $userDataToModify = getUserById($_SESSION['id']);
+    require_once('view/frontEnd/displaymodifyMyAccountForm.php');
+}
 //Affichage page d'erreur
 function displayErrorNewAdvertisement(){
     require_once('view/frontEnd/displayErrorPage.php');
@@ -56,6 +68,7 @@ function displayMyAdvertisements(){
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
     require_once('view/frontEnd/displayMyAdvertisements.php');
 }
+
 //Affichage Formulaire d'ajout d'une nouvelle annonce
 function displayAddAnAdvertisementForm()
 {

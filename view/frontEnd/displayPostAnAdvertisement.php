@@ -2,9 +2,9 @@
 $title = "Déposer une nouvelle annonce";
 ob_start();
 ?>
-<div id="addAnAdvertisementForm" class="container">
+<div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="text-center">Ajouter une nouvelle annonce</h1>
+        <h1 class="pb-3 text-center">Ajouter une nouvelle annonce</h1>
         <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
@@ -145,12 +145,12 @@ ob_start();
                                 <option value="12 mois">12 mois</option>
                             </select>
                         </div>
-                        <!-- Nombre de colocataires déja présent -->
+                        <!-- Nombre de colocataires déjà présent -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="nbOfOtherRoommatePresent">Nombre de
                                 colocataires
-                                déja
-                                présent</label>
+                                déjà
+                                présents</label>
                             <select id="nbOfOtherRoommatePresent" name="nbOfOtherRoommatePresent" class="custom-select">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
@@ -373,8 +373,7 @@ ob_start();
                     <div class="row">
                         <!-- Montant HC -->
                         <div class="form-group col-md-4" title="Loyer Hors Charges">
-                            <label class="font-weight-bold" for="monthlyRentExcludingCharges">Montant du loyer Hors
-                                charges</label>
+                            <label class="font-weight-bold" for="monthlyRentExcludingCharges">Loyer mensuel HC</label>
                             <div id="monthlyRentExcludingChargesDiv" class="input-group mb-3">
                                 <input id="monthlyRentExcludingCharges" type="number" min="0"
                                     name="monthlyRentExcludingCharges" class="form-control"

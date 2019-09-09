@@ -2,9 +2,9 @@
 $title = "Modifier une annonce";
 ob_start();
 ?>
-<div id="addAnAdvertisementForm" class="container">
+<div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="text-center">Modifier votre annonce</h1>
+        <h1 class="pb-3 text-center">Modifier votre annonce</h1>
         <form method="post"
             action="index.php?page=saveModificationAdvertisement&id=<?=$advertisementData[0]['advertisement_id']?>"
             enctype="multipart/form-data">
@@ -186,8 +186,8 @@ ob_start();
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="nbOfOtherRoommatePresent">Nombre de
                                 colocataires
-                                déja
-                                présent</label>
+                                déjà
+                                présents</label>
                             <select id="nbOfOtherRoommatePresent" name="nbOfOtherRoommatePresent" class="custom-select">
                                 <option value="0" <?php if($advertisementData[0]['advertisement_nbOfOtherRoommatePresent'] == "0"){
                                     echo 'selected';
@@ -770,8 +770,7 @@ ob_start();
                     <div class="row">
                         <!-- Montant HC -->
                         <div class="form-group col-md-4" title="Loyer Hors Charges">
-                            <label class="font-weight-bold" for="monthlyRentExcludingCharges">Montant du loyer Hors
-                                charges</label>
+                            <label class="font-weight-bold" for="monthlyRentExcludingCharges">Loyer mensuel HC</label>
                             <div id="monthlyRentExcludingChargesDiv" class="input-group mb-3">
                                 <input id="monthlyRentExcludingCharges" type="number" min="0"
                                     name="monthlyRentExcludingCharges" class="form-control"

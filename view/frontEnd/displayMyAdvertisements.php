@@ -2,14 +2,14 @@
 $title = "Mes annonces";
 ob_start();
 ?>
-<div id="displayHomeUser" class="container">
+<div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="text-center">Mes annonces</h1>
+        <h1 class="pb-3 text-center">Mes annonces</h1>
         <?php
         $countForIdButton = 0;
     foreach ($userAdvertisements as $key => $value) {
         ?>
-        <div class="card m-0 p-3 m-md-3">
+        <div class="card m-0 p-3 my-3 m-md-3">
             <div class="row">
                 <div class="media col-sm-12 col-md-8 col-lg-9">
                     <img class="mr-3" src="
