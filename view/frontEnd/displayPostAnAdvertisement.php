@@ -30,13 +30,15 @@ ob_start();
                         <div class="form-group col-md-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
-                                <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison" checked>
+                                <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison"
+                                    checked>
                                 <label class="form-check-label" for="radioType1">
                                     Maison
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input id="radioType2" class="form-check-input" type="radio" name="type" value="Appartement">
+                                <input id="radioType2" class="form-check-input" type="radio" name="type"
+                                    value="Appartement">
                                 <label class="form-check-label" for="radioType2">
                                     Appartement
                                 </label>
@@ -180,7 +182,7 @@ ob_start();
                                 (situation)</label>
                             <select id="idealRoommateSituation" name="idealRoommateSituation" class="custom-select">
                                 <option value="PeuImporte" selected>Peu importe</option>
-                                <option value="Etudiant">Etudiant</option>
+                                <option value="Etudiant">Etudiant(e)</option>
                                 <option value="Salarié">Salarié(e)</option>
                             </select>
                         </div>
@@ -562,7 +564,8 @@ ob_start();
                         <!-- Pays -->
                         <div class="form-group col-md-4" title="Pays">
                             <label for="country" class="font-weight-bold">Pays</label>
-                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays" required>
+                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays"
+                                required>
                         </div>
                     </div>
                     <div class="row">
@@ -1241,7 +1244,9 @@ ob_start();
             </div>
 
             <!-- Bouton submit -->
-            <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
+            <div class="container pt-3">
+                <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
+            </div>
 
         </form>
     </div>
