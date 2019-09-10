@@ -10,7 +10,7 @@ ob_start();
             enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
-            <p><?php if (isset($confirm) && $confirm==1){
+            <p class="text-center"><?php if (isset($confirm) && $confirm==1){
                 echo 'Votre annonce a bien été modifée';
             }?></p>
                 <h2>Annonce</h2>

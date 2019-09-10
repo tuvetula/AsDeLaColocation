@@ -7,7 +7,7 @@ ob_start();
         <h1 class="pb-3 text-center">Mon compte</h1>
         <div class="card m-0 p-3 my-3 m-md-3">
             <div class="container text-right">
-                <a href="index.php?page=modifyMyAccount&id=<?=$_SESSION['id']?>"><img
+                <a href="index.php?page=displayModifyMyAccount"><img
                         src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce" title="Modifier"></a>
             </div>
             <div class="container">
@@ -32,9 +32,9 @@ ob_start();
                         <?=$userData['user_phoneNumber']?></p>
                 </div>
             </div>
-            <div class="container">
+            <div class="container pt-3">
                 <h3 class="text-center">Identifiants de connexion aux sites de diffusion</h3>
-                <div class="row">
+                <div class="row pt-3">
                     <p class="offset-lg-2 col-lg-4"><strong>Adresse mail:</strong> <?=$userData['user_loginSiteWeb']?>
                     </p>
                     <p class="offset-lg-2 col-lg-4"><strong>Mot de passe:</strong>

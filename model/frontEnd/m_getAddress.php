@@ -10,6 +10,7 @@ function getLastAddressId(){
     return $lastAddressId;
 }
 
+//Verification si adresse existe
 //Récupére adresse_id si le nom de la rue, le code postal, la ville et le pays correspondent.
 function getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry)
 {

@@ -7,7 +7,7 @@ ob_start();
         <h1 class="pb-3 text-center">Ajouter une nouvelle annonce</h1>
         <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Annonce</h2>
                 <!-- Titre, Description -->
                 <div class="container">
@@ -79,7 +79,7 @@ ob_start();
                         <!-- Disponible le -->
                         <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
-                            <input class="form-control" type="date" id="availableDate" name="availableDate" required>
+                            <input class="form-control" type="date" min="<?=$dateOfTheDay?>" id="availableDate" name="availableDate" required>
                         </div>
                         <!-- Location sans visite + meublé -->
                         <div class="form-group col-md-3">
@@ -367,7 +367,7 @@ ob_start();
             </div>
 
             <!-- ----------LOYER---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Loyer</h2>
                 <div class="container">
                     <div class="row">
@@ -538,7 +538,7 @@ ob_start();
             </div>
 
             <!-- ---------- LOGEMENT ---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Logement</h2>
                 <div class="container">
                     <!-- Adresse -->
@@ -1110,7 +1110,7 @@ ob_start();
                 </div>
             </div>
             <!-- ---------- CHAMBRE ---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Chambre</h2>
                 <div class="container">
                     <div class="row">
@@ -1234,7 +1234,7 @@ ob_start();
                 </div>
             </div>
             <!-- Photos -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Photos</h2>
                 <div class="container">
                     <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]"></div>
