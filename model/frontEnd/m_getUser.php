@@ -6,14 +6,14 @@ function getUser($postLogin)
 {
     $postLogin = htmlspecialchars(strip_tags($postLogin));
     $db = connectBdd();
-    $answer = $db->prepare('SELECT * FROM users WHERE user_mail=:login');
+    $answer = $db->prepare('SELECT user_id,user_mail,user_password,user_isAdmin,user_isMember FROM users WHERE user_mail=:login');
     $answer->execute([
         ':login' => $postLogin
     ]);
-    return $answer->fetch();
+    return $answer->fetch(PDO::FETCH_ASSOC);
 }
 
-//Récupère les infos d'un user par son user_id
+//Récupère les infos d'un user par son user_id (pour modification "mon compte")
 function getUserById($userId)
 {
     $userId = htmlspecialchars(strip_tags($userId));
@@ -25,4 +25,17 @@ function getUserById($userId)
     $userData = $answer->fetch(PDO::FETCH_ASSOC);
     $answer->closeCursor();
     return $userData;
+}
+
+//Récupère address_id d'un user (pour modification addresse "mo compte")
+function getUserAddressId($userId){
+    $userId = htmlspecialchars(strip_tags($userId));
+    $db = connectBdd();
+    $addressIdRequest = $db->prepare('SELECT address_id FROM users WHERE user_id=:userId');
+    $addressIdRequest->execute([
+        ':userId' => $userId
+    ]);
+    $addressIdUser = $addressIdRequest->fetch(PDO::FETCH_ASSOC);
+    $addressIdRequest->closeCursor();
+    return $addressIdUser;
 }

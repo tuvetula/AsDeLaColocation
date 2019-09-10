@@ -5,6 +5,7 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Bienvenue dans votre espace personnel</h1>
+    <div class="container">
         <div class="row mt-4">
             <div class="card col-md-4 text-center p-3">
                 <div class="container offset-md-3 col-md-6">
@@ -40,6 +41,7 @@ ob_start();
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 <?php

@@ -5,19 +5,41 @@ require_once('model/frontEnd/m_getAdvertisement.php');
 //Vérification login et mot de passe
 function login()
 {
-    $login = getUser($_POST['login']);
+    $login = getUser($_POST['mail']);
     if ($login) {
-        if (password_verify($_POST['password'], $login['user_password'])) {
-            $_SESSION['login'] = $login['user_mail'];
-            $_SESSION['id'] = $login['user_id'];
-            $_SESSION['isAdmin'] = $login['user_isAdmin'];
+        if($login['user_isMember']==1){
+            if (password_verify($_POST['password'], $login['user_password'])) {
+                $_SESSION['mail'] = $login['user_mail'];
+                $_SESSION['id'] = $login['user_id'];
+                $_SESSION['isAdmin'] = $login['user_isAdmin'];
+            }else{
+                header('Location:index.php?error=pbLog');
+            }
+        }else{
+            header('Location:index.php?error=pbStatue');
         }
+    }else{
+        header('Location:index.php?error=pbLog');
     }
 }
 
 //Affichage page de connexion
 function displayLoginPage(){
-    require('view/frontEnd/displayLoginForm.php');
+    if (isset($_GET['error'])){
+        if ($_GET['error'] == "pbLog"){
+            $error = "Mauvais identifiant ou mot de passe.";
+        }else if ($_GET['error'] == "pbStatue"){
+            $error = "Accès refusé. Vous n'êtes pas membre.";
+        }
+    }else{
+        $error="";
+    }
+    require_once('view/frontEnd/displayLoginForm.php');
+}
+
+//Affichage page d'inscription
+function displaySubscribePage(){
+    require_once('view/frontEnd/displaySubscribeForm.php');
 }
 
 //Affichage page d'accueil utilisateur connecté
@@ -32,7 +54,7 @@ function displayMyAccount(){
     require_once('view/frontEnd/displayMyAccount.php');
 }
 //Affichage page Modifier mon compte
-function modifyMyAccount(){
+function displayModifyMyAccount(){
     require_once('model/frontEnd/m_getUser.php');
     $userDataToModify = getUserById($_SESSION['id']);
     require_once('view/frontEnd/displaymodifyMyAccountForm.php');
@@ -72,6 +94,8 @@ function displayMyAdvertisements(){
 //Affichage Formulaire d'ajout d'une nouvelle annonce
 function displayAddAnAdvertisementForm()
 {
+    //Variable pour définir date minimum dans "disponible le"
+    $dateOfTheDay=date('Y-m-d');
     require_once('view/frontEnd/displayPostAnAdvertisement.php');
 }
 

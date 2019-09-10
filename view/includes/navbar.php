@@ -13,7 +13,7 @@
                 </li>
 
                 <?php
-      if (isset($_SESSION['login']) && isset($_SESSION['isAdmin'])) {
+      if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
           // <!--Menu Utilisateur connecté et non-admin-->
           if (!$_SESSION['isAdmin']) {?>
                 <li class="nav-item">
