@@ -1,5 +1,5 @@
 <?php
-$title = "Page de connexion";
+$title = "Mot de passe oublié";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
