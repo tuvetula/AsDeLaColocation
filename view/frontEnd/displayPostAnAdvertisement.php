@@ -15,8 +15,8 @@ ob_start();
                     <div class="form-group"
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce" maxlength="255"
-                            required>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
+                            maxlength="255" required>
                     </div>
                     <!--Description-->
                     <div class="form-group">
@@ -79,7 +79,8 @@ ob_start();
                         <!-- Disponible le -->
                         <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
-                            <input class="form-control" type="date" min="<?=$dateOfTheDay?>" id="availableDate" name="availableDate" required>
+                            <input class="form-control" type="date" min="<?=$dateOfTheDay?>" id="availableDate"
+                                name="availableDate" required>
                         </div>
                         <!-- Location sans visite + meublé -->
                         <div class="form-group col-md-3">
@@ -545,7 +546,7 @@ ob_start();
                     <div class="form-group" title="Numéro, nom de rue">
                         <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
                         <input id="street" type="text" name="street" class="form-control"
-                            placeholder="Saisir l'adresse du logement" required>
+                            placeholder="Saisir l'adresse du logement" maxlength="255" required>
                     </div>
                     <!-- Code postal, ville, pays -->
                     <div class="row">
@@ -553,18 +554,19 @@ ob_start();
                         <div class="form-group col-md-2" title="Code postal">
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
                             <input id="zipcode" type="text" name="zipcode" class="form-control"
-                                placeholder="Code postal" required>
+                                placeholder="Code postal" maxlength="20" required>
                         </div>
                         <!-- Ville -->
                         <div class="form-group col-md-6" title="Ville">
                             <label for="city" class="font-weight-bold">Ville</label>
-                            <input id="city" type="text" name="city" class="form-control" placeholder="Ville" required>
+                            <input id="city" type="text" name="city" class="form-control" placeholder="Ville"
+                                maxlength="60" required>
                         </div>
                         <!-- Pays -->
                         <div class="form-group col-md-4" title="Pays">
                             <label for="country" class="font-weight-bold">Pays</label>
                             <input id="country" type="text" name="country" class="form-control" placeholder="Pays"
-                                required>
+                                maxlength="60" required>
                         </div>
                     </div>
                     <div class="row">

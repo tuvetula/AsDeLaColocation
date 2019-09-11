@@ -13,12 +13,14 @@ ob_start();
                         <!-- Nom -->
                         <div class="form-group col-md-6">
                             <label class="font-weight-bold" for="name">Nom</label>
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Nom" required>
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Nom"
+                                maxlength="125" required>
                         </div>
                         <!-- Prénom -->
                         <div class="form-group col-md-6">
                             <label class="font-weight-bold" for="firstName">Prénom</label>
-                            <input type="text" name="firstName" class="form-control" id="firstName" placeholder="Prénom" required>
+                            <input type="text" name="firstName" class="form-control" id="firstName" placeholder="Prénom"
+                                maxlength="125" required>
                         </div>
                     </div>
                     <div class="row">
@@ -26,7 +28,7 @@ ob_start();
                         <div class="form-group col-md-12" title="Numéro, nom de rue">
                             <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
                             <input id="street" type="text" name="street" class="form-control"
-                                placeholder="Numéro et nom de rue" required>
+                                placeholder="Numéro et nom de rue" maxlength="255" required>
                         </div>
                     </div>
                     <div class="row">
@@ -34,30 +36,33 @@ ob_start();
                         <div class="form-group col-md-2" title="Code postal">
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
                             <input id="zipcode" type="text" name="zipcode" class="form-control"
-                                placeholder="Code postal" required>
+                                placeholder="Code postal" maxlength="20" required>
                         </div>
                         <!-- Ville -->
                         <div class="form-group col-md-6" title="Ville">
                             <label for="city" class="font-weight-bold">Ville</label>
-                            <input id="city" type="text" name="city" class="form-control" placeholder="Ville" required>
+                            <input id="city" type="text" name="city" class="form-control" placeholder="Ville"
+                                maxlength="60" required>
                         </div>
                         <!-- Pays -->
                         <div class="form-group col-md-4" title="Pays">
                             <label for="country" class="font-weight-bold">Pays</label>
-                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays" required>
+                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays"
+                                maxlength="60" required>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Mail -->
                         <div class="form-group col-md-6">
                             <label for="mail" class="font-weight-bold">Adresse mail</label>
-                            <input id="mail" type="email" name="mailSubscribe" class="form-control" placeholder="Mail" required>
+                            <input id="mail" type="email" name="mailSubscribe" class="form-control" placeholder="Mail"
+                                maxlength="255" required>
                         </div>
                         <!-- Telephone -->
                         <div class="form-group col-md-6">
                             <label for="phoneNumber" class="font-weight-bold">Numéro de téléphone</label>
                             <input id="phoneNumber" type="tel" name="phoneNumber" class="form-control"
-                                placeholder="Téléphone" required>
+                                placeholder="Téléphone" maxlength="20" required>
                         </div>
                     </div>
                 </div>
@@ -69,16 +74,14 @@ ob_start();
                         <!-- mot de passe -->
                         <div class="form-group col-md-6">
                             <label for="passwordSubscribe1" class="font-weight-bold">Mot de passe</label>
-                            <input id="passwordSubscribe1" type="password" name="passwordSubscribe1" class="form-control"
-                                placeholder="Mot de passe"
-                                required>
+                            <input id="passwordSubscribe1" type="password" name="passwordSubscribe1"
+                                class="form-control" placeholder="Mot de passe" maxlength="255" required>
                         </div>
                         <!-- mot de passe -->
                         <div class="form-group col-md-6">
                             <label for="passwordSubscribe2" class="font-weight-bold">Confirmation mot de passe</label>
-                            <input id="passwordSubscribe2" type="password" name="passwordSubscribe2" class="form-control"
-                                placeholder="Mot de passe"
-                                required>
+                            <input id="passwordSubscribe2" type="password" name="passwordSubscribe2"
+                                class="form-control" placeholder="Mot de passe" maxlength="255" required>
                         </div>
                     </div>
                 </div>
@@ -91,20 +94,21 @@ ob_start();
                         <div class="form-group col-md-6">
                             <label for="loginSiteWeb" class="font-weight-bold">Adresse mail</label>
                             <input id="loginSiteWeb" type="email" name="loginSiteWeb" class="form-control"
-                                placeholder="Mail" required>
+                                placeholder="Mail" maxlength="255" required>
                         </div>
                         <!-- mot de passe pour connexion site de diffusion -->
                         <div class="form-group col-md-6">
                             <label for="passwordSiteWeb" class="font-weight-bold">Mot de passe</label>
                             <input id="passwordSiteWeb" type="text" name="passwordSiteWeb" class="form-control"
-                                placeholder="Mot de passe" required>
+                                placeholder="Mot de passe" maxlength="255" required>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Bouton submit -->
             <div class="container pt-3">
-                <button id="buttonSubscribe" type="submit" class="btn btn-primary offset-md-5 col-md-2">S'inscrire</button>
+                <button id="buttonSubscribe" type="submit"
+                    class="btn btn-primary offset-md-5 col-md-2">S'inscrire</button>
             </div>
         </form>
     </div>
