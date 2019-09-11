@@ -4,6 +4,12 @@ require_once('model/frontEnd/m_insertNewAddress.php');
 require_once('model/frontEnd/m_getAddress.php');
 require_once('model/frontEnd/m_getUser.php');
 
+//Affichage page d'inscription
+function displaySubscribePage()
+{
+    require_once('view/frontEnd/displaySubscribeForm.php');
+}
+
 //Enregistrement page d'inscription
 function saveSubscribeForm()
 {
