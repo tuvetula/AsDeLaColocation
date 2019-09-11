@@ -26,14 +26,14 @@ ob_start();
                     <div class="form-group"
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce" maxlength="255"
                             value="<?=$advertisementData[0]['advertisement_title']?>" required>
                     </div>
                     <!--Description-->
                     <div class="form-group">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
-                            placeholder="maximum 3000 charactères"
+                            placeholder="maximum 3000 charactères" maxlength="3000"
                             required><?=$advertisementData[0]['advertisement_description']?></textarea>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
@@ -127,7 +127,7 @@ ob_start();
                                 visites</label>
                             <input id="contactNameForVisit" type="text" name="contactNameForVisit" class="form-control"
                                 placeholder="Nom"
-                                value="<?=$advertisementData[0]['advertisement_contactNameForVisit']?>" required>
+                                value="<?=$advertisementData[0]['advertisement_contactNameForVisit']?>" maxlength="125" required>
                         </div>
                         <!-- Telephone du contact pour les visites -->
                         <div class="form-group col-md-4">
@@ -136,7 +136,7 @@ ob_start();
                                 les visites</label>
                             <input id="contactPhoneNumberForVisit" type="tel" name="contactPhoneNumberForVisit"
                                 class="form-control" placeholder="Téléphone"
-                                value="<?=$advertisementData[0]['advertisement_contactPhoneNumberForVisit']?>" required>
+                                value="<?=$advertisementData[0]['advertisement_contactPhoneNumberForVisit']?>" maxlength="20" required>
                         </div>
                         <!-- Mail du contact pour les visites -->
                         <div class="form-group col-md-4">
@@ -144,7 +144,7 @@ ob_start();
                                 visites</label>
                             <input id="contactMailForVisit" type="email" name="contactMailForVisit" class="form-control"
                                 placeholder="Mail"
-                                value="<?=$advertisementData[0]['advertisement_contactMailForVisit']?>" required>
+                                value="<?=$advertisementData[0]['advertisement_contactMailForVisit']?>" maxlength="255" required>
                         </div>
                     </div>
                     <div class="row">
@@ -775,8 +775,7 @@ ob_start();
                                 <input id="monthlyRentExcludingCharges" type="number" min="0"
                                     name="monthlyRentExcludingCharges" class="form-control"
                                     aria-describedby="basic-addon2"
-                                    value="<?=$advertisementData[0]['advertisement_monthlyRentExcludingCharges']?>"
-                                    required>
+                                    value="<?=$advertisementData[0]['advertisement_monthlyRentExcludingCharges']?>" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
                                 </div>
