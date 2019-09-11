@@ -977,7 +977,7 @@ ob_start();
                         <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
                         <input id="street" type="text" name="street" class="form-control"
                             placeholder="Saisir l'adresse du logement"
-                            value="<?=$advertisementData[0]['address_street']?>" required>
+                            value="<?=$advertisementData[0]['address_street']?>" maxlength="255" required>
                     </div>
                     <!-- Code postal, ville, pays -->
                     <div class="row">
@@ -986,19 +986,19 @@ ob_start();
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
                             <input id="zipcode" type="text" name="zipcode" class="form-control"
                                 placeholder="Code postal" value="<?=$advertisementData[0]['address_zipcode']?>"
-                                required>
+                                maxlength="20" required>
                         </div>
                         <!-- Ville -->
                         <div class="form-group col-md-6" title="Ville">
                             <label for="city" class="font-weight-bold">Ville</label>
                             <input id="city" type="text" name="city" class="form-control" placeholder="Ville"
-                                value="<?=$advertisementData[0]['address_city']?>" required>
+                                value="<?=$advertisementData[0]['address_city']?>" maxlength="60" required>
                         </div>
                         <!-- Pays -->
                         <div class="form-group col-md-4" title="Pays">
                             <label for="country" class="font-weight-bold">Pays</label>
                             <input id="country" type="text" name="country" class="form-control" placeholder="Pays"
-                                value="<?=$advertisementData[0]['address_country']?>" required>
+                                value="<?=$advertisementData[0]['address_country']?>" maxlength="60" required>
                         </div>
                     </div>
                     <div class="row">
