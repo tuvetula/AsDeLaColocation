@@ -4,6 +4,7 @@ require_once('controller/frontEnd/c_frontEnd.php');
 
 //Si utilisateur connecté
 if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
+    
     //Déconnexion utilisateur
     if (isset($_GET['disconnect']) && $_GET['disconnect']==1) {
         session_destroy();
@@ -76,7 +77,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     //------------------------------------------------------------------------------------------------------------
 } else {
     //Si utilisateur non-connecté
-    //Affichage page d'accueil utilisateur si id et mdp OK
+    //Verification id et mot de passe de connexion
     if (isset($_POST['mail']) && isset($_POST['password'])) {
         login();
 
@@ -84,15 +85,15 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     } elseif (isset($_GET['page']) && $_GET['page']=="forgetPassword") {
         displayforgetPasswordPage();
 
-    //Traitement mot de passe oublié
+    //Traitement mot de passe oublié (après saisie mail pour récupération)
     }else if (isset($_POST['mailForgetPassword'])){
         forgetPassword();
 
-    //Affichage page réinitialisation mot de passe
+    //Affichage page réinitialisation mot de passe (après clique sur lien reçu par mail)
     }else if (isset($_GET['token']) && isset($_GET['mail'])){
         displayTypeNewPassword();
 
-    //Traitement enregistrement nouveau mot de passe
+    //Traitement enregistrement nouveau mot de passe (après saisie de 2 nouveaux mots de passe)
     } else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mail'])){
         saveNewPasswordAfterReinitialization();
 
@@ -100,15 +101,11 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     } elseif (isset($_GET['page']) && $_GET['page']=="displaySubscribeForm") {
         displaySubscribePage();
 
-    //Traitement inscription 
+    //Traitement inscription (après saisie formulaire d'inscription)
     } elseif (isset($_GET['page']) && $_GET['page']=="saveSubscribe") {
         require_once('controller/frontEnd/c_addNewUser.php');
         saveSubscribeForm();
 
-    
-    } elseif (isset($_GET['page']) && $_GET['page']=="subscribeConfirmation") {
-        displayLoginPage();
-        
     } elseif (isset($_GET['error'])) {
         displayLoginPage();
     } else {
