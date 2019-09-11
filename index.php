@@ -78,7 +78,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
 } else {
     //Si utilisateur non-connecté
     //Verification id et mot de passe de connexion
-    if (isset($_POST['mail']) && isset($_POST['password'])) {
+    if (isset($_POST['mailLogin']) && isset($_POST['passwordLogin'])) {
         login();
 
     //Affichage page mot de passe oublié
@@ -99,15 +99,15 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
 
     //Affichage page d'inscription
     } elseif (isset($_GET['page']) && $_GET['page']=="displaySubscribeForm") {
+        require_once('controller/frontEnd/c_subscribe.php');
         displaySubscribePage();
 
     //Traitement inscription (après saisie formulaire d'inscription)
     } elseif (isset($_GET['page']) && $_GET['page']=="saveSubscribe") {
-        require_once('controller/frontEnd/c_addNewUser.php');
+        require_once('controller/frontEnd/c_subscribe.php');
         saveSubscribeForm();
-
-    } elseif (isset($_GET['error'])) {
-        displayLoginPage();
+    
+    //Affichage page de connexion
     } else {
         displayLoginPage();
     }

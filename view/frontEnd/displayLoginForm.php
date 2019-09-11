@@ -9,22 +9,24 @@ ob_start();
             <form method="post" action="index.php" class="text-center">
                 <div class="form-group text-left">
                     <label for="mail">Identifiant</label>
-                    <input type="email" class="form-control form-control-lg" id="mail" name="mail"
-                        placeholder="Saisir votre adresse mail" maxlength="255" required>
+                    <input type="email" class="form-control form-control-lg" id="mailLogin" name="mailLogin"
+                        placeholder="Saisir votre adresse mail" maxlength="255" <?php if (isset($_POST['mailLogin'])) {
+                        echo 'value="'.$_POST['mailLogin'].'"';
+                    }?> required>
                 </div>
                 <div class="form-group text-left">
                     <label for="password">Mot de passe</label>
-                    <input type="password" class="form-control form-control-lg" id="password"
-                        name="password" placeholder="Saisir votre mot de passe" maxlength="255" required>
+                    <input type="password" class="form-control form-control-lg" id="passwordLogin"
+                        name="passwordLogin" placeholder="Saisir votre mot de passe" maxlength="255" required>
                 </div>
                 <div class="container">
                     <button type="submit" class="btn btn-primary">Se connecter</button>
                 </div>
                 <?php
                     if (isset($error) && !empty($error)){
-                        echo '<p class="text-center font-weight-bold p-3">'.$error.'</p>';
+                        echo '<p class="text-center text-danger font-weight-bold p-3">'.$error.'</p>';
                     } else if (isset($message) && !empty($message)){
-                        echo '<p class="text-center font-weight-bold p-3">'.$message.'</p>';
+                        echo '<p class="text-center text-danger font-weight-bold p-3">'.$message.'</p>';
                     }
                 ?>
             </form>

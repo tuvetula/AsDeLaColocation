@@ -1,95 +1,85 @@
 <?php
-require_once('model/frontEnd/m_modifyUser.php');
 require_once('model/frontEnd/m_getUser.php');
+require_once('model/frontEnd/m_modifyUser.php');
 require_once('model/frontEnd/m_getAdvertisement.php');
 
 //Vérification login et mot de passe
-function login(){
+function login()
+{
     //On verifie si le mail existe en base de donnée
-    $mailVerification = getUser($_POST['mail']);
+    $mailVerification = getUser($_POST['mailLogin']);
     if ($mailVerification) {
-        //On vérifie si l'utilisateur est membre
-        if($mailVerification['user_isMember']==1){
-            //On vérifie si l'utilisateur a renseigné le bon mot de passe
-            if (password_verify($_POST['password'], $mailVerification['user_password'])) {
+        //On vérifie si l'utilisateur a renseigné le bon mot de passe
+        if (password_verify($_POST['passwordLogin'], $mailVerification['user_password'])) {
+            //On vérifie si l'utilisateur est membre
+            if ($mailVerification['user_isMember']==1) {
                 $_SESSION['mail'] = $mailVerification['user_mail'];
                 $_SESSION['id'] = $mailVerification['user_id'];
                 $_SESSION['isAdmin'] = $mailVerification['user_isAdmin'];
-                header('Location:index.php');
-            }else{
-                header('Location:index.php?error=pbLog');
+                require_once('view/frontEnd/displayHomeUser.php');
+            } else {
+                $error = "Accès refusé. Vous n'êtes pas membre.";
+                require_once('view/frontEnd/displayLoginForm.php');
             }
-        }else{
-            header('Location:index.php?error=pbStatue');
+        } else {
+            $error = "Mauvais identifiant et/ou mot de passe.";
+            require_once('view/frontEnd/displayLoginForm.php');
         }
-    }else{
-        header('Location:index.php?error=pbLog');
+    } else {
+        $error = "Mauvais identifiant et/ou mot de passe.";
+        require_once('view/frontEnd/displayLoginForm.php');
     }
 }
 
 //Affichage page de connexion
-function displayLoginPage(){
-    if (isset($_GET['error'])){
-        if ($_GET['error'] == "pbLog"){
-            $error = "Mauvais identifiant et/ou mot de passe.";
-        }else if ($_GET['error'] == "pbStatue"){
-            $error = "Accès refusé. Vous n'êtes pas membre.";
-        }
-    }else{
-        $error="";
-    }
+function displayLoginPage()
+{
     require_once('view/frontEnd/displayLoginForm.php');
 }
-//Affichage page d'inscription
-function displaySubscribePage(){
-    if (isset($_GET['error'])){
-        if ($_GET['error'] == "pbMail"){
-            $error = "Cette adresse mail est déja utilisée";
-        }
-    }else{
-        $error="";
-    }
-    require_once('view/frontEnd/displaySubscribeForm.php');
-}
 //Affichage page d'accueil utilisateur connecté
-function displayHomeUser(){
+function displayHomeUser()
+{
     require_once('view/frontEnd/displayHomeUser.php');
 }
 //Affichage page Mon compte
-function displayMyAccount(){
+function displayMyAccount()
+{
     require_once('model/frontEnd/m_getUser.php');
     $userData = getUserById($_SESSION['id']);
     require_once('view/frontEnd/displayMyAccount.php');
 }
 //Affichage page Modifier mon compte
-function displayModifyMyAccount(){
+function displayModifyMyAccount()
+{
     require_once('model/frontEnd/m_getUser.php');
     $userDataToModify = getUserById($_SESSION['id']);
     require_once('view/frontEnd/displaymodifyMyAccountForm.php');
 }
 //Affichage page d'erreur
-function displayErrorNewAdvertisement(){
+function displayErrorNewAdvertisement()
+{
     require_once('view/frontEnd/displayErrorPage.php');
 }
 //Affichage de la page "Mes annonces"
-function displayMyAdvertisements(){
+function displayMyAdvertisements()
+{
     require_once('model/frontEnd/m_getPicture.php');
     //Récupération annonces utilisateurs
     $userAdvertisements = getUserAdvertisement($_SESSION['id']);
     //Mise en tableau des id des annonces de l'utilisateur
     $advertisementIdArray = array();
-    foreach($userAdvertisements as $key => $value){
-        array_push($advertisementIdArray,$userAdvertisements[$key]['advertisement_id']);
+    foreach ($userAdvertisements as $key => $value) {
+        array_push($advertisementIdArray, $userAdvertisements[$key]['advertisement_id']);
     }
     //Récupération de la photo Order 1 de chaque annonce
     $pictureFilename = array();
-    foreach($advertisementIdArray as $key => $value){
+    foreach ($advertisementIdArray as $key => $value) {
         $pictureFilename[$value] =getAdvertisementPictureOrder1($value);
     }
     //Integration photos dans le tableau $userAdvertisements
-    for($i = 0 ; $i < count($userAdvertisements) ; $i++){
-        foreach($pictureFilename as $key => $value){
-            if ($userAdvertisements[$i]['advertisement_id'] == $key && $pictureFilename[$key]!=false){
+    for ($i = 0 ; $i < count($userAdvertisements) ; $i++) {
+        foreach ($pictureFilename as $key => $value) {
+            if ($userAdvertisements[$i]['advertisement_id'] == $key && $pictureFilename[$key]!=false) {
                 $userAdvertisements[$i]['picture_fileName'] = $value;
             }
         }
@@ -107,13 +97,14 @@ function displayAddAnAdvertisementForm()
 }
 
 //Affichage de la page "mot de passe oublié"
-function displayforgetPasswordPage(){
+function displayforgetPasswordPage()
+{
     if (isset($_GET['message'])) {
         if ($_GET['message'] == "mailOk") {
             $message = "Un lien vous permettant de modifier votre mot de passe vous a été envoyé";
-        } else if ($_GET['message'] == "error1"){
+        } elseif ($_GET['message'] == "error1") {
             $message = "Aucun compte ne correspond aux informations que vous avez saisies";
-        } else if ($_GET['message'] == "error2"){
+        } elseif ($_GET['message'] == "error2") {
             $message = "Problème technique, veuillez réessayer ultérieurement";
         } else {
             $message="";
@@ -123,15 +114,16 @@ function displayforgetPasswordPage(){
 }
 
 //Traitement mot de passe oublié (envoi mail)
-function forgetPassword(){
+function forgetPassword()
+{
     //Récupération adresse mail depuis $_POST
     $mail = $_POST['mailForgetPassword'];
     //Vérification si l'adresse mail existe en base de donnée
     $mailVerification = getUser($mail);
-    if($mailVerification){
+    if ($mailVerification) {
         //On génère un token et on l'enregistre en base de donnée
         $token = sha1($mail.time());
-        if(modifyToken($mail,$token)){
+        if (modifyToken($mail, $token)) {
             //Lien mail
             $link = "http://localhost/asdelacolocation/index.php?token=$token&mail=$mail";
             //Création message à envoyer par mail
@@ -141,58 +133,60 @@ function forgetPassword(){
             $headers[] = 'MIME-Version: 1.0';
             $headers[]= 'Content-type: text/html; charset=utf-8';
             //Envoi du mail
-            if(mail($to,$subject,$body,implode("\r\n", $headers))){
+            if (mail($to, $subject, $body, implode("\r\n", $headers))) {
                 //Redirection
                 header('Location:index.php?page=forgetPassword&message=mailOk');
-            }else{
+            } else {
                 header('Location:index.php?page=forgetPassword&message=error2');
             }
-        }else{
+        } else {
             header('Location:index.php?page=forgetPassword&message=error2');
         }
-    }else{
+    } else {
         header('Location:index.php?page=forgetPassword&message=error1');
     }
 }
 
 //Affichage page "choisir un nouveau mot de passe"
-function displayTypeNewPassword(){
+function displayTypeNewPassword()
+{
     $mail = $_GET['mail'];
     $token = $_GET['token'];
     //Vérification si adresse mail existe en base de donnée
     $mailVerification = getUser($mail);
-    if($mailVerification){
+    if ($mailVerification) {
         //Comparaison $_GET['token] et user_token
-        if ($token == $mailVerification['user_token']){
+        if ($token == $mailVerification['user_token']) {
             //Affichage page choisir un nouveau mot de passe
             require_once('view/frontEnd/displayTypeNewPassword.php');
-        }else{
+        } else {
             header('Location:index.php?page=error&message=wrongMailToken');
         }
-    }else{
+    } else {
         header('Location:index.php?page=error&message=wrongMailToken');
     }
 }
 
 //Traitement enregistrement nouveau mot de passe après réinitialisation
-function saveNewPasswordAfterReinitialization(){
+function saveNewPasswordAfterReinitialization()
+{
     $mail = $_GET['mail'];
     $password1 = $_POST['passwordReinitialization1'];
     $password2 = $_POST['passwordReinitialization2'];
     //Vérification si les 2 mots de passe sont identiques
-    if ($password1 == $password2){
-        //Enregistrement nouveau mot de passe 
-        if(modifyPassword($mail,$password1)){
+    if ($password1 == $password2) {
+        //Enregistrement nouveau mot de passe
+        if (modifyPassword($mail, $password1)) {
             //On remet le token à null
-            if(modifyToken($mail)){
+            if (modifyToken($mail)) {
                 header('Location:index.php?message=reinitializationOk');
-            }else{
+            } else {
                 header('Location:index.php');
             }
-        }else{
+        } else {
             header('Location:index.php');
         }
-    }else{
+    } else {
         header('Location:index.php?');
     }
 }
