@@ -26,30 +26,7 @@ function uploadImage($namePictureTmp, $namePicture, $uploadPictureDir)
         return false;
     }
 }
-
-
-
-
-
-
 //TP VOYAGES
-
-//Ajouter un voyage
-function insertNewTravel($title, $content, $image=null)
-{
-    $titleOk = htmlspecialchars(strip_tags($title));
-    $contentOk = htmlspecialchars(strip_tags($content));
-
-    $db = connectBdd();
-    $insert = $db->prepare('INSERT INTO voyagespost (title,content,image) VALUES (:title,:content,:image)');
-    $insert->execute(array(
-        ':title'=>$titleOk,
-        ':content'=>$contentOk,
-        ':image'=>$image
-    ));
-    return true;
-}
-
 //Supprimer un voyage dans la base dedonnée
 function deleteTravelInBdd($postTravelToDelete)
 {
@@ -65,18 +42,3 @@ function deleteTravelInBdd($postTravelToDelete)
     $delete->execute();
 }
 
-//Modifier un voyage dans le base dedonnée
-function modifyTravelInBdd($title, $content, $id)
-{
-    $title = htmlspecialchars(strip_tags($title));
-    $content = htmlspecialchars(strip_tags($content));
-    $id = htmlspecialchars(strip_tags($id));
-
-    $db = connectBdd();
-    $modify = $db->prepare('UPDATE voyagespost SET title=:title,content=:content WHERE id=:id');
-    $modify->execute([
-        ':title'=>$title,
-        ':content'=>$content,
-        ':id'=>$id
-    ]);
-}
