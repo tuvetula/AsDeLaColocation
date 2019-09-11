@@ -55,11 +55,6 @@ function displayModifyMyAccount()
     $userDataToModify = getUserById($_SESSION['id']);
     require_once('view/frontEnd/displaymodifyMyAccountForm.php');
 }
-//Affichage page d'erreur
-function displayErrorNewAdvertisement()
-{
-    require_once('view/frontEnd/displayErrorPage.php');
-}
 //Affichage de la page "Mes annonces"
 function displayMyAdvertisements()
 {
