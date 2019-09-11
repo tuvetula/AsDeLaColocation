@@ -2,13 +2,13 @@
 require_once('model/bdd/bddConfig.php');
 
 //Vérifie si le login existe en base de donnée
-function getUser($postLogin)
+function getUser($postMail)
 {
-    $postLogin = htmlspecialchars(strip_tags($postLogin));
+    $postMail = htmlspecialchars(strip_tags($postMail));
     $db = connectBdd();
-    $answer = $db->prepare('SELECT user_id,user_mail,user_password,user_isAdmin,user_isMember FROM users WHERE user_mail=:login');
+    $answer = $db->prepare('SELECT user_id,user_mail,user_password,user_isAdmin,user_isMember FROM users WHERE user_mail=:mail');
     $answer->execute([
-        ':login' => $postLogin
+        ':mail' => $postMail
     ]);
     return $answer->fetch(PDO::FETCH_ASSOC);
 }
