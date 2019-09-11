@@ -1,17 +1,21 @@
 <?php
+require_once('model/frontEnd/m_modifyUser.php');
 require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_getAdvertisement.php');
 
 //Vérification login et mot de passe
 function login()
 {
-    $login = getUser($_POST['mail']);
-    if ($login) {
-        if($login['user_isMember']==1){
-            if (password_verify($_POST['password'], $login['user_password'])) {
-                $_SESSION['mail'] = $login['user_mail'];
-                $_SESSION['id'] = $login['user_id'];
-                $_SESSION['isAdmin'] = $login['user_isAdmin'];
+    //On verifie si le mail existe en base de donnée
+    $mailVerification = getUser($_POST['mail']);
+    if ($mailVerification) {
+        //On vérifie si l'utilisateur est membre
+        if($mailVerification['user_isMember']==1){
+            //On vérifie si l'utilisateur a renseigné le bon mot de passe
+            if (password_verify($_POST['password'], $mailVerification['user_password'])) {
+                $_SESSION['mail'] = $mailVerification['user_mail'];
+                $_SESSION['id'] = $mailVerification['user_id'];
+                $_SESSION['isAdmin'] = $mailVerification['user_isAdmin'];
                 header('Location:index.php');
             }else{
                 header('Location:index.php?error=pbLog');
@@ -51,8 +55,7 @@ function displaySubscribePage(){
 }
 
 //Affichage page d'accueil utilisateur connecté
-function displayHomeUser()
-{
+function displayHomeUser(){
     require_once('view/frontEnd/displayHomeUser.php');
 }
 //Affichage page Mon compte
@@ -112,8 +115,10 @@ function displayforgetPasswordPage(){
     if (isset($_GET['message'])) {
         if ($_GET['message'] == "mailOk") {
             $message = "Un lien vous permettant de modifier votre mot de passe vous a été envoyé";
-        } else if ($_GET['message'] == "error"){
+        } else if ($_GET['message'] == "error1"){
             $message = "Aucun compte ne correspond aux informations que vous avez saisies";
+        } else if ($_GET['message'] == "error2"){
+            $message = "Problème technique, veuillez réessayer ultérieurement";
         } else {
             $message="";
         }
@@ -121,9 +126,8 @@ function displayforgetPasswordPage(){
     require_once('view/frontEnd/displayForgetPasswordPage.php');
 }
 
-//Traitement mot de passe oublié
+//Traitement mot de passe oublié (envoi mail)
 function forgetPassword(){
-    require_once('model/frontEnd/m_modifyUser.php');
     //Récupération adresse mail depuis $_POST
     $mail = $_POST['mailForgetPassword'];
     //Vérification si l'adresse mail existe en base de donnée
@@ -131,61 +135,68 @@ function forgetPassword(){
     if($mailVerification){
         //On génère un token et on l'enregistre en base de donnée
         $token = sha1($mail.time());
-        modifyToken($mail,$token);
-        //Lien mail
-        $link = "http://localhost/asdelacolocation/index.php?token=$token&mail=$mail";
-        //Création message à envoyer par mail
-        $to = $mail;
-        $subject = "Réinitialisation de votre mot de passe Asdelacolocation";
-        $body = 'Bonjour, veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe : '.$link.'';
-        $header = 'MIME-Version: 1.0\r\n';
-        $header .= 'Content-type: text/html; charset=utf-8\r\n';
-        //Envoi du mail
-        mail($to,$subject,$body,$header);
-        //Redirection
-        header('Location:index.php?page=forgetPassword&message=mailOk');
+        if(modifyToken($mail,$token)){
+            //Lien mail
+            $link = "http://localhost/asdelacolocation/index.php?token=$token&mail=$mail";
+            //Création message à envoyer par mail
+            $to = $mail;
+            $subject = "Réinitialisation de votre mot de passe Asdelacolocation";
+            $body = 'Bonjour,'."\r\n".' veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :'."\r\n".''.$link.'';
+            $headers[] = 'MIME-Version: 1.0';
+            $headers[]= 'Content-type: text/html; charset=utf-8';
+            //Envoi du mail
+            if(mail($to,$subject,$body,implode("\r\n", $headers))){
+                //Redirection
+                header('Location:index.php?page=forgetPassword&message=mailOk');
+            }else{
+                header('Location:index.php?page=forgetPassword&message=error2');
+            }
+        }else{
+            header('Location:index.php?page=forgetPassword&message=error2');
+        }
     }else{
-        header('Location:index.php?page=forgetPassword&message=error');
+        header('Location:index.php?page=forgetPassword&message=error1');
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//VOYAGE TP
-function displayTravels(){
-    $travels = getTravels();
-    $pageEnCours="index";
-    require('view/frontEnd/displayTravels.php');
+//Affichage page "choisir un nouveau mot de passe"
+function displayTypeNewPassword(){
+    $mail = $_GET['mail'];
+    $token = $_GET['token'];
+    //Vérification si adresse mail existe en base de donnée
+    $mailVerification = getUser($mail);
+    if($mailVerification){
+        //Comparaison $_GET['token] et user_token
+        if ($token == $mailVerification['user_token']){
+            //Affichage page choisir un nouveau mot de passe
+            require_once('view/frontEnd/displayTypeNewPassword.php');
+        }else{
+            header('Location:index.php?page=error&message=wrongMailToken');
+        }
+    }else{
+        header('Location:index.php?page=error&message=wrongMailToken');
+    }
 }
 
-function displayLogins(){
-    $pageEnCours='loginmdp';
-    require('view/frontEnd/displayLoginForm.php');
-}
-
-function displayPage(){
-    switch($_GET['page']){
-        case 'voyages':
-            displayTravels();
-            break;
-
-        case 'loginForm':
-            displayLogins();
-            break;
-
-        default:
-            displayTravels();
-            break;
+//Traitement enregistrement nouveau mot de passe après réinitialisation
+function saveNewPasswordAfterReinitialization(){
+    $mail = $_GET['mail'];
+    $password1 = $_POST['passwordReinitialization1'];
+    $password2 = $_POST['passwordReinitialization2'];
+    //Vérification si les 2 mots de passe sont identiques
+    if ($password1 == $password2){
+        //Enregistrement nouveau mot de passe 
+        if(modifyPassword($mail,$password1)){
+            //On remet le token à null
+            if(modifyToken($mail)){
+                header('Location:index.php?message=reinitializationOk');
+            }else{
+                header('Location:index.php');
+            }
+        }else{
+            header('Location:index.php');
+        }
+    }else{
+        header('Location:index.php?');
     }
 }

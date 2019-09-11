@@ -28,10 +28,11 @@ function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber,
         ':loginSiteWeb'=> $userLoginSiteWeb,
         ':passwordSiteWeb'=> $userPasswordSiteWeb
     ));
+    return true;
 }
 
 //Modification user_token
-function modifyToken($mail,$token){
+function modifyToken($mail,$token=null){
     $mail = htmlspecialchars(strip_tags($mail));
     $db = connectBdd();
     $modifyUserToken = $db->prepare('UPDATE users SET 
@@ -39,4 +40,18 @@ function modifyToken($mail,$token){
     $modifyUserToken->execute(array(
         ':token'=> $token
     ));
+    return true;
+}
+
+//Modification user_password
+function modifyPassword($mail,$newPassword){
+    $mail = htmlspecialchars(strip_tags($mail));
+    $newPassword = password_hash(htmlspecialchars(strip_tags($newPassword)),PASSWORD_DEFAULT);
+    $db = connectBdd();
+    $modifyUserPassword = $db->prepare('UPDATE users SET 
+    user_password=:newPassword WHERE user_mail="'.$mail.'"');
+    $modifyUserPassword->execute(array(
+        ':newPassword'=> $newPassword
+    ));
+    return true;
 }
