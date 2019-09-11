@@ -29,3 +29,14 @@ function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber,
         ':passwordSiteWeb'=> $userPasswordSiteWeb
     ));
 }
+
+//Modification user_token
+function modifyToken($mail,$token){
+    $mail = htmlspecialchars(strip_tags($mail));
+    $db = connectBdd();
+    $modifyUserToken = $db->prepare('UPDATE users SET 
+    user_token=:token WHERE user_mail="'.$mail.'"');
+    $modifyUserToken->execute(array(
+        ':token'=> $token
+    ));
+}

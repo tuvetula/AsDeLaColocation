@@ -12,6 +12,7 @@ function login()
                 $_SESSION['mail'] = $login['user_mail'];
                 $_SESSION['id'] = $login['user_id'];
                 $_SESSION['isAdmin'] = $login['user_isAdmin'];
+                header('Location:index.php');
             }else{
                 header('Location:index.php?error=pbLog');
             }
@@ -39,6 +40,13 @@ function displayLoginPage(){
 
 //Affichage page d'inscription
 function displaySubscribePage(){
+    if (isset($_GET['error'])){
+        if ($_GET['error'] == "pbMail"){
+            $error = "Cette adresse mail est déja utilisée";
+        }
+    }else{
+        $error="";
+    }
     require_once('view/frontEnd/displaySubscribeForm.php');
 }
 
@@ -97,6 +105,48 @@ function displayAddAnAdvertisementForm()
     //Variable pour définir date minimum dans "disponible le"
     $dateOfTheDay=date('Y-m-d');
     require_once('view/frontEnd/displayPostAnAdvertisement.php');
+}
+
+//Affichage de la page "mot de passe oublié"
+function displayforgetPasswordPage(){
+    if (isset($_GET['message'])) {
+        if ($_GET['message'] == "mailOk") {
+            $message = "Un lien vous permettant de modifier votre mot de passe vous a été envoyé";
+        } else if ($_GET['message'] == "error"){
+            $message = "Aucun compte ne correspond aux informations que vous avez saisies";
+        } else {
+            $message="";
+        }
+    }
+    require_once('view/frontEnd/displayForgetPasswordPage.php');
+}
+
+//Traitement mot de passe oublié
+function forgetPassword(){
+    require_once('model/frontEnd/m_modifyUser.php');
+    //Récupération adresse mail depuis $_POST
+    $mail = $_POST['mailForgetPassword'];
+    //Vérification si l'adresse mail existe en base de donnée
+    $mailVerification = getUser($mail);
+    if($mailVerification){
+        //On génère un token et on l'enregistre en base de donnée
+        $token = sha1($mail.time());
+        modifyToken($mail,$token);
+        //Lien mail
+        $link = "http://localhost/asdelacolocation/index.php?token=$token&mail=$mail";
+        //Création message à envoyer par mail
+        $to = $mail;
+        $subject = "Réinitialisation de votre mot de passe Asdelacolocation";
+        $body = 'Bonjour, veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe : '.$link.'';
+        $header = 'MIME-Version: 1.0\r\n';
+        $header .= 'Content-type: text/html; charset=utf-8\r\n';
+        //Envoi du mail
+        mail($to,$subject,$body,$header);
+        //Redirection
+        header('Location:index.php?page=forgetPassword&message=mailOk');
+    }else{
+        header('Location:index.php?page=forgetPassword&message=error');
+    }
 }
 
 
