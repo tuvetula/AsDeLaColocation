@@ -4,8 +4,7 @@ require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_getAdvertisement.php');
 
 //Vérification login et mot de passe
-function login()
-{
+function login(){
     //On verifie si le mail existe en base de donnée
     $mailVerification = getUser($_POST['mail']);
     if ($mailVerification) {
@@ -32,7 +31,7 @@ function login()
 function displayLoginPage(){
     if (isset($_GET['error'])){
         if ($_GET['error'] == "pbLog"){
-            $error = "Mauvais identifiant ou mot de passe.";
+            $error = "Mauvais identifiant et/ou mot de passe.";
         }else if ($_GET['error'] == "pbStatue"){
             $error = "Accès refusé. Vous n'êtes pas membre.";
         }
@@ -41,7 +40,6 @@ function displayLoginPage(){
     }
     require_once('view/frontEnd/displayLoginForm.php');
 }
-
 //Affichage page d'inscription
 function displaySubscribePage(){
     if (isset($_GET['error'])){
@@ -53,7 +51,6 @@ function displaySubscribePage(){
     }
     require_once('view/frontEnd/displaySubscribeForm.php');
 }
-
 //Affichage page d'accueil utilisateur connecté
 function displayHomeUser(){
     require_once('view/frontEnd/displayHomeUser.php');
@@ -101,7 +98,6 @@ function displayMyAdvertisements(){
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
     require_once('view/frontEnd/displayMyAdvertisements.php');
 }
-
 //Affichage Formulaire d'ajout d'une nouvelle annonce
 function displayAddAnAdvertisementForm()
 {
