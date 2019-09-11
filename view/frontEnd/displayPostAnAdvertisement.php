@@ -15,14 +15,14 @@ ob_start();
                     <div class="form-group"
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce" maxlength="255"
                             required>
                     </div>
                     <!--Description-->
                     <div class="form-group">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
-                            placeholder="maximum 3000 charactères" required></textarea>
+                            placeholder="maximum 3000 charactères" maxlength="3000" required></textarea>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
@@ -106,7 +106,7 @@ ob_start();
                             <label for="contactNameForVisit" class="font-weight-bold">Nom du contact pour les
                                 visites</label>
                             <input id="contactNameForVisit" type="text" name="contactNameForVisit" class="form-control"
-                                placeholder="Nom" required>
+                                placeholder="Nom" maxlength="125" required>
                         </div>
                         <!-- Telephone du contact pour les visites -->
                         <div class="form-group col-md-4">
@@ -114,14 +114,14 @@ ob_start();
                                 pour
                                 les visites</label>
                             <input id="contactPhoneNumberForVisit" type="tel" name="contactPhoneNumberForVisit"
-                                class="form-control" placeholder="Téléphone" required>
+                                class="form-control" placeholder="Téléphone" maxlength="20" required>
                         </div>
                         <!-- Mail du contact pour les visites -->
                         <div class="form-group col-md-4">
                             <label for="contactMailForVisit" class="font-weight-bold">Mail du contact pour les
                                 visites</label>
                             <input id="contactMailForVisit" type="email" name="contactMailForVisit" class="form-control"
-                                placeholder="Mail" required>
+                                placeholder="Mail" maxlength="255" required>
                         </div>
                     </div>
                     <div class="row">
