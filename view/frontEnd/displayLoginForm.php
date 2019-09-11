@@ -10,12 +10,12 @@ ob_start();
                 <div class="form-group text-left">
                     <label for="mail">Identifiant</label>
                     <input type="email" class="form-control form-control-lg" id="mail" name="mail"
-                        placeholder="Saisir votre adresse mail" required>
+                        placeholder="Saisir votre adresse mail" maxlength="255" required>
                 </div>
                 <div class="form-group text-left">
                     <label for="password">Mot de passe</label>
                     <input type="password" class="form-control form-control-lg" id="password"
-                        name="password" placeholder="Saisir votre mot de passe" required>
+                        name="password" placeholder="Saisir votre mot de passe" maxlength="255" required>
                 </div>
                 <?php
                     if (!empty($error)){
@@ -31,7 +31,7 @@ ob_start();
                 <a href="index.php?page=displaySubscribeForm">Inscription</a>
             </div>
             <div class="container text-right">
-                <a class="text-right" href="#">Mot de passe oublié?</a>
+                <a class="text-right" href="index.php?page=forgetPassword">Mot de passe oublié?</a>
             </div>
         </div>
     </div>
