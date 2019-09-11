@@ -87,7 +87,15 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     //Traitement mot de passe oublié
     }else if (isset($_POST['mailForgetPassword'])){
         forgetPassword();
-        
+
+    //Affichage page réinitialisation mot de passe
+    }else if (isset($_GET['token']) && isset($_GET['mail'])){
+        displayTypeNewPassword();
+
+    //Traitement enregistrement nouveau mot de passe
+    } else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mail'])){
+        saveNewPasswordAfterReinitialization();
+
     //Affichage page d'inscription
     } elseif (isset($_GET['page']) && $_GET['page']=="displaySubscribeForm") {
         displaySubscribePage();
@@ -100,6 +108,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     
     } elseif (isset($_GET['page']) && $_GET['page']=="subscribeConfirmation") {
         displayLoginPage();
+        
     } elseif (isset($_GET['error'])) {
         displayLoginPage();
     } else {

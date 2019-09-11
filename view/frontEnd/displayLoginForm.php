@@ -17,14 +17,16 @@ ob_start();
                     <input type="password" class="form-control form-control-lg" id="password"
                         name="password" placeholder="Saisir votre mot de passe" maxlength="255" required>
                 </div>
-                <?php
-                    if (!empty($error)){
-                        echo '<p class="text-center">'.$error.'</p>';
-                    }
-                ?>
                 <div class="container">
                     <button type="submit" class="btn btn-primary">Se connecter</button>
                 </div>
+                <?php
+                    if (isset($error) && !empty($error)){
+                        echo '<p class="text-center font-weight-bold p-3">'.$error.'</p>';
+                    } else if (isset($message) && !empty($message)){
+                        echo '<p class="text-center font-weight-bold p-3">'.$message.'</p>';
+                    }
+                ?>
             </form>
 
             <div class="container text-right">

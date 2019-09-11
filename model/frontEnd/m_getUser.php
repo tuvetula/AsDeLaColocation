@@ -6,7 +6,7 @@ function getUser($postMail)
 {
     $postMail = htmlspecialchars(strip_tags($postMail));
     $db = connectBdd();
-    $answer = $db->prepare('SELECT user_id,user_mail,user_password,user_isAdmin,user_isMember FROM users WHERE user_mail=:mail');
+    $answer = $db->prepare('SELECT user_id,user_mail,user_password,user_isAdmin,user_isMember,user_token FROM users WHERE user_mail=:mail');
     $answer->execute([
         ':mail' => $postMail
     ]);
