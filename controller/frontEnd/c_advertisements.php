@@ -4,6 +4,7 @@ require_once('model/frontEnd/m_insertNewPicture.php');
 require_once('model/frontEnd/m_insertNewAddress.php');
 require_once('model/frontEnd/m_getAddress.php');
 require_once('model/frontEnd/m_getAdvertisement.php');
+require_once('model/frontEnd/m_getPicture.php');
 require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_modifyAdvertisement.php');
 require_once('model/frontEnd/m_deleteAdvertisement.php');
@@ -12,7 +13,6 @@ require_once('controller/frontEnd/functions/rearrangeDataFilesArray.php');
 //Affichage de la page "Mes annonces"
 function displayMyAdvertisements()
 {
-    require_once('model/frontEnd/m_getPicture.php');
     //Récupération annonces utilisateurs
     $userAdvertisements = getUserAdvertisement($_SESSION['id']);
     //Mise en tableau des id des annonces de l'utilisateur
@@ -39,7 +39,7 @@ function displayMyAdvertisements()
     require_once('view/frontEndUserConnected/v_advertisementsDisplay.php');
 }
 
-//Affichage Formulaire d'ajout d'une nouvelle annonce
+//Affichage page "Ajouter une annonce" (formulaire)
 function displayAddAnAdvertisementForm()
 {
     //Variable pour définir date minimum dans "disponible le"
@@ -643,13 +643,16 @@ function saveNewAdvertisement()
     require_once('view/frontEndUserConnected/v_homeUser.php');
 }
 
-//Affichage page "modifier une annonce"
+//Affichage page "modifier une annonce" (formulaire)
 function displayMofifyAdvertisementForm(){
     //On récupère l'id de l'annonce à modifier
     $advertisementId = $_GET['advertisementId'];
     //On récupère les données de l'annonce
     $advertisementData = getAdvertisementWithAddress($_SESSION['id'],$advertisementId);
-    
+    //On récupère les photos liées à l'annonce
+    $advertisementPicture = getAdvertisementPictures($advertisementId);
+    $picturePath = "public/pictures/users/";
+
     require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
 }
 
