@@ -83,7 +83,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     if (isset($_POST['mailLogin']) && isset($_POST['passwordLogin'])) {
         login();
 
-    //Affichage page mot de passe oublié
+    //Affichage page mot de passe oublié (mail à saisir)
     } elseif (isset($_GET['page']) && $_GET['page']=="forgetPassword") {
         displayforgetPasswordPage();
 

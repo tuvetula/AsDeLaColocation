@@ -5,7 +5,7 @@ require_once('model/frontEnd/m_modifyUser.php');
 //Affichage de la page "mot de passe oublié"
 function displayforgetPasswordPage()
 {
-    require_once('view/frontEnd/displayForgetPasswordPage.php');
+    require_once('view/frontEnd/v_ForgetPasswordTypeMail.php');
 }
 
 //Traitement mot de passe oublié (envoi mail après saisie adresse mail dans displayForgetPasswordPage)
@@ -31,7 +31,7 @@ function forgetPassword()
             if (mail($to, $subject, $body, implode("\r\n", $headers))) {
                 //Redirection
                 $message = 'Un lien vous permettant de modifier votre mot de passe vous a été envoyé à l\'adresse "'.$mail.'"';
-                require_once('view/frontEnd/displayMessage.php');
+                require_once('view/frontEnd/v_message.php');
             } else {
                 $error = "Problème technique, veuillez réessayer ultérieurement";
             }
@@ -40,12 +40,12 @@ function forgetPassword()
         }
     } else {
         $error = "Aucun compte ne correspond aux informations que vous avez saisies";
-        require_once('view/frontEnd/displayForgetPasswordPage.php');
+        require_once('view/frontEnd/v_ForgetPasswordTypeMail.php');
     }
-    require_once('view/frontEnd/displayError.php');
+    require_once('view/frontEnd/v_error.php');
 }
 
-//Affichage page "choisir un nouveau mot de passe"
+//Affichage page "choisir un nouveau mot de passe" (après click sur le lien reçu par mail)
 function displayTypeNewPassword()
 {
     //Récupération mail et token (se trouvant dans le lien reçu par mail)
@@ -57,14 +57,14 @@ function displayTypeNewPassword()
         //Comparaison $_GET['token] et user_token
         if ($token == $mailVerification['user_token']) {
             //Affichage page choisir un nouveau mot de passe
-            require_once('view/frontEnd/displayTypeNewPassword.php');
+            require_once('view/frontEnd/v_ForgetPasswordTypeNewPassword.php');
         } else {
             $error = "Le lien utilisé ne fonctionne plus. Veuillez renouveller votre demande de réinitialisation de mot de passe.";
         }
     } else {
         $error = "Le lien utilisé ne fonctionne plus. Veuillez renouveller votre demande de réinitialisation de mot de passe.";
     }
-    require_once('view/frontEnd/displayError.php');
+    require_once('view/frontEnd/v_error.php');
 }
 
 //Traitement enregistrement nouveau mot de passe après réinitialisation
@@ -80,13 +80,13 @@ function saveNewPasswordAfterReinitialization()
             //On remet le token à null
             if (modifyToken($mail)) {
                 $message = "Votre mot de passe a bien été réinitialisé.";
-                require_once('view/frontEnd/displayMessage.php');
+                require_once('view/frontEnd/v_message.php');
             }
         }
     } else {
         $error = "Les deux mots de passe ne sont pas identiques.";
-        require_once('view/frontEnd/displayTypeNewPassword.php');
+        require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
     }
     $error = "Problème technique, veuillez réessayer ultérieurement";
-    require_once('view/frontEnd/displayError.php');
+    require_once('view/frontEnd/v_error.php');
 }
