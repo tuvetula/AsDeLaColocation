@@ -6,6 +6,7 @@ require_once('controller/frontEnd/c_forgetPassword.php');
 //Si utilisateur connecté
 if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     require_once('controller/frontEnd/c_myAccount.php');
+    require_once('controller/frontEnd/c_advertisements.php');
     
     //Déconnexion utilisateur
     if (isset($_GET['disconnect']) && $_GET['disconnect']==1) {
@@ -39,27 +40,22 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
 
     //Page qui ajoute une nouvelle annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="addAdvertisement") {
-        require_once('controller/frontEnd/c_addNewAdvertisement.php');
-        addANewAdvertisement();
+        saveNewAdvertisement();
 
     //Page qui supprime une annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="deleteAdvertisement" && isset($_GET['id'])) {
-        require_once('controller/frontEnd/c_deleteAdvertisement.php');
         deleteAdvertisement($_GET['id']);
 
     //Page modifier une annonce (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id'])) {
-        require_once('controller/frontEnd/c_modifyAdvertisement.php');
         modifyAdvertisement($_GET['id']);
         
-    //Page smodifier une annonce avec confirmation modification (Formulaire)
+    //Page modifier une annonce avec confirmation modification (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id']) && isset($_GET['confirm']) && $_GET['confirm']==1) {
-        require_once('controller/frontEnd/c_modifyAdvertisement.php');
         modifyAdvertisement($_GET['id'], $_GET['confirm']);
             
     //Page qui enregistre la modification d'une annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['id'])) {
-        require_once('controller/frontEnd/c_modifyAdvertisement.php');
         saveModifyAdvertisement($_GET['id']);
 
     //Page d'erreur
