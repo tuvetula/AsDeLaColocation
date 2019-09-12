@@ -71,6 +71,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         //Si l'utilisateur est un admin
         if ($_SESSION['isAdmin']) {
             require_once('controller/backEnd/c_backEnd.php');
+            displayHomeUser();
         } else {
             displayHomeUser();
         }
