@@ -6,7 +6,7 @@ ob_start();
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Réinitialisation mot de passe</h1>
         <div class="container col-md-9 col-lg-6">
-            <form method="post" action="index.php?mail=<?=$mail?>" class="text-center">
+            <form method="post" action="index.php?mailLink1=<?=$mail?>" class="text-center">
                 <div class="form-group text-left">
                     <label for="passwordReinitialization1">Mot de passe</label>
                     <input type="password" class="form-control form-control-lg" id="passwordReinitialization1" name="passwordReinitialization1"
@@ -21,8 +21,8 @@ ob_start();
                     <button type="submit" class="btn btn-primary">Soumettre</button>
                 </div>
                 <?php
-                    if (!empty($message)){
-                        echo '<p class="text-center pt-3">'.$message.'</p>';
+                    if (isset($error) && !empty($error)){
+                        echo '<p class="text-center text-danger font-weight-bold pt-3">'.$error.'</p>';
                     }
                 ?>
             </form>
