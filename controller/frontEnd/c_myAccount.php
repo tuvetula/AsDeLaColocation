@@ -8,14 +8,14 @@ require_once('model/frontEnd/m_modifyAddress.php');
 function displayMyAccount()
 {
     $userData = getUserById($_SESSION['id']);
-    require_once('view/frontEnd/displayMyAccount.php');
+    require_once('view/frontEndUserConnected/v_myAccount.php');
 }
 
 //Affichage page Modifier mon compte
 function displayModifyMyAccount()
 {
     $userDataToModify = getUserById($_SESSION['id']);
-    require_once('view/frontEnd/displaymodifyMyAccountForm.php');
+    require_once('view/frontEndUserConnected/v_myAccountModificationForm.php');
 }
 
 //Traitement modification mon compte
@@ -60,5 +60,8 @@ function modifyMyAccount(){
     modifyAddress($addressIdUser,$addressStreet,$addressZipcode,$addressCity,$addressCountry);
     //On modifie les coordonnées (table users)
     modifyUser($_SESSION['id'],$userName,$userFirstName,$usermail,$userPhoneNumber,$userLoginSiteWeb,$userPasswordSiteWeb);
-    header('Location:index.php?page=displayMyAccount');
+    //On récupère les nouvelles informations suite à la modification
+    $userData = getUserById($_SESSION['id']);
+    //On affiche la page "mon compte"
+    require_once('view/frontEndUserConnected/v_myAccount.php');
 }
