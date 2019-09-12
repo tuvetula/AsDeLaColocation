@@ -33,3 +33,24 @@ body {
 #preview img {
     width: 100%;
 }
+
+
+/*Affichage photo "modifier une annonce"*/
+
+.image-checkbox {
+    cursor: pointer;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 4px solid transparent;
+    outline: 0;
+    max-width: 200px;
+}
+
+.image-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.image-checkbox-checked {
+    border-color: red;
+}
