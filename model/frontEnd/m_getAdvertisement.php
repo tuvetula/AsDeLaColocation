@@ -31,7 +31,7 @@ function verifyAdvertisement($userId, $advertisementId)
     return $userAdvertisements;
 }
 
-//Récupère une annonce avec son adresse et ses photos
+//Récupère une annonce avec son adresse et ses photos (avec user_id et advertisement_id)
 function getAdvertisementWithAddress($userId, $advertisementId)
 {
     $db = connectBdd();

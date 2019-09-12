@@ -47,8 +47,8 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         deleteAdvertisement($_GET['id']);
 
     //Page modifier une annonce (Formulaire)
-    } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id'])) {
-        modifyAdvertisement($_GET['id']);
+    } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['advertisementId'])) {
+        displayMofifyAdvertisementForm();
         
     //Page modifier une annonce avec confirmation modification (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id']) && isset($_GET['confirm']) && $_GET['confirm']==1) {

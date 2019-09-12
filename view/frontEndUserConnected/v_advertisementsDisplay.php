@@ -25,7 +25,7 @@ ob_start();
                         <?=$userAdvertisements[$key]['advertisement_description']?>
                     </div>
                 </div>
-                <!--BOUTTONS-->
+                <!--BOUTONS-->
                 <div id="buttonsAdvertisement" class="col-sm-12 col-md-4 col-lg-3 pt-3 pt-md-0">
                     <div class="row">
                         <div class="col-4 text-center custom-control custom-switch">
@@ -38,12 +38,14 @@ ob_start();
                             <label class="custom-control-label" title="Activer/Désactiver"
                                 for="customSwitches<?=$countForIdButton?>"></label>
                         </div>
+                        <!-- Bouton modifier -->
                         <div class="col-4 text-center">
                             <a
-                                href="index.php?page=modifyAdvertisement&id=<?=$userAdvertisements[$key]['advertisement_id']?>"><img
+                                href="index.php?page=modifyAdvertisement&advertisementId=<?=$userAdvertisements[$key]['advertisement_id']?>"><img
                                     src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce"
                                     title="Modifier"></a>
                         </div>
+                        <!-- Bouton Supprimer -->
                         <div class="col-4 text-center">
                             <a href="#"
                                 onclick="confirmation('<?=$deleteUrl?>','<?=$userAdvertisements[$key]['advertisement_id']?>')"><img
