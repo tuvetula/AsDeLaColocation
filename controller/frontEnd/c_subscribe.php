@@ -7,7 +7,7 @@ require_once('model/frontEnd/m_getUser.php');
 //Affichage page d'inscription
 function displaySubscribePage()
 {
-    require_once('view/frontEnd/displaySubscribeForm.php');
+    require_once('view/frontEnd/v_subscribeForm.php');
 }
 
 //Enregistrement page d'inscription
@@ -74,14 +74,13 @@ function saveSubscribeForm()
             if (insertNewUser($userName, $userfirstName, $userphoneNumber, $usermail, $userpassword, $userloginSiteWeb, $userpasswordSiteWeb, $addressId)) {
                 //On définit un message de confirmation et on redirige vers la page de confirmation
                 $message = "Votre inscription est bien enregistrée!";
-                require_once('view/frontEnd/displayMessage.php');
+                require_once('view/frontEnd/v_message.php');
             }
         } else {
             $error = "Les deux mots de passe ne sont pas identiques.";
-            require_once('view/frontEnd/displaySubscribeForm.php');
         }
     } else {
         $error = "Un compte est déjà existant avec cette adresse mail.";
-        require_once('view/frontEnd/displaySubscribeForm.php');
     }
+    require_once('view/frontEnd/v_subscribeForm.php');
 }
