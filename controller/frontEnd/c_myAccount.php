@@ -53,11 +53,16 @@ function modifyMyAccount(){
         $userPasswordSiteWeb = $_POST['passwordSiteWeb'];
     }
 
-    //On récupère l'address_id de l'utilisateur
-    $addressIdUserRequest = getUserAddressId($_SESSION['id']);
-    $addressIdUser = $addressIdUserRequest['address_id'];
-    //On modifie l'adresse (table addresses)
-    modifyAddress($addressIdUser,$addressStreet,$addressZipcode,$addressCity,$addressCountry);
+    //On vérifie si l'adresse existe déjà et si oui on modifie que la table users
+    $addressRequest = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
+    //Si l'adresse n'existe pas, on modifie l'adresse en base de donnée
+    if (!$addressRequest){
+        //On récupère l'address_id de l'utilisateur
+        $addressIdUserRequest = getUserAddressId($_SESSION['id']);
+        $addressIdUser = $addressIdUserRequest['address_id'];
+        //On modifie l'adresse (table addresses)
+        modifyAddress($addressIdUser,$addressStreet,$addressZipcode,$addressCity,$addressCountry);
+    }
     //On modifie les coordonnées (table users)
     modifyUser($_SESSION['id'],$userName,$userFirstName,$usermail,$userPhoneNumber,$userLoginSiteWeb,$userPasswordSiteWeb);
     //On récupère les nouvelles informations suite à la modification
