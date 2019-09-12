@@ -1,9 +1,11 @@
 <?php
 session_start();
 require_once('controller/frontEnd/c_frontEnd.php');
+require_once('controller/frontEnd/c_forgetPassword.php');
 
 //Si utilisateur connecté
 if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
+    require_once('controller/frontEnd/c_myAccount.php');
     
     //Déconnexion utilisateur
     if (isset($_GET['disconnect']) && $_GET['disconnect']==1) {
@@ -25,7 +27,6 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
 
     //Page qui va modifier le compte User en bdd
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyMyAccount") {
-        require_once('controller/frontEnd/c_modifyMyAccount.php');
         modifyMyAccount();
 
     //Page Mes annonces
@@ -90,11 +91,11 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         forgetPassword();
 
     //Affichage page réinitialisation mot de passe (après clique sur lien reçu par mail)
-    }else if (isset($_GET['token']) && isset($_GET['mail'])){
+    }else if (isset($_GET['token']) && isset($_GET['mailLink'])){
         displayTypeNewPassword();
 
     //Traitement enregistrement nouveau mot de passe (après saisie de 2 nouveaux mots de passe)
-    } else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mail'])){
+    } else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])){
         saveNewPasswordAfterReinitialization();
 
     //Affichage page d'inscription
