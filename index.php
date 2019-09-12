@@ -58,9 +58,13 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['id'])) {
         saveModifyAdvertisement($_GET['id']);
 
-    //Page d'erreur
-    } elseif (isset($_GET['page']) && $_GET['page']=="errorNewAdvertisement") {
-        displayErrorNewAdvertisement();
+    //Affichage page modification mot de passe
+    } elseif (isset($_GET['page']) && $_GET['page']=="modifyPassword") {
+        displayChangePasswordPage();
+    
+    //Traitement qui enregistre le nouveau mot de passe
+    }else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])){
+        saveNewPasswordAfterReinitialization();
 
     //Page d'accueil utilisateur
     } else {

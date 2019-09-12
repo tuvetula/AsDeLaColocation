@@ -27,7 +27,7 @@ function getUserById($userId)
     return $userData;
 }
 
-//Récupère address_id d'un user (pour modification addresse "mo compte")
+//Récupère address_id d'un user (pour modification addresse "mon compte")
 function getUserAddressId($userId){
     $userId = htmlspecialchars(strip_tags($userId));
     $db = connectBdd();
@@ -38,4 +38,22 @@ function getUserAddressId($userId){
     $addressIdUser = $addressIdRequest->fetch(PDO::FETCH_ASSOC);
     $addressIdRequest->closeCursor();
     return $addressIdUser;
+}
+
+//Vérification du mot de passe (pour changement de mot de passe d'un utilisateur connecté)
+function verifyPassword($password)
+{
+    $password = htmlspecialchars(strip_tags($password));
+    $db = connectBdd();
+    $passwordRequest = $db->prepare('SELECT user_password FROM users WHERE user_id=:userId');
+    $passwordRequest->execute([
+        ':userId' => $_SESSION['id']
+    ]);
+    $passwordBddArray = $passwordRequest->fetch(PDO::FETCH_ASSOC);
+    $passwordBdd = $passwordBddArray['user_password'];
+    if (password_verify($password, $passwordBdd)) {
+        return true;
+    }else{
+        return false;
+    }
 }

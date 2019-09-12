@@ -19,7 +19,7 @@ function forgetPassword()
         //On génère un token et on l'enregistre en base de donnée
         $token = sha1($mail.time());
         if (modifyToken($mail, $token)) {
-            //Lien mail
+            //On génère le lien à inscrire dans le mail
             $link = "http://localhost/asdelacolocation/index.php?token=$token&mailLink=$mail";
             //Création message à envoyer par mail
             $to = $mail;
@@ -73,15 +73,24 @@ function saveNewPasswordAfterReinitialization()
     $mail = $_GET['mailLink1'];
     $password1 = $_POST['passwordReinitialization1'];
     $password2 = $_POST['passwordReinitialization2'];
+    //Récupération ancien mot de passe si utilisateur connecté
+    if (isset($_SESSION['mail'])){
+        $oldpassword = $_POST['oldPassword'];
+        //On vérifie si l'ancien mot de passe correspond bien à celui en base de donnée
+        if(!verifyPassword($oldpassword)){
+            $error = "Ancien mot de passe incorrect!";
+        }
+    }
     //Vérification si les 2 mots de passe sont identiques
     if ($password1 == $password2) {
         //Enregistrement nouveau mot de passe
         if (modifyPassword($mail, $password1)) {
-            //On remet le token à null
-            if (modifyToken($mail)) {
-                $message = "Votre mot de passe a bien été réinitialisé.";
-                require_once('view/frontEnd/v_message.php');
+            //Si l'utilisateur n'est pas connecté, on remet le user_token à null
+            if (!isset($_SESSION['mail'])){
+                modifyToken($mail);
             }
+            $message = "Votre mot de passe a bien été réinitialisé.";
+            require_once('view/frontEnd/v_message.php');
         }
     } else {
         $error = "Les deux mots de passe ne sont pas identiques.";
