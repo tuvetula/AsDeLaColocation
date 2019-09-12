@@ -8,16 +8,18 @@ ob_start();
         <div class="container col-md-9 col-lg-6">
             <form method="post" action="index.php" class="text-center">
                 <div class="form-group text-left">
-                    <label for="mail">Adresse mail</label>
-                    <input type="email" class="form-control form-control-lg" id="mail" name="mailForgetPassword"
-                        placeholder="Saisir votre adresse mail" maxlength="255" required>
+                    <label for="mailForgetPassword">Adresse mail</label>
+                    <input type="email" class="form-control form-control-lg" id="mailForgetPassword" name="mailForgetPassword"
+                        placeholder="Saisir votre adresse mail" maxlength="255" <?php if (isset($_POST['mailForgetPassword'])) {
+                        echo 'value="'.$_POST['mailForgetPassword'].'"';
+                    } ?>required>
                 </div>
                 <div class="container">
                     <button type="submit" class="btn btn-primary">Envoyer</button>
                 </div>
                 <?php
-                    if (!empty($message)){
-                        echo '<p class="text-center pt-3">'.$message.'</p>';
+                    if (isset($error) && !empty($error)){
+                        echo '<p class="text-center font-weight-bold text-danger pt-3">'.$error.'</p>';
                     }
                 ?>
             </form>

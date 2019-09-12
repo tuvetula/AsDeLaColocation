@@ -1,8 +1,24 @@
 <?php
+require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_getAddress.php');
-require_once('model/frontEnd/m_modifyAddress.php');
 require_once('model/frontEnd/m_modifyUser.php');
+require_once('model/frontEnd/m_modifyAddress.php');
 
+//Affichage page Mon compte
+function displayMyAccount()
+{
+    $userData = getUserById($_SESSION['id']);
+    require_once('view/frontEnd/displayMyAccount.php');
+}
+
+//Affichage page Modifier mon compte
+function displayModifyMyAccount()
+{
+    $userDataToModify = getUserById($_SESSION['id']);
+    require_once('view/frontEnd/displaymodifyMyAccountForm.php');
+}
+
+//Traitement modification mon compte
 function modifyMyAccount(){
     //Address $_POST
     if (isset($_POST['street'])) {
