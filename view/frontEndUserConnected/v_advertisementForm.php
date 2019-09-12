@@ -80,7 +80,7 @@ ob_start();
                         <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
                             <input class="form-control" type="date" min="<?=$dateOfTheDay?>" id="availableDate"
-                                name="availableDate" required>
+                                name="availableDate" value="<?=$dateOfTheDay?>" required>
                         </div>
                         <!-- Location sans visite + meublé -->
                         <div class="form-group col-md-3">

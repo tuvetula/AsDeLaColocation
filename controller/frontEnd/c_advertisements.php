@@ -45,7 +45,7 @@ function displayAddAnAdvertisementForm()
     //Variable pour définir date minimum dans "disponible le"
     $dateOfTheDay=date('Y-m-d');
 
-    require_once('view/frontEndUserConnected/v_advertisementAdd.php');
+    require_once('view/frontEndUserConnected/v_advertisementForm.php');
 }
 
 //Traitement enregistrement nouvelle annonce en base de donnée
@@ -644,9 +644,13 @@ function saveNewAdvertisement()
 }
 
 //Affichage page "modifier une annonce"
-function modifyAdvertisement($advertisementId, $confirm=null){
+function displayMofifyAdvertisementForm(){
+    //On récupère l'id de l'annonce à modifier
+    $advertisementId = $_GET['advertisementId'];
+    //On récupère les données de l'annonce
     $advertisementData = getAdvertisementWithAddress($_SESSION['id'],$advertisementId);
-    require_once('view/frontEndUserConnected/v_advertisementModify.php');
+    
+    require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
 }
 
 //Traitement enregistrement modification annonce en base de donnée
