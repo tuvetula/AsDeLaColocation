@@ -7,15 +7,26 @@ ob_start();
         <h1 class="pb-3 text-center">Réinitialisation mot de passe</h1>
         <div class="container col-md-9 col-lg-6">
             <form method="post" action="index.php?mailLink1=<?=$mail?>" class="text-center">
+            <?php if (isset($_SESSION['mail'])){
+                ?>
                 <div class="form-group text-left">
-                    <label for="passwordReinitialization1">Mot de passe</label>
+                    <label class="font-weight-bold" for="oldPassword">Ancien mot de passe</label>
+                    <input type="password" class="form-control form-control-lg" id="oldPassword" name="oldPassword"
+                        placeholder="Saisir votre ancien mot de passe" maxlength="255" required>
+                </div>
+
+                <?php
+            }
+            ?>
+                <div class="form-group text-left">
+                    <label class="font-weight-bold" for="passwordReinitialization1">Nouveau mot de passe</label>
                     <input type="password" class="form-control form-control-lg" id="passwordReinitialization1" name="passwordReinitialization1"
                         placeholder="Saisir un nouveau mot de passe" maxlength="255" required>
                 </div>
                 <div class="form-group text-left">
-                    <label for="passwordReinitialization2">Confirmation mot de passe</label>
+                    <label class="font-weight-bold" for="passwordReinitialization2">Confirmation du nouveau mot de passe</label>
                     <input type="password" class="form-control form-control-lg" id="passwordReinitialization2" name="passwordReinitialization2"
-                        placeholder="Répéter le mot de passe" maxlength="255" required>
+                        placeholder="Confirmer le nouveau mot de passe" maxlength="255" required>
                 </div>
                 <div class="container">
                     <button type="submit" class="btn btn-primary">Soumettre</button>

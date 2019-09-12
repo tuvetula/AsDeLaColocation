@@ -41,7 +41,12 @@ ob_start();
                         <?=$userData['user_passwordSiteWeb']?></p>
                 </div>
             </div>
-
+            <div class="container pt-3">
+                <h3 class="text-center">Mot de passe</h3>
+                <div class="row pt-1 d-flex justify-content-center">
+                    <a href="index.php?page=modifyPassword">Modifier votre mot de passe</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
