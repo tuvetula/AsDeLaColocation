@@ -23,7 +23,7 @@ function forgetPassword()
             $link = "http://localhost/asdelacolocation/index.php?token=$token&mailLink=$mail";
             //Création message à envoyer par mail
             $to = $mail;
-            $subject = "Réinitialisation de votre mot de passe Asdelacolocation";
+            $subject = "Réinitialisation de votre mot de passe As de la coloc";
             $body = 'Bonjour,'."\r\n".' veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :'."\r\n".''.$link.'';
             $headers[] = 'MIME-Version: 1.0';
             $headers[]= 'Content-type: text/html; charset=utf-8';
