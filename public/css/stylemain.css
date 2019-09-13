@@ -25,12 +25,8 @@ body {
 
 /*Affichage preview photo*/
 
-#preview {
-    width: 200px;
-    display: inline-block;
-}
-
 #preview img {
+    height: 200px;
     width: 100%;
 }
 
