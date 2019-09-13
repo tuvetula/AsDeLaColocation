@@ -31,11 +31,15 @@ function verifyAdvertisement($userId, $advertisementId)
     return $userAdvertisements;
 }
 
-//Récupère une annonce avec son adresse et ses photos (avec user_id et advertisement_id)
+//Récupère une annonce avec son adresse (avec user_id et advertisement_id)
 function getAdvertisementWithAddress($userId, $advertisementId)
 {
     $db = connectBdd();
-    $request = $db->query('SELECT * FROM advertisements join addresses on advertisements.address_id = addresses.address_id WHERE advertisements.advertisement_id="'.$advertisementId.'" AND advertisements.user_id="'.$userId.'"');
+    $request = $db->query('SELECT * FROM advertisements 
+    join addresses on advertisements.address_id = addresses.address_id 
+    WHERE advertisements.advertisement_id='.$advertisementId.' 
+    AND advertisements.user_id='.$userId.' 
+    ORDER BY advertisements.advertisement_id DESC');
     $userAdvertisementWithAddress = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();
     return $userAdvertisementWithAddress;
