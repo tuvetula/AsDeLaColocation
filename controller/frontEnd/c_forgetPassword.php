@@ -79,6 +79,7 @@ function saveNewPasswordAfterReinitialization()
         //On vérifie si l'ancien mot de passe correspond bien à celui en base de donnée
         if(!verifyPassword($oldpassword)){
             $error = "Ancien mot de passe incorrect!";
+            require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
         }
     }
     //Vérification si les 2 mots de passe sont identiques
@@ -91,11 +92,12 @@ function saveNewPasswordAfterReinitialization()
             }
             $message = "Votre mot de passe a bien été réinitialisé.";
             require_once('view/frontEnd/v_message.php');
+        }else{
+            $error = "Problème technique, veuillez réessayer ultérieurement";
+            require_once('view/frontEnd/v_error.php');
         }
     } else {
         $error = "Les deux mots de passe ne sont pas identiques.";
         require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
     }
-    $error = "Problème technique, veuillez réessayer ultérieurement";
-    require_once('view/frontEnd/v_error.php');
 }
