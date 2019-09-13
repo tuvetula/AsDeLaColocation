@@ -21,7 +21,7 @@ ob_start();
                     } ?>
                     " alt="Generic placeholder image" style="width:64px">
                     <div class="media-body">
-                        <h5 class="mt-0"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
+                        <h5 class="mt-0 font-weight-bold"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
                         <?=$userAdvertisements[$key]['advertisement_description']?>
                     </div>
                 </div>
