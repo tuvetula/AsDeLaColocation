@@ -1239,8 +1239,13 @@ ob_start();
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Photos</h2>
                 <div class="container">
-                    <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]"></div>
-                    <div><label for="upload"><span id="preview"></span></label></div>
+                <p>Sélectionner 10 photos maximum</p>
+                    <div>
+                        <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]">
+                    </div>
+                    <div>
+                        <label for="upload"><span id="preview" class="row"></span></label>
+                    </div>
                 </div>
             </div>
 
@@ -1248,12 +1253,11 @@ ob_start();
             <div class="container pt-3">
                 <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
             </div>
-
         </form>
     </div>
 </div>
 <script src="public/js/energyAdvertisement.js"></script>
-<script src="public/js/uploadFilePreview.js"></script>
+<script src="public/js/advertisementUploadFilePreview.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
