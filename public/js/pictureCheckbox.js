@@ -21,6 +21,20 @@ jQuery(function($) {
         e.preventDefault();
     });
 });
+
+//Alerte avant suppression
+let deleteButton = document.getElementById('modifyAdvertisementDeletePictureButton');
+
+
+function confirmationBeforeDelete(url) {
+    let deleteForm = document.getElementById('modifyAdvertisementDeletePictureForm');
+    if (confirm("Êtes-vous sûr de vouloir supprimer?")) {
+        deleteForm.action = url;
+    } else {
+        return false;
+    }
+}
+
 // function clic() {
 //     alert(this.id);
 //     return false;
