@@ -38,9 +38,14 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     } elseif (isset($_GET['page']) && $_GET['page']=="displayAddAnAdvertisement") {
         displayAddAnAdvertisementForm();
 
-    //Page qui ajoute une nouvelle annonce
+    //Page qui enregistre une nouvelle annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="addAdvertisement") {
-        saveNewAdvertisement();
+        saveNewOrModifyAdvertisement();
+
+    //Page qui enregistre la modification d'une annonce
+    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['advertisementId']) && isset($_GET['action'])) {
+        saveNewOrModifyAdvertisement($_GET['advertisementId']);
+
 
     //Page qui supprime une annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="deleteAdvertisement" && isset($_GET['id'])) {
@@ -49,15 +54,11 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     //Page modifier une annonce (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['advertisementId'])) {
         displayMofifyAdvertisementForm();
+       
+    //Page qui enregistre la suppression photos de la page "modifier annonce"
+    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisementDeletePicture" && isset($_GET['idAdvertisement'])){
+        saveModificationAdvertisementDeletePicture();
         
-    //Page modifier une annonce avec confirmation modification (Formulaire)
-    } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['id']) && isset($_GET['confirm']) && $_GET['confirm']==1) {
-        modifyAdvertisement($_GET['id'], $_GET['confirm']);
-            
-    //Page qui enregistre la modification d'une annonce
-    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['id'])) {
-        saveModifyAdvertisement($_GET['id']);
-
     //Affichage page modification mot de passe
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyPassword") {
         displayChangePasswordPage();

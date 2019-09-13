@@ -1239,7 +1239,7 @@ ob_start();
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Photos</h2>
                 <div class="container">
-                <p>Sélectionner 10 photos maximum</p>
+                <p>Sélectionner <span id="nbPicturesAvailable">10</span> photos maximum</p>
                     <div>
                         <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]">
                     </div>
