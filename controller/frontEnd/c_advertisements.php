@@ -9,6 +9,7 @@ require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_modifyAdvertisement.php');
 require_once('model/frontEnd/m_deleteAdvertisement.php');
 require_once('controller/frontEnd/functions/rearrangeDataFilesArray.php');
+require_once('controller/frontEnd/functions/calculEnergyGesLetter.php');
 
 //Affichage de la page "Mes annonces"
 function displayMyAdvertisements()
@@ -86,18 +87,18 @@ function saveNewAdvertisement()
     if (isset($_POST['category'])) {
         $category = $_POST['category'];
     }
-    if (isset($_POST['energyClassLetter'])) {
-        $energyClassLetter = $_POST['energyClassLetter'];
-    }
     if (isset($_POST['energyClassNumber'])) {
         $energyClassNumber = $_POST['energyClassNumber'];
     }
-    if (isset($_POST['gesLetter'])) {
-        $gesLetter = $_POST['gesLetter'];
-    }
+    
+    $energyClassLetter = calculEnergyLetter($energyClassNumber);
+    
     if (isset($_POST['gesNumber'])) {
         $gesNumber = $_POST['gesNumber'];
     }
+    
+    $gesLetter = calculGesLetter($gesNumber);
+    
     if (isset($_POST['accomodationLivingAreaSize'])) {
         $accomodationLivingAreaSize = $_POST['accomodationLivingAreaSize'];
     }
@@ -518,7 +519,7 @@ function saveNewAdvertisement()
             
             //Verification nombre de pixels png
             $pixelImage = getimagesize($namePictureTmp);
-            if ($pixelImage[0]*$pixelImage[1]>1000000 && $fileExtension == 'png'){
+            if ($pixelImage[0]*$pixelImage[1]>1000000 && $fileExtension == 'png') {
                 $errors['pixel_err'] = "L'image png sera déformée";
             }
 
@@ -541,7 +542,7 @@ function saveNewAdvertisement()
             }
             
             if (empty($errors)) {
-                //On génère un nom unique pour la photo                
+                //On génère un nom unique pour la photo
                 $namePicture = uniqid().'.'.$fileExtension;
                 //Calcul pourcentage qualité à appliquer
                 $quality=floor((1000000*100)/$filesArray[$i]['size']);
@@ -550,22 +551,22 @@ function saveNewAdvertisement()
 
                 //On enregistre la photo dans le dossier
                 if (move_uploaded_file($namePictureTmp, UPLOAD_REP_PHOTO . $namePicture)) {
-                    if($pictureSize>1000000){
-                        if($fileExtension == 'jpg' || $fileExtension == 'jpeg'){
+                    if ($pictureSize>1000000) {
+                        if ($fileExtension == 'jpg' || $fileExtension == 'jpeg') {
                             $img = imagecreatefromjpeg(UPLOAD_REP_PHOTO . $namePicture);
-                            imagejpeg($img,UPLOAD_REP_PHOTO . $namePicture,$quality);
+                            imagejpeg($img, UPLOAD_REP_PHOTO . $namePicture, $quality);
                             imagedestroy($img);
-                        }else if ($fileExtension == 'png'){
+                        } elseif ($fileExtension == 'png') {
                             $pngQuality = ($quality - 100) / 11.111111;
                             $pngQuality = round(abs($pngQuality));
                             echo $pngQuality;
                             ini_set('memory_limit', '-1');
                             $img = imagecreatefrompng(UPLOAD_REP_PHOTO . $namePicture);
-                            imagepng($img,UPLOAD_REP_PHOTO . $namePicture,0,9);
-                            imagedestroy($img);                   
-                        }else if ($fileExtension == 'gif'){
+                            imagepng($img, UPLOAD_REP_PHOTO . $namePicture, 0, 9);
+                            imagedestroy($img);
+                        } elseif ($fileExtension == 'gif') {
                             $img = imagecreatefromgif(UPLOAD_REP_PHOTO . $namePicture);
-                            imagegif($img,UPLOAD_REP_PHOTO . $namePicture,$quality);
+                            imagegif($img, UPLOAD_REP_PHOTO . $namePicture, $quality);
                             imagedestroy($img);
                         }
                     }
@@ -575,9 +576,9 @@ function saveNewAdvertisement()
                 } else {
                     $_SESSION['fileUploadEchec'] = 'Echec de l\'upload !';
                 }
-            }else{
+            } else {
                 $_SESSION['error'] = array();
-                array_push($_SESSION['error'],$errors);
+                array_push($_SESSION['error'], $errors);
                 // header("Location: index.php?page=errorNewAdvertisement");
             }
         }
@@ -644,11 +645,12 @@ function saveNewAdvertisement()
 }
 
 //Affichage page "modifier une annonce" (formulaire)
-function displayMofifyAdvertisementForm(){
+function displayMofifyAdvertisementForm()
+{
     //On récupère l'id de l'annonce à modifier
     $advertisementId = $_GET['advertisementId'];
     //On récupère les données de l'annonce
-    $advertisementData = getAdvertisementWithAddress($_SESSION['id'],$advertisementId);
+    $advertisementData = getAdvertisementWithAddress($_SESSION['id'], $advertisementId);
     //On récupère les photos liées à l'annonce
     $advertisementPicture = getAdvertisementPictures($advertisementId);
     $picturePath = "public/pictures/users/";
@@ -657,7 +659,8 @@ function displayMofifyAdvertisementForm(){
 }
 
 //Traitement enregistrement modification annonce en base de donnée
-function saveModifyAdvertisement($advertisementId){
+function saveModifyAdvertisement($advertisementId)
+{
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai) des checkbox cochées
     foreach ($_POST as $key => $value) {
         if ($value === "on") {
@@ -680,7 +683,7 @@ function saveModifyAdvertisement($advertisementId){
     //Advertisement $_POST
     if (isset($_POST['isActive'])) {
         $isActive = $_POST['isActive'];
-    }else{
+    } else {
         $isActive = 0;
     }
     if (isset($_POST['availableDate'])) {
@@ -698,18 +701,14 @@ function saveModifyAdvertisement($advertisementId){
     if (isset($_POST['category'])) {
         $category = $_POST['category'];
     }
-    if (isset($_POST['energyClassLetter'])) {
-        $energyClassLetter = $_POST['energyClassLetter'];
-    }
     if (isset($_POST['energyClassNumber'])) {
         $energyClassNumber = $_POST['energyClassNumber'];
     }
-    if (isset($_POST['gesLetter'])) {
-        $gesLetter = $_POST['gesLetter'];
-    }
+    $energyClassLetter = calculEnergyLetter($energyClassNumber);
     if (isset($_POST['gesNumber'])) {
         $gesNumber = $_POST['gesNumber'];
     }
+    $gesLetter = calculGesLetter($gesNumber);
     if (isset($_POST['accomodationLivingAreaSize'])) {
         $accomodationLivingAreaSize = $_POST['accomodationLivingAreaSize'];
     }
@@ -1090,10 +1089,10 @@ function saveModifyAdvertisement($advertisementId){
     $addressVerification = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
 
     //Si l'adresse existe déja ($addressVerification contient un id), alors enregistrement annonce en bdd
-    if($addressVerification){
+    if ($addressVerification) {
         $addressId = $addressVerification['address_id'];
         saveModifyAdvertisementInBdd($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $advertisementId);
-    }else{
+    } else {
         //Sinon si l'adresse n'existe pas en bdd, on ajoute l'adresse d'abord
         //Si l'adresse a bien été ajouté en bdd alors on ajoute l'annonce
         if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
@@ -1107,13 +1106,14 @@ function saveModifyAdvertisement($advertisementId){
 }
 
 //Supprime une annonce
-function deleteAdvertisement($advertisementIdToDelete){
+function deleteAdvertisement($advertisementIdToDelete)
+{
     //Verification si le $_GET['id'](id de l'annonce) appartient bien à $_SESSION['id](utilisateur connecté)
-    if(verifyAdvertisement($_SESSION['id'],$advertisementIdToDelete)){
+    if (verifyAdvertisement($_SESSION['id'], $advertisementIdToDelete)) {
         deleteAdvertisementBdd($advertisementIdToDelete);
         //On redirige vers la page d'affichage des annonces
         header('Location:index.php?page=myAdvertisements');
-    }else{
+    } else {
         //Sinon l'annonce n'appartient pas à l'utilisateur connecté
         $error = "Problème technique.";
     }

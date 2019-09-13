@@ -30,7 +30,7 @@ energyClassNumber.addEventListener("input", function() {
         energyClassLetterView.textContent = "";
         energyClassLetterView.style.backgroundColor = "#e9ecef";
     }
-    energyClassLetterInput.value = energyClassLetterView.textContent;
+    // energyClassLetterInput.value = energyClassLetterView.textContent;
 });
 
 //Lettre ges
@@ -64,5 +64,5 @@ gesNumber.addEventListener("input", function() {
         gesLetterView.textContent = "";
         gesLetterView.style.backgroundColor = "#e9ecef";
     }
-    gesLetterInput.value = gesLetterView.textContent;
+    // gesLetterInput.value = gesLetterView.textContent;
 });
