@@ -46,7 +46,7 @@ function displayAddAnAdvertisementForm()
     //Variable pour définir date minimum dans "disponible le"
     $dateOfTheDay=date('Y-m-d');
 
-    require_once('view/frontEndUserConnected/v_advertisementForm.php');
+    require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
 }
 
 //Traitement enregistrement nouvelle annonce en base de donnée

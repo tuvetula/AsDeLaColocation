@@ -1961,45 +1961,44 @@ ob_start();
                 </div>
             </div>
             <!-- Photos -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 border-bottom border-dark">
                 <h2>Photos</h2>
                 <div class="row">
                     <?php
-                    foreach($advertisementPicture as $key => $value){
-                        ?>
+                    if($advertisementPicture){
+                        foreach($advertisementPicture as $key => $value){
+                            ?>
                     <div id="test" class="col-md-4 text-center">
                         <label class="image-checkbox">
                             <img class="img-responsive img-thumbnail"
                                 src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
                                 alt="Photo de l'annonce">
                             <input type="checkbox" name=picture[]
-                                value="<?=$advertisementPicture[$key]['picture_fileName']?>">     
+                                value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                         </label>
                     </div>
                     <?php
+                    }
                 }
                 ?>
                 </div>
+                <div class="container py-3">
+                    <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]"></div>
+                    <div><label for="upload"><span id="preview"></span></label></div>
+                </div>
             </div>
-            <div class="container">
-                <div><input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]"></div>
-                <div><label for="upload"><span id="preview"></span></label></div>
+            <!-- Bouton submit -->
+            <div class="container pt-3">
+                <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
             </div>
+        </form>
     </div>
-
-    <!-- Bouton submit -->
-    <div class="container pt-3">
-        <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
-    </div>
-
-    </form>
-</div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
 <script src="public/js/pictureCheckbox.js"></script>
-<script src="public/js/modifyAdvertisement.js"></script>
+<script src="public/js/energyAdvertisement.js"></script>
 <script src="public/js/uploadFilePreview.js"></script>
 <?php
 $content = ob_get_clean();
