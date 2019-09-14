@@ -69,8 +69,7 @@ function displayMofifyAdvertisementForm()
 }
 
 //Traitement enregistrement nouvelle annonce ou modification annonce en base de donnée
-function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
-{
+function saveNewOrModifyAdvertisement($advertisementIdToModify=null){
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai) des checkbox cochées
     foreach ($_POST as $key => $value) {
         if ($value === "on") {
@@ -738,10 +737,10 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
 }
 
 //Supprime une annonce
-function deleteAdvertisement($advertisementIdToDelete)
-{
+function deleteAdvertisement($advertisementIdToDelete){
     //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté
     if (verifyAdvertisement($_SESSION['id'], $advertisementIdToDelete)) {
+        
         //SUPPRESSION PHOTOS
         $picturesRequest = getAdvertisementPictures($advertisementIdToDelete);
         if(!empty($picturesRequest)){
