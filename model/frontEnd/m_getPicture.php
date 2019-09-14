@@ -10,6 +10,7 @@ function getAdvertisementPictureOrder1($advertisementId){
 
 //Récupère les photos liées à une annonce
 function getAdvertisementPictures($advertisementId){
+    $advertisementId = htmlspecialchars(strip_tags($advertisementId));
     $db = connectBdd();
     $request = $db->query('SELECT picture_id,picture_fileName,picture_order FROM pictures WHERE advertisement_id="'.$advertisementId.'" ORDER BY picture_order');
     $picturesRequest = $request->fetchAll(PDO::FETCH_ASSOC);

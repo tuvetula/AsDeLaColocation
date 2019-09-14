@@ -1,9 +1,17 @@
 <?php
 require_once('model/bdd/bddConfig.php');
 
+//Récupère l'adress_id d'une annonce (utilisation: Pour suppresion annonce)
+function getAddressIdFromAdvertisement($advertisementId){
+    $db = connectBdd();
+    $request = $db->query('SELECT address_id FROM advertisements WHERE advertisement_id='.$advertisementId.'');
+    $addressIdFromAdvertisement = $request->fetch(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $addressIdFromAdvertisement['address_id'];
+}
+
 //Récupère MAX(advertisement_id) de la dernière annonce saisie en bdd
-function getLastAdvertisementId()
-{
+function getLastAdvertisementId(){
     $db = connectBdd();
     $request = $db->query('SELECT MAX(advertisement_id) FROM advertisements');
     $lastAdvertisementId = $request->fetch(PDO::FETCH_ASSOC);
@@ -31,7 +39,7 @@ function verifyAdvertisement($userId, $advertisementId)
     return $userAdvertisements;
 }
 
-//Récupère une annonce avec son adresse (avec user_id et advertisement_id)
+//Récupère une annonce et son adresse (avec user_id et advertisement_id)
 function getAdvertisementWithAddress($userId, $advertisementId)
 {
     $db = connectBdd();
@@ -43,6 +51,16 @@ function getAdvertisementWithAddress($userId, $advertisementId)
     $userAdvertisementWithAddress = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();
     return $userAdvertisementWithAddress;
+}
+
+//récupère les annonces qui ont la même adresse
+function getAdvertisementsWithSameAddressId($addressId){
+    $db = connectBdd();
+    $request = $db->query('SELECT advertisement_id FROM advertisements 
+    WHERE address_id='.$addressId.'');
+    $advertisementsWithSameAddressId = $request->fetchAll(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $advertisementsWithSameAddressId;
 }
 
 //Récupère advertisement_id d'une annonce si tous les paramètres correspondent
