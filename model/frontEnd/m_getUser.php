@@ -40,6 +40,19 @@ function getUserAddressId($userId){
     return $addressIdUser;
 }
 
+//Récupère les utilisateurs qui ont l'adress_id passé en argument
+function getUsersWithThisAddressId($addressId){
+        $addressId = htmlspecialchars(strip_tags($addressId));
+        $db = connectBdd();
+        $request = $db->prepare('SELECT user_id FROM users WHERE address_id=:addressId');
+        $request->execute([
+            ':addressId' => $addressId
+        ]);
+        $usersIdWithSameAddress = $request->fetch(PDO::FETCH_ASSOC);
+        $request->closeCursor();
+        return $usersIdWithSameAddress;
+}
+
 //Vérification du mot de passe (pour changement de mot de passe d'un utilisateur connecté)
 function verifyPassword($password)
 {
