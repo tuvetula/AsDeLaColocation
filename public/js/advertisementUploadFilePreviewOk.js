@@ -19,13 +19,18 @@ function handleFiles(files) {
                 if (i == 0) {
                     preview.innerHTML = '';
                 }
+                let imgDiv = document.createElement("div");
+                imgDiv.classList.add("imageAddPreview");
+                imgDiv.classList.add("col-md-4");
+                imgDiv.classList.add("p-0");
+
                 var img = document.createElement("img");
-                img.classList.add("col-md-4");
                 img.classList.add("img-responsive");
-                img.classList.add("py-2");
-                img.classList.add("obj");
+                img.classList.add("img-thumbnail");
+
                 img.file = file;
-                preview.appendChild(img);
+                imgDiv.appendChild(img);
+                preview.appendChild(imgDiv);
 
                 var reader = new FileReader();
                 reader.onload = (function(aImg) {

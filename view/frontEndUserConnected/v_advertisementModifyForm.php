@@ -2053,34 +2053,39 @@ ob_start();
             </div>
             <!-- Photos -->
             <div class="container py-3 border-bottom border-dark">
-                <h2>Photos</h2>
+                <h2 class=>Photos</h2>
                 <!-- Suppression photos -->
-                <div class="row">
+                <div class="container">
+                    <h4>Supprimer des photos</h4>
+                    <p>Cocher les photos que vous voulez supprimer</p>
+                </div>
+                <div class="container">
+                <div id="previewImageCheckbox" class="row p-2">
                     <?php
                     if ($advertisementPicture) {
                         foreach ($advertisementPicture as $key => $value) {
                             ?>
-                    <div id="test" class="col-md-4 text-center">
-                        <label class="image-checkbox">
+                        <label class="image-checkbox col-md-4 p-0 m-0">
                             <img class="img-responsive img-thumbnail"
                                 src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
                                 alt="Photo de l'annonce">
                             <input type="checkbox" name=picture[]
                                 value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                         </label>
-                    </div>
                     <?php
                         }
                     }
                 ?>
                 </div>
+                </div>
                 <!-- Ajout photos -->
-                <div class="container py-3">
-                    <div>
+                <div class="container py-3 px-0">
+                    <div class="container">
+                        <h4>Ajouter des photos</h4>
                         <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]">
                     </div>
                     <div>
-                        <label for="upload"><span id="preview"></span></label>
+                        <label class="container" for="upload"><span id="preview" class="row p-2"></span></label>
                     </div>
                 </div>
             </div>
@@ -2097,7 +2102,7 @@ ob_start();
 </script>
 <script src="public/js/pictureCheckbox.js"></script>
 <script src="public/js/energyAdvertisement.js"></script>
-<script src="public/js/advertisementUploadFilePreview.js"></script>
+<script src="public/js/advertisementUploadFilePreviewOk.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
