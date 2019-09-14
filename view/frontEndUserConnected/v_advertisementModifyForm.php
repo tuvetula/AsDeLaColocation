@@ -2055,16 +2055,18 @@ ob_start();
             <div class="container py-3 border-bottom border-dark">
                 <h2 class=>Photos</h2>
                 <!-- Suppression photos -->
+                <?php
+                if($advertisementPicture){
+                ?>
                 <div class="container">
                     <h4>Supprimer des photos</h4>
                     <p>Cocher les photos que vous voulez supprimer</p>
                 </div>
                 <div class="container">
-                <div id="previewImageCheckbox" class="row p-2">
-                    <?php
-                    if ($advertisementPicture) {
+                    <div id="previewImageCheckbox" class="row p-2">
+                        <?php
                         foreach ($advertisementPicture as $key => $value) {
-                            ?>
+                        ?>
                         <label class="image-checkbox col-md-4 p-0 m-0">
                             <img class="img-responsive img-thumbnail"
                                 src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
@@ -2072,12 +2074,14 @@ ob_start();
                             <input type="checkbox" name=picture[]
                                 value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                         </label>
-                    <?php
+                        <?php
                         }
-                    }
+                        ?>
+                    </div>
+                </div>
+                <?php
+                }
                 ?>
-                </div>
-                </div>
                 <!-- Ajout photos -->
                 <div class="container py-3 px-0">
                     <div class="container">
