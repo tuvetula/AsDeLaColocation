@@ -43,9 +43,8 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         saveNewOrModifyAdvertisement();
 
     //Page qui enregistre la modification d'une annonce
-    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['advertisementId']) && isset($_GET['action'])) {
+    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['advertisementId'])) {
         saveNewOrModifyAdvertisement($_GET['advertisementId']);
-
 
     //Page qui supprime une annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="deleteAdvertisement" && isset($_GET['id'])) {

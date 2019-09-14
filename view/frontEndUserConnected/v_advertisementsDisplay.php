@@ -5,6 +5,14 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Mes annonces</h1>
+        <!-- Affichage message de confirmation ou d'erreur -->
+        <?php
+                    if ($error){
+                        echo '<p class="text-danger font-weight-bold p-3">'.$error.'</p>';
+                    } else if ($message){
+                        echo '<p class="text-danger font-weight-bold p-3">'.$message.'</p>';
+                    }
+                ?>
         <?php
         $countForIdButton = 0;
     foreach ($userAdvertisements as $key => $value) {
@@ -28,6 +36,7 @@ ob_start();
                 <!--BOUTONS-->
                 <div id="buttonsAdvertisement" class="col-sm-12 col-md-4 col-lg-3 pt-3 pt-md-0">
                     <div class="row">
+                        <!-- Bouton switch isActive -->
                         <div class="col-4 text-center custom-control custom-switch">
                             <input type="checkbox"
                                 onchange="requestAjaxPost(<?=$userAdvertisements[$key]['advertisement_id']?>)"

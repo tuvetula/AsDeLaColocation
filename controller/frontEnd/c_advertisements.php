@@ -8,11 +8,13 @@ require_once('model/frontEnd/m_getPicture.php');
 require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_modifyAdvertisement.php');
 require_once('model/frontEnd/m_deleteAdvertisement.php');
+require_once('model/frontEnd/m_deletePicture.php');
+require_once('model/frontEnd/m_deleteAddress.php');
 require_once('controller/frontEnd/functions/rearrangeDataFilesArray.php');
 require_once('controller/frontEnd/functions/calculEnergyGesLetter.php');
 
 //Affichage de la page "Mes annonces"
-function displayMyAdvertisements()
+function displayMyAdvertisements($error=null,$message=null)
 {
     //Récupération annonces utilisateurs
     $userAdvertisements = getUserAdvertisement($_SESSION['id']);
@@ -49,17 +51,26 @@ function displayAddAnAdvertisementForm()
     require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
 }
 
+//Affichage page "modifier une annonce" (formulaire)
+function displayMofifyAdvertisementForm()
+{
+    //On récupère l'id de l'annonce à modifier
+    $advertisementId = $_GET['advertisementId'];
+    //On récupère les données de l'annonce
+    $advertisementData = getAdvertisementWithAddress($_SESSION['id'], $advertisementId);
+    //On récupère les photos liées à l'annonce
+    $advertisementPicture = getAdvertisementPictures($advertisementId);
+    //On prépare une variable avec un lien pour bouton supprimer photos
+    $deletePictureUrl = 'index.php?page=saveModificationAdvertisementDeletePicture&idAdvertisement='.$advertisementId.'';
+
+    $picturePath = "public/pictures/users/";
+
+    require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
+}
+
 //Traitement enregistrement nouvelle annonce ou modification annonce en base de donnée
 function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
 {
-    //Si $_GET['action ] existe, cela veut dire que c'est une modification d'annonce.
-    //On crée donc la variable $modify et on indique si vrai ou faux c'est une modification d'annonce.
-    if (isset($_GET['action']) && $_GET['action'] == "modify") {
-        $modify = true;
-    } else {
-        $modify = false;
-    }
-
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai) des checkbox cochées
     foreach ($_POST as $key => $value) {
         if ($value === "on") {
@@ -607,7 +618,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
     if ($addressVerification) {
         $addressId = $addressVerification['address_id'];
         //On enregistre l'annonce selon si c'est une nouvelle annonce ou une modificatio
-        if ($modify) {
+        if ($advertisementIdToModify) {
             if (saveModifyAdvertisementInBdd($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $advertisementIdToModify)) {
                 $saveAdvertisement = true;
             } else {
@@ -624,7 +635,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
         if ($saveAdvertisement) {
             //On recupére id de l'annonce pour laquelle on veut ajouter les photos
             if (!empty($fileUpload)) {
-                if ($modify) {
+                if ($advertisementIdToModify) {
                     //On récupère l'id de l'annonce qui a été passée en argument en appel à cette fonction
                     $advertisementId = $advertisementIdToModify;
                 } else {
@@ -637,13 +648,19 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
                 }
                 //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                 if (insertPictures($fileUpload, $advertisementId)) {
-                    if($modify){
+                    if($advertisementIdToModify){
                         $message = 'Votre annonce a bien été modifiée';
                     }else{
                         $message = 'Votre nouvelle annonce a bien été ajoutée';
                     }
                 } else {
                     $error ='Aucune annonce ne correspond pour vos photos!';
+                }
+            }else{
+                if($advertisementIdToModify){
+                    $message = 'Votre annonce a bien été modifiée';
+                }else{
+                    $message = 'Votre nouvelle annonce a bien été ajoutée';
                 }
             }
         } else {
@@ -658,7 +675,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
             $addressArray = getLastAddressId();
             $addressId = $addressArray['MAX(address_id)'];
             //AJOUT OU MODIFICATION ANNONCE
-            if ($modify){
+            if ($advertisementIdToModify){
                 if(saveModifyAdvertisementInBdd($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $advertisementIdToModify)){
                     $saveAdvertisement = true;
                 }else{
@@ -676,7 +693,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
             if ($saveAdvertisement) {
                 //On vérifie s'il y a des photos à enregistrer et si oui, recupération id de la dernière annonce
                 if (!empty($fileUpload)) {
-                    if ($modify) {
+                    if ($advertisementIdToModify) {
                         //On récupère l'id de l'annonce qui a été passée en argument en appel à cette fonction
                         $advertisementId = $advertisementIdToModify;
                     } else {
@@ -689,7 +706,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
                     }
                     //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                     if (insertPictures($fileUpload, $advertisementId)) {
-                        if($modify){
+                        if($advertisementIdToModify){
                             $message = 'Votre annonce a bien été modifiée';
                         }else{
                             $message = 'Votre nouvelle annonce a bien été ajoutée';
@@ -697,7 +714,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
                     } else {
                         $error ='Aucune annonce ne correspond pour vos photos!';                    }
                 }else{
-                    if($modify){
+                    if($advertisementIdToModify){
                         $message = 'Votre annonce a bien été modifiée';
                     }else{
                         $message = 'Votre nouvelle annonce a bien été ajoutée';
@@ -710,30 +727,60 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null)
             $error = 'Problème technique. Veuillez réessayer ultérieurement';
         }
     }
-    require_once('view/frontEndUserConnected/v_homeUser.php');
+    //Appel de la fonction pour afficher la liste des annonces de l'utilisateur en passant en argument les messages d'erreur ou de confirmation
+    if(isset($error)){
+        displayMyAdvertisements($error);
+    }else if (isset($message)){
+        displayMyAdvertisements(null,$message);
+    }else{
+        displayMyAdvertisements();
+    }
 }
 
-//Affichage page "modifier une annonce" (formulaire)
-function displayMofifyAdvertisementForm()
+//Supprime une annonce
+function deleteAdvertisement($advertisementIdToDelete)
 {
-    //On récupère l'id de l'annonce à modifier
-    $advertisementId = $_GET['advertisementId'];
-    //On récupère les données de l'annonce
-    $advertisementData = getAdvertisementWithAddress($_SESSION['id'], $advertisementId);
-    //On récupère les photos liées à l'annonce
-    $advertisementPicture = getAdvertisementPictures($advertisementId);
-    //On prépare une variable avec un lien pour bouton supprimer photos
-    $deletePictureUrl = 'index.php?page=saveModificationAdvertisementDeletePicture&idAdvertisement='.$advertisementId.'';
+    //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté
+    if (verifyAdvertisement($_SESSION['id'], $advertisementIdToDelete)) {
+        //SUPPRESSION PHOTOS
+        $picturesRequest = getAdvertisementPictures($advertisementIdToDelete);
+        if(!empty($picturesRequest)){
+            //On supprime toutes les photos liées à l'annonce dans la base de donnée
+            deletePictureBdd($advertisementIdToDelete);
+            //On supprime les photos du dossier public/pictures/users
+            foreach($picturesRequest as $key => $value){
+                unlink('public/pictures/users/'.$picturesRequest[$key]['picture_fileName'].'');
+            }
+        }
+        //On récupère l'adress_id de l'annonce avant de la supprimer (peut servir pour suppression adresse)
+        $addressId = getAddressIdFromAdvertisement($advertisementIdToDelete);
+        
+        //SUPPRESSION ANNONCE
+        if(deleteAdvertisementBdd($advertisementIdToDelete)){
 
-    $picturePath = "public/pictures/users/";
-
-    require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
-}
-
-//Traitement enregistrement modification annonce en base de donnée
-function saveModifyAdvertisement($advertisementId)
-{
-    header('Location:index.php?page=myAdvertisements');
+            //SUPPRESSION ADRESSE si l'adresse n'appartient à aucun utilisateur et aucune autre annonce
+            //On vérifie si un user à cet address-id
+            $usersWithAdvertisementAddressId = getUsersWithThisAddressId($addressId);
+            if (!$usersWithAdvertisementAddressId) {
+                //On verifie si une autre annonce à cet address_id
+                $advertisementsWithSameAddressId = getAdvertisementsWithSameAddressId($addressId);
+                if (empty($advertisementsWithSameAddressId)) {
+                    //Si il y aucune annonce en retour, on supprime l'adresse
+                    deleteAddressBdd($addressId);
+                }
+            }
+            //On appelle la fonction qui affiche la page "mes annonces"
+            $message = 'Votre annonce a été supprimée.';
+            displayMyAdvertisements(null,$message);
+        }else{
+            $error = "Problème technique. Veuillez réessayer ultérieurement.";
+            displayMyAdvertisements($error);
+        }
+    } else {
+        //Sinon l'annonce n'appartient pas à l'utilisateur connecté
+        $error = "Problème technique.";
+        displayMyAdvertisements($error);
+    }
 }
 
 //Traitement enregistrement suppression photos dans modification annonce en base de donnée
@@ -746,17 +793,3 @@ function saveModifyAdvertisement($advertisementId)
 //     }
 //     header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementId.'#modifyAdvertisementDeletePictureForm');
 // }
-
-//Supprime une annonce
-function deleteAdvertisement($advertisementIdToDelete)
-{
-    //Verification si le $_GET['id'](id de l'annonce) appartient bien à $_SESSION['id](utilisateur connecté)
-    if (verifyAdvertisement($_SESSION['id'], $advertisementIdToDelete)) {
-        deleteAdvertisementBdd($advertisementIdToDelete);
-        //On redirige vers la page d'affichage des annonces
-        header('Location:index.php?page=myAdvertisements');
-    } else {
-        //Sinon l'annonce n'appartient pas à l'utilisateur connecté
-        $error = "Problème technique.";
-    }
-}

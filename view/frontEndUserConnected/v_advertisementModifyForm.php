@@ -6,7 +6,7 @@ ob_start();
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Modifier votre annonce</h1>
         <form method="post"
-            action="index.php?page=saveModificationAdvertisement&advertisementId=<?=$advertisementData[0]['advertisement_id']?>&action=modify"
+            action="index.php?page=saveModificationAdvertisement&advertisementId=<?=$advertisementData[0]['advertisement_id']?>"
             enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
