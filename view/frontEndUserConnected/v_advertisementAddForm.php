@@ -1238,7 +1238,7 @@ ob_start();
             <!-- Photos -->
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Photos</h2>
-                <div class="container">
+                <div class="container py-3">
                 <p>Sélectionner <span id="nbPicturesAvailable">10</span> photos maximum</p>
                     <div>
                         <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]">
@@ -1257,7 +1257,7 @@ ob_start();
     </div>
 </div>
 <script src="public/js/energyAdvertisement.js"></script>
-<script src="public/js/advertisementUploadFilePreview.js"></script>
+<script src="public/js/advertisementUploadFilePreviewOk.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
