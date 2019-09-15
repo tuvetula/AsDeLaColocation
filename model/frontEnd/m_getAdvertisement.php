@@ -30,23 +30,24 @@ function getUserAdvertisement($userId)
 }
 
 //Verifie si un id_advertisement et un id_user renvoi bien une annonce
-function verifyAdvertisement($userId, $advertisementId)
+function verifyAdvertisementBelongsToUser($userId, $advertisementId)
 {
+    $advertisementId = htmlspecialchars(strip_tags($advertisementId));
     $db = connectBdd();
-    $request = $db->query('SELECT * FROM advertisements WHERE user_id="'.$userId.'" AND advertisement_id="'.$advertisementId.'"');
+    $request = $db->query('SELECT advertisement_id FROM advertisements WHERE user_id='.$userId.' AND advertisement_id='.$advertisementId.'');
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();
     return $userAdvertisements;
 }
 
 //Récupère une annonce et son adresse (avec user_id et advertisement_id)
-function getAdvertisementWithAddress($userId, $advertisementId)
+function getAdvertisementWithAddress($advertisementId)
 {
+    $advertisementId = htmlspecialchars(strip_tags($advertisementId));
     $db = connectBdd();
     $request = $db->query('SELECT * FROM advertisements 
     join addresses on advertisements.address_id = addresses.address_id 
     WHERE advertisements.advertisement_id='.$advertisementId.' 
-    AND advertisements.user_id='.$userId.' 
     ORDER BY advertisements.advertisement_id DESC');
     $userAdvertisementWithAddress = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();

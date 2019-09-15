@@ -37,25 +37,25 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     //Page Ajouter une nouvelle annonce (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="displayAddAnAdvertisement") {
         displayAddAnAdvertisementForm();
-
+        
+    //Page modifier une annonce (Formulaire)
+    } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['advertisementId'])) {
+        displayMofifyAdvertisementForm();
+       
     //Page qui enregistre une nouvelle annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="addAdvertisement") {
         saveNewOrModifyAdvertisement();
 
     //Page qui enregistre la modification d'une annonce
-    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement" && isset($_GET['advertisementId'])) {
-        saveNewOrModifyAdvertisement($_GET['advertisementId']);
+    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisement") {
+        saveNewOrModifyAdvertisement();
 
     //Page qui supprime une annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="deleteAdvertisement" && isset($_GET['id'])) {
         deleteAdvertisement($_GET['id']);
 
-    //Page modifier une annonce (Formulaire)
-    } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['advertisementId'])) {
-        displayMofifyAdvertisementForm();
-       
     //Page qui enregistre la suppression photos de la page "modifier annonce"
-    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisementDeletePicture" && isset($_GET['idAdvertisement'])){
+    } elseif (isset($_GET['page']) && $_GET['page']=="saveModificationAdvertisementDeletePicture" && isset($_GET['idAdvertisement'])) {
         saveModificationAdvertisementDeletePicture();
         
     //Affichage page modification mot de passe
@@ -63,7 +63,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         displayChangePasswordPage();
     
     //Traitement qui enregistre le nouveau mot de passe
-    }else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])){
+    } elseif (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])) {
         saveNewPasswordAfterReinitialization();
 
     //Page d'accueil utilisateur
@@ -88,15 +88,15 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         displayforgetPasswordPage();
 
     //Traitement mot de passe oublié (après saisie mail pour récupération)
-    }else if (isset($_POST['mailForgetPassword'])){
+    } elseif (isset($_POST['mailForgetPassword'])) {
         forgetPassword();
 
     //Affichage page réinitialisation mot de passe (après clique sur lien reçu par mail)
-    }else if (isset($_GET['token']) && isset($_GET['mailLink'])){
+    } elseif (isset($_GET['token']) && isset($_GET['mailLink'])) {
         displayTypeNewPassword();
 
     //Traitement enregistrement nouveau mot de passe (après saisie de 2 nouveaux mots de passe)
-    } else if (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])){
+    } elseif (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])) {
         saveNewPasswordAfterReinitialization();
 
     //Affichage page d'inscription
