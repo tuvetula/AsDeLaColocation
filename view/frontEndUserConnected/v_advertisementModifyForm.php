@@ -2069,7 +2069,7 @@ ob_start();
                             <img class="img-responsive img-thumbnail"
                                 src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
                                 alt="Photo de l'annonce">
-                            <input type="checkbox" name=picture[]
+                            <input type="checkbox" name=pictureToDelete[]
                                 value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                         </label>
                         <?php
@@ -2092,7 +2092,7 @@ ob_start();
                 </div>
             </div>
             <!-- Bouton submit -->
-            <div class="container py-5 border-bottom border-dark">
+            <div class="container py-3">
                 <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer mes
                     modifications</button>
             </div>
