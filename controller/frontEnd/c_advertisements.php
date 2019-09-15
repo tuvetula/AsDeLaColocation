@@ -77,6 +77,13 @@ function displayMofifyAdvertisementForm()
 
 //Traitement enregistrement nouvelle annonce ou modification annonce en base de donnée
 function saveNewOrModifyAdvertisement(){
+    //Nous permet de savoir si il faut modifier une annonce ou en créer une nouvelle
+    if (isset($_POST['id'])){
+        $advertisementIdToModify = $_POST['id'];
+    }else{
+        $advertisementIdToModify = null;
+    }
+    
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai) des checkbox cochées
     foreach ($_POST as $key => $value) {
         if ($value === "on") {
@@ -98,13 +105,6 @@ function saveNewOrModifyAdvertisement(){
     }
 
     //Advertisement $_POST
-
-    //Nous permet de savoir si il faut modifier une annonce ou en créer une nouvelle
-    if (isset($_POST['id'])){
-        $advertisementIdToModify = $_POST['id'];
-    }else{
-        $advertisementIdToModify = null;
-    }
     if (isset($_POST['isActive'])) {
         $isActive = $_POST['isActive'];
     } else {
@@ -647,6 +647,14 @@ function saveNewOrModifyAdvertisement(){
         }
         //Vérification présence photos et enregistrement en bdd, Si l'annonce a bien été enregistré
         if ($saveAdvertisement) {
+            //SUPPRESSION PHOTOS (page modification annonce)
+            if (isset($_POST['pictureToDelete'])){
+                foreach($_POST['pictureToDelete'] as $key => $value){
+                    deleteOnePicture($advertisementIdToModify,$value);
+                }
+            }
+
+            //AJOUT NOUVELLES PHOTOS
             //On recupére id de l'annonce pour laquelle on veut ajouter les photos
             if (!empty($fileUpload)) {
                 if ($advertisementIdToModify) {
@@ -702,9 +710,16 @@ function saveNewOrModifyAdvertisement(){
                     $saveAdvertisement = false;
                 }
             }
-            //AJOUT PHOTOS
             //Si l'annonce a bien été enregistré alors vérification s'il y a des photos
             if ($saveAdvertisement) {
+                //SUPPRESSION PHOTOS (page modification annonce)
+                if (isset($_POST['pictureToDelete'])){
+                    foreach($_POST['pictureToDelete'] as $key => $value){
+                        deleteOnePicture($advertisementIdToModify,$value);
+                    }
+                }
+                
+                //AJOUT NOUVELLES PHOTOS
                 //On vérifie s'il y a des photos à enregistrer et si oui, recupération id de la dernière annonce
                 if (!empty($fileUpload)) {
                     if ($advertisementIdToModify) {
