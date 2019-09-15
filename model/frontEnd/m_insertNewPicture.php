@@ -3,7 +3,13 @@ require_once('model/bdd/bddConfig.php');
 
 //Enregistrement photo(s) dans la table pictures
 function insertPictures($fileUpload,$advertisementId){
-    $pictureOrder = 0;
+    //On recupere le dernier picture_order pour assigner ensuite les photos à la suite
+    $pictureOrderRequest = getLastPictureOrder($advertisementId);
+    if($pictureOrderRequest){
+        $pictureOrder = $pictureOrderRequest;
+    }else{
+        $pictureOrder = 0;
+    }
     foreach($fileUpload as $key => $value){ 
         $pictureOrder++;
         $pictureFileName = $fileUpload[$key];
