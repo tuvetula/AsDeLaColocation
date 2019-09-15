@@ -7,6 +7,7 @@ require_once('model/frontEnd/m_getAdvertisement.php');
 require_once('model/frontEnd/m_getPicture.php');
 require_once('model/frontEnd/m_getUser.php');
 require_once('model/frontEnd/m_modifyAdvertisement.php');
+require_once('model/frontEnd/m_modifyPicture.php');
 require_once('model/frontEnd/m_deleteAdvertisement.php');
 require_once('model/frontEnd/m_deletePicture.php');
 require_once('model/frontEnd/m_deleteAddress.php');
@@ -654,6 +655,7 @@ function saveNewOrModifyAdvertisement(){
                     deleteOnePicture($advertisementIdToModify,$value);        
                     unlink('public/pictures/users/'.$value.'');
                 }
+                reorganizePictureOrder($advertisementIdToModify);
             }
 
             //AJOUT NOUVELLES PHOTOS
@@ -722,7 +724,9 @@ function saveNewOrModifyAdvertisement(){
                         deleteOnePicture($advertisementIdToModify,$value);
                         unlink('public/pictures/users/'.$value.'');
                     }
+                    reorganizePictureOrder($advertisementIdToModify);
                 }
+
                 
                 //AJOUT NOUVELLES PHOTOS
                 //On vérifie s'il y a des photos à enregistrer et si oui, recupération id de la dernière annonce
