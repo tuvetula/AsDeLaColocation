@@ -647,10 +647,12 @@ function saveNewOrModifyAdvertisement(){
         }
         //Vérification présence photos et enregistrement en bdd, Si l'annonce a bien été enregistré
         if ($saveAdvertisement) {
+
             //SUPPRESSION PHOTOS (page modification annonce)
             if (isset($_POST['pictureToDelete'])){
                 foreach($_POST['pictureToDelete'] as $key => $value){
-                    deleteOnePicture($advertisementIdToModify,$value);
+                    deleteOnePicture($advertisementIdToModify,$value);        
+                    unlink('public/pictures/users/'.$value.'');
                 }
             }
 
@@ -690,12 +692,13 @@ function saveNewOrModifyAdvertisement(){
         }
     } else {
         //AJOUT ADRESSE
-        //Sinon si l'adresse n'existe pas en bdd
+        //AJOUT NOUVELLE ADRESSE
         //Si l'adresse a bien été ajouté en bdd alors on ajoute l'annonce
         if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
             //Recup l'id de la dernière addresse ajoutée en bdd
             $addressArray = getLastAddressId();
             $addressId = $addressArray['MAX(address_id)'];
+
             //AJOUT OU MODIFICATION ANNONCE
             if ($advertisementIdToModify){
                 if(saveModifyAdvertisementInBdd($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $advertisementIdToModify)){
@@ -712,10 +715,12 @@ function saveNewOrModifyAdvertisement(){
             }
             //Si l'annonce a bien été enregistré alors vérification s'il y a des photos
             if ($saveAdvertisement) {
+
                 //SUPPRESSION PHOTOS (page modification annonce)
                 if (isset($_POST['pictureToDelete'])){
                     foreach($_POST['pictureToDelete'] as $key => $value){
                         deleteOnePicture($advertisementIdToModify,$value);
+                        unlink('public/pictures/users/'.$value.'');
                     }
                 }
                 
