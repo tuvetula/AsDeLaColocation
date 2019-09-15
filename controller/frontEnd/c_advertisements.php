@@ -56,20 +56,27 @@ function displayMofifyAdvertisementForm()
 {
     //On récupère l'id de l'annonce à modifier
     $advertisementId = $_GET['advertisementId'];
-    //On récupère les données de l'annonce
-    $advertisementData = getAdvertisementWithAddress($_SESSION['id'], $advertisementId);
-    //On récupère les photos liées à l'annonce
-    $advertisementPicture = getAdvertisementPictures($advertisementId);
-    //On prépare une variable avec un lien pour bouton supprimer photos
-    $deletePictureUrl = 'index.php?page=saveModificationAdvertisementDeletePicture&idAdvertisement='.$advertisementId.'';
-
-    $picturePath = "public/pictures/users/";
-
-    require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
+    //On verifie si l'id de l'annonce($_GET['advertisementId]) appartient bien à l'utilisateur connecté
+    $advertisementVerification = verifyAdvertisementBelongsToUser($_SESSION['id'],$advertisementId);
+    if ($advertisementVerification){
+        //On récupère les données de l'annonce et de l'adresse liée à l'annonce
+        $advertisementData = getAdvertisementWithAddress($advertisementId);
+        //On récupère les photos liées à l'annonce
+        $advertisementPicture = getAdvertisementPictures($advertisementId);
+        //On prépare une variable avec un lien pour bouton supprimer photos
+        $deletePictureUrl = 'index.php?page=saveModificationAdvertisementDeletePicture&idAdvertisement='.$advertisementId.'';
+        //On définit le chemin ou sont enregistrer les photos
+        $picturePath = "public/pictures/users/";
+    
+        require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
+    }else{
+        $error = "Erreur";
+        require_once('view/frontEnd/v_error.php');
+    }
 }
 
 //Traitement enregistrement nouvelle annonce ou modification annonce en base de donnée
-function saveNewOrModifyAdvertisement($advertisementIdToModify=null){
+function saveNewOrModifyAdvertisement(){
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai) des checkbox cochées
     foreach ($_POST as $key => $value) {
         if ($value === "on") {
@@ -89,7 +96,15 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null){
     if (isset($_POST['country'])) {
         $addressCountry = $_POST['country'];
     }
+
     //Advertisement $_POST
+
+    //Nous permet de savoir si il faut modifier une annonce ou en créer une nouvelle
+    if (isset($_POST['id'])){
+        $advertisementIdToModify = $_POST['id'];
+    }else{
+        $advertisementIdToModify = null;
+    }
     if (isset($_POST['isActive'])) {
         $isActive = $_POST['isActive'];
     } else {
@@ -739,7 +754,7 @@ function saveNewOrModifyAdvertisement($advertisementIdToModify=null){
 //Supprime une annonce
 function deleteAdvertisement($advertisementIdToDelete){
     //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté
-    if (verifyAdvertisement($_SESSION['id'], $advertisementIdToDelete)) {
+    if (verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementIdToDelete)) {
         
         //SUPPRESSION PHOTOS
         $picturesRequest = getAdvertisementPictures($advertisementIdToDelete);

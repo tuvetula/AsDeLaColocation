@@ -6,15 +6,13 @@ ob_start();
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Modifier votre annonce</h1>
         <form method="post"
-            action="index.php?page=saveModificationAdvertisement&advertisementId=<?=$advertisementData[0]['advertisement_id']?>"
+            action="index.php?page=saveModificationAdvertisement"
             enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
-                <p class="text-center"><?php if (isset($confirm) && $confirm==1) {
-    echo 'Votre annonce a bien été modifée';
-}?></p>
                 <h2>Annonce</h2>
                 <!-- IsActive, Titre, Description -->
+                <input type="hidden" name="id" value="<?=$advertisementData[0]['advertisement_id']?>">
                 <div class="container">
                     <!-- isActive -->
                     <div class=" custom-control custom-checkbox ">
