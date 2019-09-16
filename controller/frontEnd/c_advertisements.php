@@ -15,7 +15,7 @@ require_once('controller/frontEnd/functions/rearrangeDataFilesArray.php');
 require_once('controller/frontEnd/functions/calculEnergyGesLetter.php');
 
 //Affichage de la page "Mes annonces"
-function displayMyAdvertisements($error=null,$message=null)
+function displayMyAdvertisements($error=null, $message=null)
 {
     //Récupération annonces utilisateurs
     $userAdvertisements = getUserAdvertisement($_SESSION['id']);
@@ -40,6 +40,18 @@ function displayMyAdvertisements($error=null,$message=null)
     //Déclaration variable url bouton supprimer
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
 
+    //Déclaration variable nombre maximal de caractères dans l'affichage de la description et du titre
+    function shortDescription($description){
+        $nbMaxCaracteresToDisplayForDescription = 170;
+        if (strlen($description)>$nbMaxCaracteresToDisplayForDescription && !empty($description)) {
+            return substr($description, 0, $nbMaxCaracteresToDisplayForDescription).'...';
+        } else{
+            return $description;
+        }
+    }
+    
+
+    
     require_once('view/frontEndUserConnected/v_advertisementsDisplay.php');
 }
 
@@ -58,8 +70,8 @@ function displayMofifyAdvertisementForm()
     //On récupère l'id de l'annonce à modifier
     $advertisementId = $_GET['advertisementId'];
     //On verifie si l'id de l'annonce($_GET['advertisementId]) appartient bien à l'utilisateur connecté
-    $advertisementVerification = verifyAdvertisementBelongsToUser($_SESSION['id'],$advertisementId);
-    if ($advertisementVerification){
+    $advertisementVerification = verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementId);
+    if ($advertisementVerification) {
         //On récupère les données de l'annonce et de l'adresse liée à l'annonce
         $advertisementData = getAdvertisementWithAddress($advertisementId);
         //On récupère les photos liées à l'annonce
@@ -70,18 +82,19 @@ function displayMofifyAdvertisementForm()
         $picturePath = "public/pictures/users/";
     
         require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
-    }else{
+    } else {
         $error = "Erreur";
         require_once('view/frontEnd/v_error.php');
     }
 }
 
 //Traitement enregistrement nouvelle annonce ou modification annonce en base de donnée
-function saveNewOrModifyAdvertisement(){
+function saveNewOrModifyAdvertisement()
+{
     //Nous permet de savoir si il faut modifier une annonce ou en créer une nouvelle
-    if (isset($_POST['id'])){
+    if (isset($_POST['id'])) {
         $advertisementIdToModify = $_POST['id'];
-    }else{
+    } else {
         $advertisementIdToModify = null;
     }
     
@@ -650,9 +663,9 @@ function saveNewOrModifyAdvertisement(){
         if ($saveAdvertisement) {
 
             //SUPPRESSION PHOTOS (page modification annonce)
-            if (isset($_POST['pictureToDelete'])){
-                foreach($_POST['pictureToDelete'] as $key => $value){
-                    deleteOnePicture($advertisementIdToModify,$value);        
+            if (isset($_POST['pictureToDelete'])) {
+                foreach ($_POST['pictureToDelete'] as $key => $value) {
+                    deleteOnePicture($advertisementIdToModify, $value);
                     unlink('public/pictures/users/'.$value.'');
                 }
                 reorganizePictureOrder($advertisementIdToModify);
@@ -674,18 +687,18 @@ function saveNewOrModifyAdvertisement(){
                 }
                 //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                 if (insertPictures($fileUpload, $advertisementId)) {
-                    if($advertisementIdToModify){
+                    if ($advertisementIdToModify) {
                         $message = 'Votre annonce a bien été modifiée';
-                    }else{
+                    } else {
                         $message = 'Votre nouvelle annonce a bien été ajoutée';
                     }
                 } else {
                     $error ='Aucune annonce ne correspond pour vos photos!';
                 }
-            }else{
-                if($advertisementIdToModify){
+            } else {
+                if ($advertisementIdToModify) {
                     $message = 'Votre annonce a bien été modifiée';
-                }else{
+                } else {
                     $message = 'Votre nouvelle annonce a bien été ajoutée';
                 }
             }
@@ -702,16 +715,16 @@ function saveNewOrModifyAdvertisement(){
             $addressId = $addressArray['MAX(address_id)'];
 
             //AJOUT OU MODIFICATION ANNONCE
-            if ($advertisementIdToModify){
-                if(saveModifyAdvertisementInBdd($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $advertisementIdToModify)){
+            if ($advertisementIdToModify) {
+                if (saveModifyAdvertisementInBdd($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $advertisementIdToModify)) {
                     $saveAdvertisement = true;
-                }else{
+                } else {
                     $saveAdvertisement = false;
                 }
-            }else{
-                if(insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId)){
+            } else {
+                if (insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId)) {
                     $saveAdvertisement = true;
-                }else{
+                } else {
                     $saveAdvertisement = false;
                 }
             }
@@ -719,9 +732,9 @@ function saveNewOrModifyAdvertisement(){
             if ($saveAdvertisement) {
 
                 //SUPPRESSION PHOTOS (page modification annonce)
-                if (isset($_POST['pictureToDelete'])){
-                    foreach($_POST['pictureToDelete'] as $key => $value){
-                        deleteOnePicture($advertisementIdToModify,$value);
+                if (isset($_POST['pictureToDelete'])) {
+                    foreach ($_POST['pictureToDelete'] as $key => $value) {
+                        deleteOnePicture($advertisementIdToModify, $value);
                         unlink('public/pictures/users/'.$value.'');
                     }
                     reorganizePictureOrder($advertisementIdToModify);
@@ -744,17 +757,18 @@ function saveNewOrModifyAdvertisement(){
                     }
                     //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                     if (insertPictures($fileUpload, $advertisementId)) {
-                        if($advertisementIdToModify){
+                        if ($advertisementIdToModify) {
                             $message = 'Votre annonce a bien été modifiée';
-                        }else{
+                        } else {
                             $message = 'Votre nouvelle annonce a bien été ajoutée';
                         }
                     } else {
-                        $error ='Aucune annonce ne correspond pour vos photos!';                    }
-                }else{
-                    if($advertisementIdToModify){
+                        $error ='Aucune annonce ne correspond pour vos photos!';
+                    }
+                } else {
+                    if ($advertisementIdToModify) {
                         $message = 'Votre annonce a bien été modifiée';
-                    }else{
+                    } else {
                         $message = 'Votre nouvelle annonce a bien été ajoutée';
                     }
                 }
@@ -766,27 +780,28 @@ function saveNewOrModifyAdvertisement(){
         }
     }
     //Appel de la fonction pour afficher la liste des annonces de l'utilisateur en passant en argument les messages d'erreur ou de confirmation
-    if(isset($error)){
+    if (isset($error)) {
         displayMyAdvertisements($error);
-    }else if (isset($message)){
-        displayMyAdvertisements(null,$message);
-    }else{
+    } elseif (isset($message)) {
+        displayMyAdvertisements(null, $message);
+    } else {
         displayMyAdvertisements();
     }
 }
 
 //Supprime une annonce
-function deleteAdvertisement($advertisementIdToDelete){
+function deleteAdvertisement($advertisementIdToDelete)
+{
     //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté
     if (verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementIdToDelete)) {
         
         //SUPPRESSION PHOTOS
         $picturesRequest = getAdvertisementPictures($advertisementIdToDelete);
-        if(!empty($picturesRequest)){
+        if (!empty($picturesRequest)) {
             //On supprime toutes les photos liées à l'annonce dans la base de donnée
             deletePictureBdd($advertisementIdToDelete);
             //On supprime les photos du dossier public/pictures/users
-            foreach($picturesRequest as $key => $value){
+            foreach ($picturesRequest as $key => $value) {
                 unlink('public/pictures/users/'.$picturesRequest[$key]['picture_fileName'].'');
             }
         }
@@ -794,7 +809,7 @@ function deleteAdvertisement($advertisementIdToDelete){
         $addressId = getAddressIdFromAdvertisement($advertisementIdToDelete);
         
         //SUPPRESSION ANNONCE
-        if(deleteAdvertisementBdd($advertisementIdToDelete)){
+        if (deleteAdvertisementBdd($advertisementIdToDelete)) {
 
             //SUPPRESSION ADRESSE si l'adresse n'appartient à aucun utilisateur et aucune autre annonce
             //On vérifie si un user à cet address-id
@@ -809,8 +824,8 @@ function deleteAdvertisement($advertisementIdToDelete){
             }
             //On appelle la fonction qui affiche la page "mes annonces"
             $message = 'Votre annonce a été supprimée.';
-            displayMyAdvertisements(null,$message);
-        }else{
+            displayMyAdvertisements(null, $message);
+        } else {
             $error = "Problème technique. Veuillez réessayer ultérieurement.";
             displayMyAdvertisements($error);
         }
