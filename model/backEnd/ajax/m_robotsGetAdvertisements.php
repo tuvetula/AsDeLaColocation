@@ -1,13 +1,13 @@
 <?php
 header('Content-Type: application/json');
-//require_once('../bdd/bddConfig.php');
+require_once('../../bdd/config.php');
 //Stocke la date - 7 jours
 $date = date('Y-m-d', strtotime('-7 day'));
 // echo $date;
 
 //Connexion Base de donnée
 try {
-    $bdd = new PDO('mysql:host=localhost;dbname=asdelacolocation;charset=utf8', 'root', '',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $bdd = new PDO('mysql:host=localhost;dbname='.$acces.';charset=utf8',''.$login.'', ''.$password.'',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 } catch (Exception $e) {
     die('Erreur : '.$e->getMessage());
 }
