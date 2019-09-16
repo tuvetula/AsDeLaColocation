@@ -718,8 +718,7 @@ ob_start();
                         <div class="form-group col-md-4" title="Nombre de chambres disponibles">
                             <label class="font-weight-bold" for="nbOfBedroomsToRent">Nombre de chambres à louer</label>
                             <select id="nbOfBedroomsToRent" name="nbOfBedroomsToRent" class="custom-select">
-                                <option value="0" selected>0</option>
-                                <option value="1">1</option>
+                                <option value="1" selected>1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
