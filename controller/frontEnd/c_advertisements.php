@@ -40,7 +40,7 @@ function displayMyAdvertisements($error=null, $message=null)
     //Déclaration variable url bouton supprimer
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
 
-    //Déclaration variable nombre maximal de caractères dans l'affichage de la description et du titre
+    //Fonction qui raccourcit la description pour affichage dans la page "mes annonces"
     function shortDescription($description){
         $nbMaxCaracteresToDisplayForDescription = 170;
         if (strlen($description)>$nbMaxCaracteresToDisplayForDescription && !empty($description)) {
