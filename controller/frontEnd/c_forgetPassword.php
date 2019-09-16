@@ -20,7 +20,7 @@ function forgetPassword()
         $token = sha1($mail.time());
         if (modifyToken($mail, $token)) {
             //On génère le lien à inscrire dans le mail
-            $link = "http://localhost/asdelacolocation/index.php?token=$token&mailLink=$mail";
+            $link = "http://localhost/asdelacoloc/index.php?token=$token&mailLink=$mail";
             //Création message à envoyer par mail
             $to = $mail;
             $subject = "Réinitialisation de votre mot de passe As de la coloc";

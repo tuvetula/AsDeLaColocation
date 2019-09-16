@@ -73,7 +73,8 @@ function saveSubscribeForm()
             //On ajoute l'utilisateur à la base de donnée et on redirige vers la page de login
             if (insertNewUser($userName, $userfirstName, $userphoneNumber, $usermail, $userpassword, $userloginSiteWeb, $userpasswordSiteWeb, $addressId)) {
                 //On définit un message de confirmation et on redirige vers la page de confirmation
-                $message = "Votre inscription est bien enregistrée!";
+                $message = "Votre inscription est bien enregistrée !";
+                $message2 = "Un membre de notre équipe va valider votre inscription sous 72 heures, vous pourrez ensuite vous connecter à votre compte. Merci et à très bientôt.";
                 require_once('view/frontEnd/v_message.php');
             }
         } else {

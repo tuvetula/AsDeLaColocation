@@ -1374,9 +1374,6 @@ ob_start();
                         <div class="form-group col-md-4" title="Nombre de chambres disponibles">
                             <label class="font-weight-bold" for="nbOfBedroomsToRent">Nombre de chambres à louer</label>
                             <select id="nbOfBedroomsToRent" name="nbOfBedroomsToRent" class="custom-select">
-                                <option value="0" <?php if ($advertisementData[0]['advertisement_nbOfBedroomsToRent'] == "0") {
-    echo 'selected';
-}?>>0</option>
                                 <option value="1" <?php if ($advertisementData[0]['advertisement_nbOfBedroomsToRent'] == "1") {
     echo 'selected';
 }?>>1</option>
