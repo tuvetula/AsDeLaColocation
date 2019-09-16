@@ -10,6 +10,12 @@ ob_start();
                 echo $message;
             }?>
             </p>
+            <?php
+            if(isset($message2) && !empty($message2)){
+            ?>
+            <p class="text-center font-weight-bold py-3"><?=$message2?></p>
+            <?php
+            }
             <p  class="text-center"><a href="index.php">Retour à l'accueil</a></p>
         </div>
     </div>
