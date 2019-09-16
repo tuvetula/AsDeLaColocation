@@ -1,12 +1,12 @@
 <?php
 // header('Content-type: text/html; charset=iso-8859-1');
-// require_once('model/bdd/bddConfig.php');
+require_once('../../bdd/config.php');
 
 $advertisementId = htmlspecialchars(strip_tags($_POST['advertisementId']));
 
 //Connexion Base de donnée
 try {
-    $bdd = new PDO('mysql:host=localhost;dbname=asdelacolocation;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $bdd = new PDO('mysql:host=localhost;dbname='.$acces.';charset=utf8',''.$login.'', ''.$password.'',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 } catch (Exception $e) {
     die('Erreur : '.$e->getMessage());
 }
