@@ -6,7 +6,8 @@ ob_start();
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Réinitialisation mot de passe</h1>
         <div class="container col-md-9 col-lg-6">
-            <form method="post" action="index.php?mailLink1=<?=$mail?>" class="text-center">
+            <form method="post" action="index.php" class="text-center">
+            <input type="hidden" name="userMail" value="<?=$mail?>">
             <?php if (isset($_SESSION['mail'])){
                 ?>
                 <div class="form-group text-left">

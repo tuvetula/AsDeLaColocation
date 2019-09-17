@@ -6,7 +6,7 @@ require_once('model/bdd/config.php');
 //Affichage de la page "mot de passe oublié"
 function displayforgetPasswordPage()
 {
-    require_once('view/frontEnd/v_ForgetPasswordTypeMail.php');
+    require_once('view/frontEnd/v_forgetPasswordTypeMail.php');
 }
 
 //Traitement mot de passe oublié (envoi mail après saisie adresse mail dans displayForgetPasswordPage)
@@ -59,7 +59,7 @@ function displayTypeNewPassword()
         //Comparaison $_GET['token] et user_token
         if ($token == $mailVerification['user_token']) {
             //Affichage page choisir un nouveau mot de passe
-            require_once('view/frontEnd/v_ForgetPasswordTypeNewPassword.php');
+            require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
         } else {
             $error = "Le lien utilisé ne fonctionne plus. Veuillez renouveller votre demande de réinitialisation de mot de passe.";
         }
@@ -69,10 +69,15 @@ function displayTypeNewPassword()
     require_once('view/frontEnd/v_error.php');
 }
 
+//Affichage page Modifier mon mot de passe (après click dans mo compte, modifier mot de passe)
+function displayChangePasswordPage(){
+    $mail = $_SESSION['mail'];
+    require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
+}
 //Traitement enregistrement nouveau mot de passe après réinitialisation
 function saveNewPasswordAfterReinitialization()
 {
-    $mail = $_GET['mailLink1'];
+    $mail = $_POST['userMail'];
     $password1 = $_POST['passwordReinitialization1'];
     $password2 = $_POST['passwordReinitialization2'];
     //Récupération ancien mot de passe si utilisateur connecté
@@ -82,6 +87,7 @@ function saveNewPasswordAfterReinitialization()
         if(!verifyPassword($oldpassword)){
             $error = "Ancien mot de passe incorrect!";
             require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
+            exit;
         }
     }
     //Vérification si les 2 mots de passe sont identiques

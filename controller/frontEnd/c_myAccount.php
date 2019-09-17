@@ -70,9 +70,3 @@ function modifyMyAccount(){
     //On affiche la page "mon compte"
     require_once('view/frontEndUserConnected/v_myAccount.php');
 }
-
-//Affichage page Modifier mon mot de passe
-function displayChangePasswordPage(){
-    $mail = $_SESSION['mail'];
-    require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
-}
