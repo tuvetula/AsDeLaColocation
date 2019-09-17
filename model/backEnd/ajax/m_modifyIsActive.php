@@ -6,7 +6,7 @@ $advertisementId = htmlspecialchars(strip_tags($_POST['advertisementId']));
 
 //Connexion Base de donnée
 try {
-    $bdd = new PDO('mysql:host=localhost;dbname='.$acces.';charset=utf8',''.$login.'', ''.$password.'',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $bdd = new PDO($acces.$dbName,$login,$password,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 } catch (Exception $e) {
     die('Erreur : '.$e->getMessage());
 }

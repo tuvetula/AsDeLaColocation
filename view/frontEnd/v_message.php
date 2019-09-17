@@ -16,7 +16,8 @@ ob_start();
             <p class="text-center font-weight-bold py-3"><?=$message2?></p>
             <?php
             }
-            <p  class="text-center"><a href="index.php">Retour à l'accueil</a></p>
+            ?>
+            <p class="text-center"><a href="index.php">Retour à l'accueil</a></p>
         </div>
     </div>
 </div>
