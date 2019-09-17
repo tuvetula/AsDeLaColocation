@@ -63,7 +63,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         displayChangePasswordPage();
     
     //Traitement qui enregistre le nouveau mot de passe
-    } elseif (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])) {
+    } elseif (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_POST['userMail'])) {
         saveNewPasswordAfterReinitialization();
 
     //Page d'accueil utilisateur
@@ -96,7 +96,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         displayTypeNewPassword();
 
     //Traitement enregistrement nouveau mot de passe (après saisie de 2 nouveaux mots de passe)
-    } elseif (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_GET['mailLink1'])) {
+    } elseif (isset($_POST['passwordReinitialization1']) && isset($_POST['passwordReinitialization2']) && isset($_POST['userMail'])) {
         saveNewPasswordAfterReinitialization();
 
     //Affichage page d'inscription
