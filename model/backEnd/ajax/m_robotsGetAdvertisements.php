@@ -7,7 +7,7 @@ $date = date('Y-m-d', strtotime('-7 day'));
 
 //Connexion Base de donnée
 try {
-    $bdd = new PDO('mysql:host=localhost;dbname='.$acces.';charset=utf8',''.$login.'', ''.$password.'',array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $bdd = new PDO($acces.$dbName,$login,$password,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 } catch (Exception $e) {
     die('Erreur : '.$e->getMessage());
 }
@@ -16,7 +16,7 @@ try {
 $request=$bdd->prepare('SELECT * FROM advertisements 
                         join users on advertisements.user_id = users.user_id
                         where advertisement_isActive=:isActive 
-                        AND advertisement_dateOfLastDiffusion IS NOT NULL');
+                        AND advertisement_dateOfLastDiffusionSeloger IS NOT NULL');
 
 $request->execute([
     ':isActive' => false,
@@ -31,7 +31,7 @@ $request1=$bdd->prepare('SELECT * FROM advertisements
                         join users on advertisements.user_id = users.user_id
                         join pictures on advertisements.advertisement_id = pictures.advertisement_id
                         where advertisement_isActive=:isActive 
-                        AND advertisement_dateOfLastDiffusion IS NULL');
+                        AND advertisement_dateOfLastDiffusionSeloger IS NULL');
 
 $request1->execute([
     ':isActive' => true,
@@ -147,7 +147,7 @@ users.user_passwordSiteWeb FROM advertisements
                         JOIN addresses ON advertisements.address_id = addresses.address_id 
                         JOIN users ON advertisements.user_id = users.user_id
                         WHERE advertisements.advertisement_isActive=:isActive 
-                        AND advertisements.advertisement_dateOfLastDiffusion<=:dateOfLastDiffusion');
+                        AND advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion');
 
 $requestData->execute([
     ':isActive' => true,
@@ -159,7 +159,7 @@ $requestData->closeCursor();
 $requestPictures=$bdd->prepare('SELECT advertisements.advertisement_id,pictures.picture_fileName FROM advertisements 
                         JOIN pictures ON advertisements.advertisement_id = pictures.advertisement_id
                         WHERE advertisements.advertisement_isActive=:isActive 
-                        AND advertisements.advertisement_dateOfLastDiffusion<=:dateOfLastDiffusion');
+                        AND advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion');
 
 $requestPictures->execute([
     ':isActive' => true,

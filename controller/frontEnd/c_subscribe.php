@@ -3,6 +3,7 @@ require_once('model/frontEnd/m_insertNewUser.php');
 require_once('model/frontEnd/m_insertNewAddress.php');
 require_once('model/frontEnd/m_getAddress.php');
 require_once('model/frontEnd/m_getUser.php');
+require_once('model/bdd/config.php');
 
 //Affichage page d'inscription
 function displaySubscribePage()
@@ -75,6 +76,17 @@ function saveSubscribeForm()
                 //On définit un message de confirmation et on redirige vers la page de confirmation
                 $message = "Votre inscription est bien enregistrée !";
                 $message2 = "Un membre de notre équipe va valider votre inscription sous 72 heures, vous pourrez ensuite vous connecter à votre compte. Merci et à très bientôt.";
+                //On envoi un mail pour informer une nouvelle inscription
+                //Création message à envoyer par mail
+                global $ownMail;
+                $to = $ownMail;
+                $subject = "Nouvelle inscription";
+                $body = 'Bonjour, '."\r\n".$userName.' '.$userfirstName.' vient de s\'inscrire sur le site moncompte.asdelacoloc.fr';
+                $headers[] = 'MIME-Version: 1.0';
+                $headers[]= 'Content-type: text/html; charset=utf-8';
+                //Envoi du mail
+                mail($to, $subject, $body, implode("\r\n", $headers));
+                //Affichage page de confirmation d'inscription
                 require_once('view/frontEnd/v_message.php');
             }
         } else {
