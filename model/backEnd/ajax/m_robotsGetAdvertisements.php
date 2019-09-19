@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
 require_once('../../bdd/config.php');
 //Stocke la date - 7 jours
 $date = date('Y-m-d', strtotime('-7 day'));
@@ -7,169 +8,493 @@ $date = date('Y-m-d', strtotime('-7 day'));
 
 //Connexion Base de donnée
 try {
-    $bdd = new PDO($acces.$dbName,$login,$password,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $bdd = new PDO($acces.$dbName, $login, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 } catch (Exception $e) {
     die('Erreur : '.$e->getMessage());
 }
 
-//Requete Suppression: Annonce inactive + date non null
-$request=$bdd->prepare('SELECT * FROM advertisements 
-                        join users on advertisements.user_id = users.user_id
-                        where advertisement_isActive=:isActive 
-                        AND advertisement_dateOfLastDiffusionSeloger IS NOT NULL');
+$json = deletion($bdd);
+$json += publication($bdd);
+$json += publicationPictures($bdd);
+$json += republication($bdd, $date);
+$json += republicationPictures($bdd, $date);
+//DELETION: Annonce inactive + date non null
+function deletion($bdd)
+{
+    //leboncoin deletion
+    $requestdeleteLeboncoin=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionLeboncoin IS NOT NULL');
+    $requestdeleteLeboncoin->execute([
+        ':isActive' => false,
+    ]);
+    $deletionLeboncoin = $requestdeleteLeboncoin->fetchAll(PDO::FETCH_ASSOC);
+    $json['d_Leboncoin'] = $deletionLeboncoin;
 
-$request->execute([
-    ':isActive' => false,
-]);
+    //Lacartedescolocs deletion
+    $requestdeleteLacartedesColocs=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionLacartedescolocs IS NOT NULL');
+    $requestdeleteLacartedesColocs->execute([
+        ':isActive' => false,
+    ]);
+    $deletionLacartedescolocs = $requestdeleteLacartedesColocs->fetchAll(PDO::FETCH_ASSOC);
+    $json['d_Lacartedescolocs'] = $deletionLacartedescolocs;
 
-$deletion = $request->fetchAll(PDO::FETCH_ASSOC);
-$json['Deletion'] = $deletion;
+    //Appartager deletion
+    $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionAppartager IS NOT NULL');
+    $requestdeleteAppartager->execute([
+        ':isActive' => false,
+    ]);
+    $deletionAppartager = $requestdeleteAppartager->fetchAll(PDO::FETCH_ASSOC);
+    $json['d_Appartager'] = $deletionAppartager;
 
-//Requete Publication: Annonce active + date vide
-$request1=$bdd->prepare('SELECT * FROM advertisements 
-                        join addresses on advertisements.address_id = addresses.address_id 
-                        join users on advertisements.user_id = users.user_id
-                        join pictures on advertisements.advertisement_id = pictures.advertisement_id
-                        where advertisement_isActive=:isActive 
-                        AND advertisement_dateOfLastDiffusionSeloger IS NULL');
+    //Seloger deletion
+    //PAS DE SUPPRESSION
 
-$request1->execute([
-    ':isActive' => true,
-]);
-$jsonPublication = $request1->fetchAll(PDO::FETCH_ASSOC);
-$json['Publication'] = $jsonPublication;
+    //Studapart deletion
+    //PAS DE SUPPRESSION
 
+    //Erasmusu deletion
+    $requestdeleteErasmusu=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionErasmusu IS NOT NULL');
+    $requestdeleteErasmusu->execute([
+        ':isActive' => false,
+    ]);
+    $deletionErasmusu = $requestdeleteErasmusu->fetchAll(PDO::FETCH_ASSOC);
+    $json['d_Erasmusu'] = $deletionErasmusu;
 
-//Requete RePublication: Annonce active + Date de + de 7 jours
-//On récupère les datas
-$requestData=$bdd->prepare('SELECT advertisements.advertisement_id,
-advertisements.advertisement_availableDate,
-advertisements.advertisement_title,
-advertisements.advertisement_description,
-advertisements.advertisement_type,
-advertisements.advertisement_category,
-advertisements.advertisement_energyClassLetter,
-advertisements.advertisement_energyClassNumber,
-advertisements.advertisement_gesLetter,
-advertisements.advertisement_gesNumber,
-advertisements.advertisement_accomodationLivingAreaSize,
-advertisements.advertisement_accomodationFloor,
-advertisements.advertisement_buildingNbOfFloors,
-advertisements.advertisement_accomodationNbOfRooms,
-advertisements.advertisement_accomodationNbOfBedrooms,
-advertisements.advertisement_accomodationNbOfBathrooms,
-advertisements.advertisement_nbOfBedroomsToRent,
-advertisements.advertisement_monthlyRentExcludingCharges,
-advertisements.advertisement_charges,
-advertisements.advertisement_suretyBond,
-advertisements.advertisement_financialRequirements,
-advertisements.advertisement_guarantorLiving,
-advertisements.advertisement_solvencyRatio,
-advertisements.advertisement_eligibleForAids,
-advertisements.advertisement_chargesIncludeCoOwnershipCharges,
-advertisements.advertisement_chargesIncludeElectricity,
-advertisements.advertisement_chargesIncludeHotWater,
-advertisements.advertisement_chargesIncludeHeating,
-advertisements.advertisement_chargesIncludeInternet,
-advertisements.advertisement_chargesIncludeHomeInsurance,
-advertisements.advertisement_chargesIncludeBoilerInspection,
-advertisements.advertisement_chargesIncludeHouseholdGarbageTaxes,
-advertisements.advertisement_chargesIncludeCleaningService,
-advertisements.advertisement_isFurnished,
-advertisements.advertisement_kitchenUse,
-advertisements.advertisement_livingRoomUse,
-advertisements.advertisement_bedroomSize,
-advertisements.advertisement_bedroomType,
-advertisements.advertisement_bedType,
-advertisements.advertisement_bedroomHasDesk,
-advertisements.advertisement_bedroomHasWardrobe,
-advertisements.advertisement_bedroomHasChair,
-advertisements.advertisement_bedroomHasTv,
-advertisements.advertisement_bedroomHasArmchair,
-advertisements.advertisement_bedroomHasCoffeeTable,
-advertisements.advertisement_bedroomHasBedside,
-advertisements.advertisement_bedroomHasLamp,
-advertisements.advertisement_bedroomHasCloset,
-advertisements.advertisement_bedroomHasShelf,
-advertisements.advertisement_handicapedAccessibility,
-advertisements.advertisement_accomodationHasElevator,
-advertisements.advertisement_accomodationHasCommonParkingLot,
-advertisements.advertisement_accomodationHasPrivateParkingPlace,
-advertisements.advertisement_accomodationHasGarden,
-advertisements.advertisement_accomodationHasBalcony,
-advertisements.advertisement_accomodationHasTerrace,
-advertisements.advertisement_accomodationHasSwimmingPool,
-advertisements.advertisement_accomodationHasTv,
-advertisements.advertisement_accomodationHasInternet,
-advertisements.advertisement_accomodationHasWifi,
-advertisements.advertisement_accomodationHasFiberOpticInternet,
-advertisements.advertisement_accomodationHasNetflix,
-advertisements.advertisement_accomodationHasDoubleGlazing,
-advertisements.advertisement_accomodationHasAirConditioning,
-advertisements.advertisement_accomodationHasElectricHeating,
-advertisements.advertisement_accomodationHasIndividualGasHeating,
-advertisements.advertisement_accomodationHasCollectiveGasHeating,
-advertisements.advertisement_accomodationHasHotWaterTank,
-advertisements.advertisement_accomodationHasGasWaterHeater,
-advertisements.advertisement_accomodationHasFridge,
-advertisements.advertisement_accomodationHasFreezer,
-advertisements.advertisement_accomodationHasOven,
-advertisements.advertisement_accomodationHasBakingTray,
-advertisements.advertisement_accomodationHasWashingMachine,
-advertisements.advertisement_accomodationHasDishwasher,
-advertisements.advertisement_accomodationHasMicrowaveOven,
-advertisements.advertisement_accomodationHasCoffeeMachine,
-advertisements.advertisement_accomodationHasPodCoffeeMachine,
-advertisements.advertisement_accomodationHasKettle,
-advertisements.advertisement_accomodationHasToaster,
-advertisements.advertisement_accomodationHasExtractorHood,
-advertisements.advertisement_animalsAllowed,
-advertisements.advertisement_smokingIsAllowed,
-advertisements.advertisement_authorizedParty,
-advertisements.advertisement_authorizedVisit,
-advertisements.advertisement_nbOfOtherRoommatePresent,
-advertisements.advertisement_renterSituation,
-advertisements.advertisement_idealRoommateSex,
-advertisements.advertisement_idealRoommateSituation,
-advertisements.advertisement_idealRoommateMinAge,
-advertisements.advertisement_idealRoommateMaxAge,
-advertisements.advertisement_locationMinDuration,
-advertisements.advertisement_rentWithoutVisit,
-advertisements.advertisement_contactNameForVisit,
-advertisements.advertisement_contactPhoneNumberForVisit,
-advertisements.advertisement_contactMailForVisit,
-addresses.address_street,
-addresses.address_zipcode,
-addresses.address_city,
-addresses.address_country,
-users.user_loginSiteWeb,
-users.user_passwordSiteWeb FROM advertisements 
-                        JOIN addresses ON advertisements.address_id = addresses.address_id 
-                        JOIN users ON advertisements.user_id = users.user_id
-                        WHERE advertisements.advertisement_isActive=:isActive 
-                        AND advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion');
+    //Roomlala deletion
+    $requestdeleteRoomlala=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionRoomlala IS NOT NULL');
+    $requestdeleteRoomlala->execute([
+        ':isActive' => false,
+    ]);
+    $deletionRoomlala = $requestdeleteRoomlala->fetchAll(PDO::FETCH_ASSOC);
+    $json['d_Roomlala'] = $deletionRoomlala;
 
-$requestData->execute([
-    ':isActive' => true,
-    ':dateOfLastDiffusion' => $date
-]);
-$jsonRepublicationData = $requestData->fetchAll(PDO::FETCH_ASSOC);
-$requestData->closeCursor();
-//On récupère les photos
-$requestPictures=$bdd->prepare('SELECT advertisements.advertisement_id,pictures.picture_fileName FROM advertisements 
-                        JOIN pictures ON advertisements.advertisement_id = pictures.advertisement_id
-                        WHERE advertisements.advertisement_isActive=:isActive 
-                        AND advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion');
+    //Bubbleflat deletion
+    $requestdeleteBubbleflat=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionBubbleflat IS NOT NULL');
+    $requestdeleteBubbleflat->execute([
+        ':isActive' => false,
+    ]);
+    $deletionBubbleflat = $requestdeleteBubbleflat->fetchAll(PDO::FETCH_ASSOC);
+    $json['d_Bubbleflat'] = $deletionBubbleflat;
 
-$requestPictures->execute([
-    ':isActive' => true,
-    ':dateOfLastDiffusion' => $date
-]);
-$jsonRepublicationPictures = $requestPictures->fetchAll(PDO::FETCH_ASSOC);
-$requestPictures->closeCursor();
+    return $json;
+}
 
-$json['Republication'] = $jsonRepublicationData;
-$json['RepublicationPictures'] = $jsonRepublicationPictures;
+//PUBLICATION: Annonce active + date vide
+function publication($bdd)
+{
+    //Leboncoin Publication
+    $requestPublicationLeboncoin=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_phoneNumber,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionLeboncoin IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationLeboncoin->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationLeboncoin = $requestPublicationLeboncoin->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Leboncoin'] = $jsonPublicationLeboncoin;
+
+    //Lacartedescolocs Publication
+    $requestPublicationLacartedescolocs=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionLacartedescolocs IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationLacartedescolocs->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationLacartedescolocs = $requestPublicationLacartedescolocs->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Lacartedescolocs'] = $jsonPublicationLacartedescolocs;
+
+    //Appartager Publication
+    $requestPublicationAppartager=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionAppartager IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationAppartager->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationAppartager = $requestPublicationAppartager->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Appartager'] = $jsonPublicationAppartager;
+
+    //Seloger Publication
+    $requestPublicationSeloger=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionSeloger IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationSeloger->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationSeloger = $requestPublicationSeloger->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Seloger'] = $jsonPublicationSeloger;
+
+    //Studapart Publication
+    $requestPublicationStudapart=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionStudapart IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationStudapart->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationStudapart = $requestPublicationStudapart->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Studapart'] = $jsonPublicationStudapart;
+
+    //Erasmusu Publication
+    $requestPublicationErasmusu=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionErasmusu IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationErasmusu->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationErasmusu = $requestPublicationErasmusu->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Erasmusu'] = $jsonPublicationErasmusu;
+
+    //Roomlala Publication
+    $requestPublicationRoomlala=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionRoomlala IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationRoomlala->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationRoomlala = $requestPublicationRoomlala->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Roomlala'] = $jsonPublicationRoomlala;
+
+    //Bubbleflat Publication
+    $requestPublicationBubbleflat=$bdd->prepare('SELECT 
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionBubbleflat IS NULL 
+    AND users.user_isMember=:isMember');
+    $requestPublicationBubbleflat->execute([
+        ':isActive' => true,
+        ':isMember' => true
+    ]);
+    $jsonPublicationBubbleflat = $requestPublicationBubbleflat->fetchAll(PDO::FETCH_ASSOC);
+    $json['p_Bubbleflat'] = $jsonPublicationBubbleflat;
+
+    return $json;
+}
+
+//PUBLICATION PICTURES
+function publicationPictures($bdd)
+{
+    //On récupère les photos
+    $requestPicturesPublication=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,pictures.picture_fileName FROM advertisements 
+    JOIN pictures ON advertisements.advertisement_id = pictures.advertisement_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND (advertisements.advertisement_dateOfLastDiffusionLeboncoin IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionLacartedescolocs IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionAppartager IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionSeloger IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionStudapart IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionErasmusu IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionRoomlala IS NULL
+    OR advertisements.advertisement_dateOfLastDiffusionBubbleflat IS NULL)');
+    
+    $requestPicturesPublication->execute([
+        ':isActive' => true
+    ]);
+    $jsonPublicationPictures = $requestPicturesPublication->fetchAll(PDO::FETCH_ASSOC);
+    $requestPicturesPublication->closeCursor();
+    $json['p_Allpictures'] = $jsonPublicationPictures;
+
+    return $json;
+}
+//REPUBLICATION: Annonce active + Date de + de 7 jours
+function republication($bdd, $date)
+{
+    //Leboncoin Republication
+    $requestRepublicationLeboncoinData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionLeboncoin<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationLeboncoinData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationLeboncoinData = $requestRepublicationLeboncoinData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationLeboncoinData->closeCursor();
+    $json['r_Leboncoin'] = $jsonRepublicationLeboncoinData;
+    
+    //Lacartedescolocs Republication
+    $requestRepublicationLacartedescolocsData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionLacartedescolocs<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationLacartedescolocsData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationLacartedescolocsData = $requestRepublicationLacartedescolocsData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationLacartedescolocsData->closeCursor();
+    $json['r_Lacartedescolocs'] = $jsonRepublicationLacartedescolocsData;
+
+    //Appartager Republication
+    $requestRepublicationAppartagerData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionAppartager<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationAppartagerData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationAppartagerData = $requestRepublicationAppartagerData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationAppartagerData->closeCursor();
+    $json['r_Appartager'] = $jsonRepublicationAppartagerData;
+
+    //Seloger Republication
+    $requestRepublicationSelogerData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationSelogerData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationSelogerData = $requestRepublicationSelogerData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationSelogerData->closeCursor();
+    $json['r_Seloger'] = $jsonRepublicationSelogerData;
+
+    //Studapart Republication
+    $requestRepublicationStudapartData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionStudapart<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationStudapartData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationStudapartData = $requestRepublicationStudapartData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationStudapartData->closeCursor();
+    $json['r_Studapart'] = $jsonRepublicationStudapartData;
+
+    //Erasmusu Republication
+    $requestRepublicationErasmusuData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionErasmusu<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationErasmusuData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationErasmusuData = $requestRepublicationErasmusuData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationErasmusuData->closeCursor();
+    $json['r_Erasmusu'] = $jsonRepublicationErasmusuData;
+
+    //Roomlala Republication
+    $requestRepublicationRoomlalaData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionRoomlala<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationRoomlalaData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationRoomlalaData = $requestRepublicationRoomlalaData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationRoomlalaData->closeCursor();
+    $json['r_Roomlala'] = $jsonRepublicationRoomlalaData;
+
+    //Bubbleflat Republication
+    $requestRepublicationBubbleflatData=$bdd->prepare('SELECT
+    advertisements.*,
+    addresses.*,
+    users.user_loginSiteWeb,
+    users.user_passwordSiteWeb 
+    FROM advertisements 
+    JOIN addresses ON advertisements.address_id = addresses.address_id 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND advertisements.advertisement_dateOfLastDiffusionBubbleflat<=:dateOfLastDiffusion
+    AND users.user_isMember=:isMember');
+    
+    $requestRepublicationBubbleflatData->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date,
+        'isMember' => true
+    ]);
+    $jsonRepublicationBubbleflatData = $requestRepublicationBubbleflatData->fetchAll(PDO::FETCH_ASSOC);
+    $requestRepublicationBubbleflatData->closeCursor();
+    $json['r_Bubbleflat'] = $jsonRepublicationBubbleflatData;
+
+    return $json;
+}
+
+//REPUBLICATION PICTURES
+function republicationPictures($bdd, $date)
+{
+    //On récupère les photos
+    $requestPicturesRepublication=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,pictures.picture_fileName FROM advertisements 
+    JOIN pictures ON advertisements.advertisement_id = pictures.advertisement_id
+    WHERE advertisements.advertisement_isActive=:isActive 
+    AND (advertisements.advertisement_dateOfLastDiffusionLeboncoin<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionLacartedescolocs<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionAppartager<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionStudapart<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionErasmusu<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionRoomlala<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionBubbleflat<=:dateOfLastDiffusion)');
+    
+    $requestPicturesRepublication->execute([
+        ':isActive' => true,
+        ':dateOfLastDiffusion' => $date
+    ]);
+    $jsonRepublicationPictures = $requestPicturesRepublication->fetchAll(PDO::FETCH_ASSOC);
+    $requestPicturesRepublication->closeCursor();
+    $json['r_Allpictures'] = $jsonRepublicationPictures;
+
+    return $json;
+}
 
 //Ecriture fichier json
 echo json_encode($json);
