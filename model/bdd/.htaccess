@@ -1,4 +1,5 @@
-AuthName "Page d'administration protégée"
+AuthUserFile /home/myhotefrchcoloc/moncompteasdelacoloc/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Accès restreint"
 AuthType Basic
-AuthUserFile "/wamp/www/asdelacoloc/.htpasswd"
 Require valid-user
