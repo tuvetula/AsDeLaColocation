@@ -1,23 +1,30 @@
 <?php
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
-require_once('../../bdd/config.php');
-//Stocke la date - 7 jours
-$date = date('Y-m-d', strtotime('-7 day'));
-// echo $date;
+//A activer sur site en ligne
+//header("Access-Control-Allow-Origin: *");
+require_once('../bdd/config.php');
 
-//Connexion Base de donnée
-try {
-    $bdd = new PDO($acces.$dbName, $login, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-} catch (Exception $e) {
-    die('Erreur : '.$e->getMessage());
+if (isset($_GET['id']) && $_GET['id'] == $idJson) {
+    //Stocke la date - 7 jours
+    $date = date('Y-m-d', strtotime('-7 day'));
+    //Stocke la date - 30 jours (pour republication seloger)
+    $dateSeloger = date('Y-m-d', strtotime('-30 day'));
+
+    //Connexion Base de donnée
+    try {
+        $bdd = new PDO($acces.$dbName, $login, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    } catch (Exception $e) {
+        die('Erreur : '.$e->getMessage());
+    }
+    
+    $json = deletion($bdd);
+    $json += publication($bdd);
+    $json += publicationPictures($bdd);
+    $json += republication($bdd, $date, $dateSeloger);
+    $json += republicationPictures($bdd, $date, $dateSeloger);
+    //Ecriture fichier json
+    echo json_encode($json);
 }
-
-$json = deletion($bdd);
-$json += publication($bdd);
-$json += publicationPictures($bdd);
-$json += republication($bdd, $date);
-$json += republicationPictures($bdd, $date);
 //DELETION: Annonce inactive + date non null
 function deletion($bdd)
 {
@@ -31,7 +38,7 @@ function deletion($bdd)
         ':isActive' => false,
     ]);
     $deletionLeboncoin = $requestdeleteLeboncoin->fetchAll(PDO::FETCH_ASSOC);
-    $json['d_Leboncoin'] = $deletionLeboncoin;
+    $jsonDeletion['d_Leboncoin'] = $deletionLeboncoin;
 
     //Lacartedescolocs deletion
     $requestdeleteLacartedesColocs=$bdd->prepare('SELECT 
@@ -43,7 +50,7 @@ function deletion($bdd)
         ':isActive' => false,
     ]);
     $deletionLacartedescolocs = $requestdeleteLacartedesColocs->fetchAll(PDO::FETCH_ASSOC);
-    $json['d_Lacartedescolocs'] = $deletionLacartedescolocs;
+    $jsonDeletion['d_Lacartedescolocs'] = $deletionLacartedescolocs;
 
     //Appartager deletion
     $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
@@ -54,7 +61,7 @@ function deletion($bdd)
         ':isActive' => false,
     ]);
     $deletionAppartager = $requestdeleteAppartager->fetchAll(PDO::FETCH_ASSOC);
-    $json['d_Appartager'] = $deletionAppartager;
+    $jsonDeletion['d_Appartager'] = $deletionAppartager;
 
     //Seloger deletion
     //PAS DE SUPPRESSION
@@ -72,7 +79,7 @@ function deletion($bdd)
         ':isActive' => false,
     ]);
     $deletionErasmusu = $requestdeleteErasmusu->fetchAll(PDO::FETCH_ASSOC);
-    $json['d_Erasmusu'] = $deletionErasmusu;
+    $jsonDeletion['d_Erasmusu'] = $deletionErasmusu;
 
     //Roomlala deletion
     $requestdeleteRoomlala=$bdd->prepare('SELECT 
@@ -84,7 +91,7 @@ function deletion($bdd)
         ':isActive' => false,
     ]);
     $deletionRoomlala = $requestdeleteRoomlala->fetchAll(PDO::FETCH_ASSOC);
-    $json['d_Roomlala'] = $deletionRoomlala;
+    $jsonDeletion['d_Roomlala'] = $deletionRoomlala;
 
     //Bubbleflat deletion
     $requestdeleteBubbleflat=$bdd->prepare('SELECT 
@@ -96,8 +103,9 @@ function deletion($bdd)
         ':isActive' => false,
     ]);
     $deletionBubbleflat = $requestdeleteBubbleflat->fetchAll(PDO::FETCH_ASSOC);
-    $json['d_Bubbleflat'] = $deletionBubbleflat;
-
+    $jsonDeletion['d_Bubbleflat'] = $deletionBubbleflat;
+    
+    $json['deletion'] = $jsonDeletion;
     return $json;
 }
 
@@ -122,12 +130,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationLeboncoin = $requestPublicationLeboncoin->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Leboncoin'] = $jsonPublicationLeboncoin;
+    $jsonPublication['p_Leboncoin'] = $jsonPublicationLeboncoin;
 
     //Lacartedescolocs Publication
     $requestPublicationLacartedescolocs=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -141,12 +150,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationLacartedescolocs = $requestPublicationLacartedescolocs->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Lacartedescolocs'] = $jsonPublicationLacartedescolocs;
+    $jsonPublication['p_Lacartedescolocs'] = $jsonPublicationLacartedescolocs;
 
     //Appartager Publication
     $requestPublicationAppartager=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -160,12 +170,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationAppartager = $requestPublicationAppartager->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Appartager'] = $jsonPublicationAppartager;
+    $jsonPublication['p_Appartager'] = $jsonPublicationAppartager;
 
     //Seloger Publication
     $requestPublicationSeloger=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -179,12 +190,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationSeloger = $requestPublicationSeloger->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Seloger'] = $jsonPublicationSeloger;
+    $jsonPublication['p_Seloger'] = $jsonPublicationSeloger;
 
     //Studapart Publication
     $requestPublicationStudapart=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -198,12 +210,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationStudapart = $requestPublicationStudapart->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Studapart'] = $jsonPublicationStudapart;
+    $jsonPublication['p_Studapart'] = $jsonPublicationStudapart;
 
     //Erasmusu Publication
     $requestPublicationErasmusu=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -217,12 +230,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationErasmusu = $requestPublicationErasmusu->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Erasmusu'] = $jsonPublicationErasmusu;
+    $jsonPublication['p_Erasmusu'] = $jsonPublicationErasmusu;
 
     //Roomlala Publication
     $requestPublicationRoomlala=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -236,12 +250,13 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationRoomlala = $requestPublicationRoomlala->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Roomlala'] = $jsonPublicationRoomlala;
+    $jsonPublication['p_Roomlala'] = $jsonPublicationRoomlala;
 
     //Bubbleflat Publication
     $requestPublicationBubbleflat=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -255,8 +270,9 @@ function publication($bdd)
         ':isMember' => true
     ]);
     $jsonPublicationBubbleflat = $requestPublicationBubbleflat->fetchAll(PDO::FETCH_ASSOC);
-    $json['p_Bubbleflat'] = $jsonPublicationBubbleflat;
+    $jsonPublication['p_Bubbleflat'] = $jsonPublicationBubbleflat;
 
+    $json['publication'] = $jsonPublication;
     return $json;
 }
 
@@ -282,17 +298,18 @@ function publicationPictures($bdd)
     ]);
     $jsonPublicationPictures = $requestPicturesPublication->fetchAll(PDO::FETCH_ASSOC);
     $requestPicturesPublication->closeCursor();
-    $json['p_Allpictures'] = $jsonPublicationPictures;
+    $json['publication_Allpictures'] = $jsonPublicationPictures;
 
     return $json;
 }
 //REPUBLICATION: Annonce active + Date de + de 7 jours
-function republication($bdd, $date)
+function republication($bdd, $date, $dateSeloger)
 {
     //Leboncoin Republication
     $requestRepublicationLeboncoinData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -309,12 +326,13 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationLeboncoinData = $requestRepublicationLeboncoinData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationLeboncoinData->closeCursor();
-    $json['r_Leboncoin'] = $jsonRepublicationLeboncoinData;
+    $jsonRepublication['r_Leboncoin'] = $jsonRepublicationLeboncoinData;
     
     //Lacartedescolocs Republication
     $requestRepublicationLacartedescolocsData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -331,12 +349,13 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationLacartedescolocsData = $requestRepublicationLacartedescolocsData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationLacartedescolocsData->closeCursor();
-    $json['r_Lacartedescolocs'] = $jsonRepublicationLacartedescolocsData;
+    $jsonRepublication['r_Lacartedescolocs'] = $jsonRepublicationLacartedescolocsData;
 
     //Appartager Republication
     $requestRepublicationAppartagerData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -353,12 +372,13 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationAppartagerData = $requestRepublicationAppartagerData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationAppartagerData->closeCursor();
-    $json['r_Appartager'] = $jsonRepublicationAppartagerData;
+    $jsonRepublication['r_Appartager'] = $jsonRepublicationAppartagerData;
 
     //Seloger Republication
     $requestRepublicationSelogerData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -370,17 +390,18 @@ function republication($bdd, $date)
     
     $requestRepublicationSelogerData->execute([
         ':isActive' => true,
-        ':dateOfLastDiffusion' => $date,
+        ':dateOfLastDiffusion' => $dateSeloger,
         'isMember' => true
     ]);
     $jsonRepublicationSelogerData = $requestRepublicationSelogerData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationSelogerData->closeCursor();
-    $json['r_Seloger'] = $jsonRepublicationSelogerData;
+    $jsonRepublication['r_Seloger'] = $jsonRepublicationSelogerData;
 
     //Studapart Republication
     $requestRepublicationStudapartData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -397,12 +418,13 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationStudapartData = $requestRepublicationStudapartData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationStudapartData->closeCursor();
-    $json['r_Studapart'] = $jsonRepublicationStudapartData;
+    $jsonRepublication['r_Studapart'] = $jsonRepublicationStudapartData;
 
     //Erasmusu Republication
     $requestRepublicationErasmusuData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -419,12 +441,13 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationErasmusuData = $requestRepublicationErasmusuData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationErasmusuData->closeCursor();
-    $json['r_Erasmusu'] = $jsonRepublicationErasmusuData;
+    $jsonRepublication['r_Erasmusu'] = $jsonRepublicationErasmusuData;
 
     //Roomlala Republication
     $requestRepublicationRoomlalaData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -441,12 +464,13 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationRoomlalaData = $requestRepublicationRoomlalaData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationRoomlalaData->closeCursor();
-    $json['r_Roomlala'] = $jsonRepublicationRoomlalaData;
+    $jsonRepublication['r_Roomlala'] = $jsonRepublicationRoomlalaData;
 
     //Bubbleflat Republication
     $requestRepublicationBubbleflatData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
     FROM advertisements 
@@ -463,13 +487,14 @@ function republication($bdd, $date)
     ]);
     $jsonRepublicationBubbleflatData = $requestRepublicationBubbleflatData->fetchAll(PDO::FETCH_ASSOC);
     $requestRepublicationBubbleflatData->closeCursor();
-    $json['r_Bubbleflat'] = $jsonRepublicationBubbleflatData;
+    $jsonRepublication['r_Bubbleflat'] = $jsonRepublicationBubbleflatData;
 
+    $json['republication'] = $jsonRepublication;
     return $json;
 }
 
 //REPUBLICATION PICTURES
-function republicationPictures($bdd, $date)
+function republicationPictures($bdd, $date, $dateSeloger)
 {
     //On récupère les photos
     $requestPicturesRepublication=$bdd->prepare('SELECT 
@@ -479,7 +504,7 @@ function republicationPictures($bdd, $date)
     AND (advertisements.advertisement_dateOfLastDiffusionLeboncoin<=:dateOfLastDiffusion
     OR advertisements.advertisement_dateOfLastDiffusionLacartedescolocs<=:dateOfLastDiffusion
     OR advertisements.advertisement_dateOfLastDiffusionAppartager<=:dateOfLastDiffusion
-    OR advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusionSeloger
     OR advertisements.advertisement_dateOfLastDiffusionStudapart<=:dateOfLastDiffusion
     OR advertisements.advertisement_dateOfLastDiffusionErasmusu<=:dateOfLastDiffusion
     OR advertisements.advertisement_dateOfLastDiffusionRoomlala<=:dateOfLastDiffusion
@@ -487,14 +512,12 @@ function republicationPictures($bdd, $date)
     
     $requestPicturesRepublication->execute([
         ':isActive' => true,
-        ':dateOfLastDiffusion' => $date
+        ':dateOfLastDiffusion' => $date,
+        ':dateOfLastDiffusionSeloger' =>$dateSeloger
     ]);
     $jsonRepublicationPictures = $requestPicturesRepublication->fetchAll(PDO::FETCH_ASSOC);
     $requestPicturesRepublication->closeCursor();
-    $json['r_Allpictures'] = $jsonRepublicationPictures;
+    $json['republication_Allpictures'] = $jsonRepublicationPictures;
 
     return $json;
 }
-
-//Ecriture fichier json
-echo json_encode($json);
