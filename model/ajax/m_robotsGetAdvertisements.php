@@ -8,7 +8,9 @@ if (isset($_GET['id']) && $_GET['id'] == $idJson) {
     //Stocke la date - 7 jours
     $date = date('Y-m-d', strtotime('-7 day'));
     //Stocke la date - 30 jours (pour republication seloger)
-    $dateSeloger = date('Y-m-d', strtotime('-30 day'));
+    $dateSeloger = date('Y-m-d', strtotime('-31 day'));
+    //Stocke la date pour site erasmusu
+    $dateErasmusu = date('Y-m-d', strtotime('-6 day'));
 
     //Connexion Base de donnée
     try {
@@ -20,8 +22,8 @@ if (isset($_GET['id']) && $_GET['id'] == $idJson) {
     $json = deletion($bdd);
     $json += publication($bdd);
     $json += publicationPictures($bdd);
-    $json += republication($bdd, $date, $dateSeloger);
-    $json += republicationPictures($bdd, $date, $dateSeloger);
+    $json += republication($bdd, $date, $dateSeloger, $dateErasmusu);
+    $json += republicationPictures($bdd, $date, $dateSeloger,$dateErasmusu);
     //Ecriture fichier json
     echo json_encode($json);
 }
@@ -30,7 +32,7 @@ function deletion($bdd)
 {
     //leboncoin deletion
     $requestdeleteLeboncoin=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionLeboncoin IS NOT NULL');
@@ -42,7 +44,7 @@ function deletion($bdd)
 
     //Lacartedescolocs deletion
     $requestdeleteLacartedesColocs=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionLacartedescolocs IS NOT NULL');
@@ -53,7 +55,7 @@ function deletion($bdd)
     $jsonDeletion['d_Lacartedescolocs'] = $deletionLacartedescolocs;
 
     //Appartager deletion
-    $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionAppartager IS NOT NULL');
@@ -71,7 +73,7 @@ function deletion($bdd)
 
     //Erasmusu deletion
     $requestdeleteErasmusu=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionErasmusu IS NOT NULL');
@@ -83,7 +85,7 @@ function deletion($bdd)
 
     //Roomlala deletion
     $requestdeleteRoomlala=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionRoomlala IS NOT NULL');
@@ -95,7 +97,7 @@ function deletion($bdd)
 
     //Bubbleflat deletion
     $requestdeleteBubbleflat=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionBubbleflat IS NOT NULL');
@@ -302,8 +304,8 @@ function publicationPictures($bdd)
 
     return $json;
 }
-//REPUBLICATION: Annonce active + Date de + de 7 jours
-function republication($bdd, $date, $dateSeloger)
+//REPUBLICATION: Annonce active + Date de + de 7 jours (6jours pour Erasmusu, 31 jours pour seloger)
+function republication($bdd, $date, $dateSeloger,$dateErasmusu)
 {
     //Leboncoin Republication
     $requestRepublicationLeboncoinData=$bdd->prepare('SELECT
@@ -436,7 +438,7 @@ function republication($bdd, $date, $dateSeloger)
     
     $requestRepublicationErasmusuData->execute([
         ':isActive' => true,
-        ':dateOfLastDiffusion' => $date,
+        ':dateOfLastDiffusion' => $dateErasmusu,
         'isMember' => true
     ]);
     $jsonRepublicationErasmusuData = $requestRepublicationErasmusuData->fetchAll(PDO::FETCH_ASSOC);
@@ -494,7 +496,7 @@ function republication($bdd, $date, $dateSeloger)
 }
 
 //REPUBLICATION PICTURES
-function republicationPictures($bdd, $date, $dateSeloger)
+function republicationPictures($bdd, $date, $dateSeloger, $dateErasmusu)
 {
     //On récupère les photos
     $requestPicturesRepublication=$bdd->prepare('SELECT 
@@ -506,14 +508,15 @@ function republicationPictures($bdd, $date, $dateSeloger)
     OR advertisements.advertisement_dateOfLastDiffusionAppartager<=:dateOfLastDiffusion
     OR advertisements.advertisement_dateOfLastDiffusionSeloger<=:dateOfLastDiffusionSeloger
     OR advertisements.advertisement_dateOfLastDiffusionStudapart<=:dateOfLastDiffusion
-    OR advertisements.advertisement_dateOfLastDiffusionErasmusu<=:dateOfLastDiffusion
+    OR advertisements.advertisement_dateOfLastDiffusionErasmusu<=:dateOfLastDiffusionErasmusu
     OR advertisements.advertisement_dateOfLastDiffusionRoomlala<=:dateOfLastDiffusion
     OR advertisements.advertisement_dateOfLastDiffusionBubbleflat<=:dateOfLastDiffusion)');
     
     $requestPicturesRepublication->execute([
         ':isActive' => true,
         ':dateOfLastDiffusion' => $date,
-        ':dateOfLastDiffusionSeloger' =>$dateSeloger
+        ':dateOfLastDiffusionSeloger' =>$dateSeloger,
+        ':dateOfLastDiffusionErasmusu' =>$dateErasmusu
     ]);
     $jsonRepublicationPictures = $requestPicturesRepublication->fetchAll(PDO::FETCH_ASSOC);
     $requestPicturesRepublication->closeCursor();
