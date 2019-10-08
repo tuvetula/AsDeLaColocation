@@ -1,7 +1,6 @@
 <?php
 header('Content-Type: application/json');
-//A activer sur site en ligne
-//header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");
 require_once('../bdd/config.php');
 
 if (isset($_GET['id']) && $_GET['id'] == $idJson) {
@@ -55,7 +54,7 @@ function deletion($bdd)
     $jsonDeletion['d_Lacartedescolocs'] = $deletionLacartedescolocs;
 
     //Appartager deletion
-    $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_monthlyRentExcludingCharges,advertisements.advertisement_charges,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionAppartager IS NOT NULL');
@@ -69,7 +68,16 @@ function deletion($bdd)
     //PAS DE SUPPRESSION
 
     //Studapart deletion
-    //PAS DE SUPPRESSION
+    $requestdeleteStudapart=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    JOIN users ON advertisements.user_id = users.user_id
+    WHERE advertisement_isActive=:isActive 
+    AND advertisement_dateOfLastDiffusionStudapart IS NOT NULL');
+    $requestdeleteStudapart->execute([
+        ':isActive' => false,
+    ]);
+    $deletionStudapart = $requestdeleteStudapart->fetchAll(PDO::FETCH_ASSOC);
+    $jsonDeletion['d_Studapart'] = $deletionStudapart;
 
     //Erasmusu deletion
     $requestdeleteErasmusu=$bdd->prepare('SELECT 

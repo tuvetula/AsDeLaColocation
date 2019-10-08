@@ -1,0 +1,136 @@
+Array
+(
+    [0] => Array
+        (
+            [0] => Suppression
+            [1] => Array
+                (
+                    [0] => Leboncoin
+                )
+
+            [2] => Array
+                (
+                    [0] => Lacartedescolocs
+                )
+
+            [3] => Array
+                (
+                    [0] => Appartager
+                )
+
+            [4] => Array
+                (
+                    [0] => Studapart
+                )
+
+            [5] => Array
+                (
+                    [0] => Erasmusu
+                )
+
+            [6] => Array
+                (
+                    [0] => Roomlala
+                )
+
+            [7] => Array
+                (
+                    [0] => Bubbleflat
+                )
+
+        )
+
+    [1] => Array
+        (
+            [0] => Publication
+            [1] => Array
+                (
+                    [0] => Leboncoin
+                    [1] => AnnonceId: 25 = false
+                )
+
+            [2] => Array
+                (
+                    [0] => Lacartedescolocs
+                    [1] => AnnonceId: 25 = false
+                )
+
+            [3] => Array
+                (
+                    [0] => Appartager
+                )
+
+            [4] => Array
+                (
+                    [0] => Seloger
+                )
+
+            [5] => Array
+                (
+                    [0] => Studapart
+                )
+
+            [6] => Array
+                (
+                    [0] => Erasmusu
+                )
+
+            [7] => Array
+                (
+                    [0] => Roomlala
+                )
+
+            [8] => Array
+                (
+                    [0] => Bubbleflat
+                    [1] => AnnonceId: 25 = false
+                )
+
+        )
+
+    [2] => Array
+        (
+            [0] => Republication
+            [1] => Array
+                (
+                    [0] => Leboncoin
+                )
+
+            [2] => Array
+                (
+                    [0] => Lacartedescolocs
+                )
+
+            [3] => Array
+                (
+                    [0] => Appartager
+                )
+
+            [4] => Array
+                (
+                    [0] => Seloger
+                )
+
+            [5] => Array
+                (
+                    [0] => Studapart
+                )
+
+            [6] => Array
+                (
+                    [0] => Erasmusu
+                )
+
+            [7] => Array
+                (
+                    [0] => Roomlala
+                )
+
+            [8] => Array
+                (
+                    [0] => Bubbleflat
+                )
+
+        )
+
+)

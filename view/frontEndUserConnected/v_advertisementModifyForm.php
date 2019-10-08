@@ -26,7 +26,8 @@ ob_start();
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
-                            maxlength="255" value="<?=$advertisementData[0]['advertisement_title']?>" required>
+                            maxlength="80" value="<?=$advertisementData[0]['advertisement_title']?>" required>
+                        <div class="float-right" id="countTitle"></div>
                     </div>
                     <!--Description-->
                     <div class="form-group">
@@ -34,6 +35,7 @@ ob_start();
                         <textarea class="form-control" id="description" rows="6" name="description"
                             placeholder="maximum 3000 charactères" maxlength="3000"
                             required><?=$advertisementData[0]['advertisement_description']?></textarea>
+                        <div class="float-right" id="countDescription"></div>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
@@ -195,9 +197,9 @@ ob_start();
                         <!-- Nombre de colocataires déja présent -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="nbOfOtherRoommatePresent">Nombre de
-                                colocataires
+                                colocataire(s)
                                 déjà
-                                présents</label>
+                                présent(s)</label>
                             <select id="nbOfOtherRoommatePresent" name="nbOfOtherRoommatePresent" class="custom-select">
                                 <option value="0" <?php if ($advertisementData[0]['advertisement_nbOfOtherRoommatePresent'] == "0") {
     echo 'selected';
@@ -229,6 +231,27 @@ ob_start();
                                 <option value="9" <?php if ($advertisementData[0]['advertisement_nbOfOtherRoommatePresent'] == "9") {
     echo 'selected';
 }?>>9</option>
+                            </select>
+                        </div>
+                    </div>
+                     <!-- Sex colocataires déja présents --> 
+                     <div class="row">
+                    <div class="form-group offset-md-8 col-md-4" id="otherRoommateSex">
+                            <label for="roommateSex" class="font-weight-bold">Colocataire(s) déja présent(s)
+                                (sexe)</label>
+                            <select id="roommateSex" name="roommateSex" class="custom-select">
+                                <option id="otherRoommateSexWomenValue" value="Femme" <?php if ($advertisementData[0]['advertisement_otherRoommateSex'] == "Femme") {
+                                    echo 'selected';
+                                    }?>>Femme</option>
+                                <option id="otherRoommateSexMenValue" value="Homme" <?php if ($advertisementData[0]['advertisement_otherRoommateSex'] == "Homme") {
+                                    echo 'selected';
+                                    }?>>Homme</option>
+                                <option id="otherRoommateSexMixteValue" value="Mixte" <?php if ($advertisementData[0]['advertisement_otherRoommateSex'] == "Mixte") {
+                                    echo 'selected';
+                                    }?>>Mixte</option>
+                                <option id="otherRoommateSexNullValue" value="null" <?php if ($advertisementData[0]['advertisement_nbOfOtherRoommatePresent'] == "0") {
+                                    echo 'selected';
+                                    }?>>Null</option>
                             </select>
                         </div>
                     </div>
@@ -2037,8 +2060,8 @@ ob_start();
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasCloset"
                                     name="bedroomHasCloset" <?php if ($advertisementData[0]['advertisement_bedroomHasCloset']) {
-                                            echo 'checked';
-                                    }
+    echo 'checked';
+}
                                     ?>>
                                 <label class="custom-control-label " for="bedroomHasCloset">Penderie</label>
                             </div>
@@ -2051,8 +2074,8 @@ ob_start();
                 <h2 class=>Photos</h2>
                 <!-- Suppression photos -->
                 <?php
-                if($advertisementPicture){
-                ?>
+                if ($advertisementPicture) {
+                    ?>
                 <div class="container">
                     <h4>Supprimer des photos</h4>
                     <p>Cocher les photos que vous voulez supprimer</p>
@@ -2061,7 +2084,7 @@ ob_start();
                     <div id="previewImageCheckbox" class="row p-2">
                         <?php
                         foreach ($advertisementPicture as $key => $value) {
-                        ?>
+                            ?>
                         <label class="image-checkbox col-md-4 p-0 m-0">
                             <img class="img-responsive img-thumbnail"
                                 src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
@@ -2070,8 +2093,7 @@ ob_start();
                                 value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                         </label>
                         <?php
-                        }
-                        ?>
+                        } ?>
                     </div>
                 </div>
                 <?php
@@ -2099,6 +2121,8 @@ ob_start();
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
 </script>
+<script src="public/js/hiddenInput.js"></script>
+<script src="public/js/caractersCount.js"><script>
 <script src="public/js/pictureCheckbox.js"></script>
 <script src="public/js/energyAdvertisement.js"></script>
 <script src="public/js/advertisementUploadFilePreviewOk.js"></script>
