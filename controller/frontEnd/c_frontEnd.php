@@ -23,14 +23,16 @@ function login()
                 require_once('view/frontEndUserConnected/v_homeUser.php');
             } else {
                 $error = "Accès refusé. Vous n'êtes pas membre.";
+                require_once('view/frontEnd/v_loginForm.php');
             }
         } else {
             $error = "Mauvais identifiant et/ou mot de passe.";
+            require_once('view/frontEnd/v_loginForm.php');
         }
     } else {
         $error = "Mauvais identifiant et/ou mot de passe.";
+        require_once('view/frontEnd/v_loginForm.php');
     }
-    require_once('view/frontEnd/v_loginForm.php');
 }
 
 //Affichage page d'accueil utilisateur connecté

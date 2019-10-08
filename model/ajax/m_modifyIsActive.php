@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once('../bdd/config.php');
+header("Access-Control-Allow-Origin: *");
+include_once('../bdd/config.php');
 if (isset($_SESSION['mail'])){
-
     $advertisementId = htmlspecialchars(strip_tags($_POST['advertisementId']));
     
     //Connexion Base de donnée
@@ -28,4 +28,5 @@ if (isset($_SESSION['mail'])){
     //Requete changement valeur de isActive
     $insert=$bdd->prepare('UPDATE advertisements SET advertisement_isActive="'.$advertisementIsActiveNewState.'" WHERE advertisement_id="'.$advertisementId.'"');
     $insert->execute();
+    echo "requete executée en base de donnée";
 }

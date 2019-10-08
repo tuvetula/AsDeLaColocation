@@ -32,7 +32,7 @@ function forgetPassword()
             //Envoi du mail
             if (mail($to, $subject, $body, implode("\r\n", $headers))) {
                 //Redirection
-                $message = 'Un lien vous permettant de modifier votre mot de passe vous a été envoyé à l\'adresse "'.$mail.'"';
+                $message = 'Un lien vous permettant de modifier votre mot de passe va vous être envoyé dans quelques minutes à l\'adresse "'.$mail.'"';
                 require_once('view/frontEnd/v_message.php');
             } else {
                 $error = "Problème technique, veuillez réessayer ultérieurement";
