@@ -16,13 +16,15 @@ ob_start();
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
-                            maxlength="255" required>
+                            maxlength="80" required>
+                        <div class="float-right" id="countTitle"></div>
                     </div>
                     <!--Description-->
-                    <div class="form-group">
+                    <div class="form-group pb-3">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
-                            placeholder="maximum 3000 charactères" maxlength="3000" required></textarea>
+                            placeholder="maximum 3000 caractères" maxlength="3000" required></textarea>
+                        <div class="float-right" id="countDescription"></div>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
@@ -149,9 +151,9 @@ ob_start();
                         <!-- Nombre de colocataires déjà présent -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="nbOfOtherRoommatePresent">Nombre de
-                                colocataires
+                                colocataire(s)
                                 déjà
-                                présents</label>
+                                présent(s)</label>
                             <select id="nbOfOtherRoommatePresent" name="nbOfOtherRoommatePresent" class="custom-select">
                                 <option value="0" selected>0</option>
                                 <option value="1">1</option>
@@ -163,6 +165,19 @@ ob_start();
                                 <option value="7">7</option>
                                 <option value="8">8</option>
                                 <option value="9">9</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Sex colocataires déja présents --> 
+                    <div class="row">
+                    <div class="form-group offset-md-8 col-md-4" id="otherRoommateSex">
+                            <label for="roommateSex" class="font-weight-bold">Colocataire(s) déja présent(s)
+                                (sexe)</label>
+                            <select id="roommateSex" name="roommateSex" class="custom-select">
+                                <option id="otherRoommateSexWomenValue" value="Femme">Femme</option>
+                                <option id="otherRoommateSexMenValue" value="Homme">Homme</option>
+                                <option id="otherRoommateSexMixteValue" value="Mixte">Mixte</option>
+                                <option id="otherRoommateSexNullValue" value="Null" selected>Null</option>
                             </select>
                         </div>
                     </div>
@@ -1255,6 +1270,8 @@ ob_start();
         </form>
     </div>
 </div>
+<script src="public/js/hiddenInput.js"></script>
+<script src="public/js/caractersCount.js"></script>
 <script src="public/js/energyAdvertisement.js"></script>
 <script src="public/js/advertisementUploadFilePreviewOk.js"></script>
 <?php

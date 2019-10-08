@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/javascript');
+header("Access-Control-Allow-Origin: *");
 require_once('../bdd/config.php');
 if (isset($_GET['id']) && $_GET['id'] == $idjsonReturn){
     $columnBdd = htmlspecialchars(strip_tags($_GET['columnBdd']));
