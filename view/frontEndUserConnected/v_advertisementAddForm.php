@@ -1304,7 +1304,7 @@ ob_start();
                 <div class="container py-3">
                 <p>Sélectionner <span id="nbPicturesAvailable">10</span> photos maximum</p>
                     <div>
-                        <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]">
+                        <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]" required>
                     </div>
                     <div>
                         <label for="upload"><span id="preview" class="row"></span></label>
