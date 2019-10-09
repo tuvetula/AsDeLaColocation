@@ -48,10 +48,7 @@ function displayMyAdvertisements($error=null, $message=null)
         } else{
             return $description;
         }
-    }
-    
-
-    
+    }    
     require_once('view/frontEndUserConnected/v_advertisementsDisplay.php');
 }
 
@@ -639,9 +636,31 @@ function saveNewOrModifyAdvertisement()
             }
         }
     }
+    //Verification Titre identiques
+    $titleVerification = getUserAdvertisement($_SESSION['id']);
+    $countTitle = 0;
+    $advertisementIdWithSameTitle = "";
+    foreach ($titleVerification as $key => $value){
+        if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)){
+            $countTitle++;
+            $advertisementIdWithSameTitle = $titleVerification[$key]['advertisement_id'];
+        }
+    }
+    if ($countTitle >= 1 && $advertisementIdToModify != $advertisementIdWithSameTitle && $advertisementIdToModify != null){
+        header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify.'&error=title&title='.$title.'');
+        exit();
+        }
+    if ($countTitle >= 1 && $advertisementIdToModify == null){
+        $_SESSION['postData'] = $_POST;
+        header('Location:index.php?page=displayAddAnAdvertisement&error=title');
+        exit();
+    }else{
+        if (isset($_SESSION['postData'])){
+            unset($_SESSION['postData']);
+        }
+    }
 
     //ENREGISTREMENT EN BASE DE DONNEE
-
     //Vérification si l'adresse postale renseignée existe déja et si oui renvoi l'id
     $addressVerification = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
     
@@ -664,7 +683,6 @@ function saveNewOrModifyAdvertisement()
         }
         //Vérification présence photos et enregistrement en bdd, Si l'annonce a bien été enregistré
         if ($saveAdvertisement) {
-
             //SUPPRESSION PHOTOS (page modification annonce)
             if (isset($_POST['pictureToDelete'])) {
                 foreach ($_POST['pictureToDelete'] as $key => $value) {
@@ -733,7 +751,6 @@ function saveNewOrModifyAdvertisement()
             }
             //Si l'annonce a bien été enregistré alors vérification s'il y a des photos
             if ($saveAdvertisement) {
-
                 //SUPPRESSION PHOTOS (page modification annonce)
                 if (isset($_POST['pictureToDelete'])) {
                     foreach ($_POST['pictureToDelete'] as $key => $value) {
@@ -742,8 +759,6 @@ function saveNewOrModifyAdvertisement()
                     }
                     reorganizePictureOrder($advertisementIdToModify);
                 }
-
-                
                 //AJOUT NOUVELLES PHOTOS
                 //On vérifie s'il y a des photos à enregistrer et si oui, recupération id de la dernière annonce
                 if (!empty($fileUpload)) {

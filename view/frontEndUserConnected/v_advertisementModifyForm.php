@@ -26,8 +26,17 @@ ob_start();
                         title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
-                            maxlength="80" value="<?=$advertisementData[0]['advertisement_title']?>" required>
+                            maxlength="80" value="<?php
+                            if(isset($_GET['error']) && isset($_GET['title'])){
+                                echo $_GET['title'];}else{
+                                    echo $advertisementData[0]['advertisement_title'];
+                                }?>" required>
                         <div class="float-right" id="countTitle"></div>
+                        <p class="text-danger font-weight-bold pb-1"><?php
+                        if (isset($_GET['error']) && $_GET['error'] == 'title'){
+                            echo 'Vous avez déja utilisé ce titre dans une autre annonce';
+                        }
+                        ?></p>
                     </div>
                     <!--Description-->
                     <div class="form-group">
