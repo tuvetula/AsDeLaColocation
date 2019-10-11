@@ -39,6 +39,7 @@ body {
 /*Affichage photo "modifier une annonce"*/
 
 .image-checkbox {
+    width: 100%;
     cursor: pointer;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
