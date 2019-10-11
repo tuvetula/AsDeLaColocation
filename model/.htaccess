@@ -1,5 +1,0 @@
-AuthUserFile /home/myhotefrchcoloc/moncompteasdelacoloc/.htpasswd
-AuthGroupFile /dev/null
-AuthName "Accès restreint"
-AuthType Basic
-Require valid-user
