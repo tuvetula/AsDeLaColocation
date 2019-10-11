@@ -1,16 +1,13 @@
-// Add the following code if you want the name of the file appear on select
-// let typeFileInput1 = document.getElementById('customFile1');
-// typeFileInput1.addEventListener('change', function() {
-//     if (typeFileInput1.value != "") {
-//         typeFileInput1.textContent = typeFileInput1.value;
-//     } else {
-//         typeFileInput1.textContent = "";
-//     }
-// })
-function handleFiles(files) {
-    let input = document.getElementById('upload');
+function handleFiles(files, id) {
+    let inputDiv = document.getElementById('inputDiv');
+    let nbchildrenDivInput = inputDiv.children.length;
+    let countNbOfFiles = 0;
+    for (let z = 0; z < nbchildrenDivInput; z++) {
+        countNbOfFiles += inputDiv.children[z].files.length;
+    }
+    let input = document.getElementById(id);
     var imageType = /^image\//;
-    if (files.length <= 10) {
+    if (countNbOfFiles <= 10) {
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
             if (!imageType.test(file.type)) {
@@ -19,18 +16,19 @@ function handleFiles(files) {
                 if (i == 0) {
                     preview.innerHTML = '';
                 }
+
                 let imgDiv = document.createElement("div");
                 imgDiv.classList.add("imageAddPreview");
                 imgDiv.classList.add("col-md-4");
                 imgDiv.classList.add("p-0");
+                preview.appendChild(imgDiv);
 
                 var img = document.createElement("img");
+                // img.file = file;
                 img.classList.add("img-responsive");
                 img.classList.add("img-thumbnail");
-
-                img.file = file;
                 imgDiv.appendChild(img);
-                preview.appendChild(imgDiv);
+
 
                 var reader = new FileReader();
                 reader.onload = (function(aImg) {
@@ -43,9 +41,18 @@ function handleFiles(files) {
         }
     } else {
         alert("Vous devez sélectionner 10 images maximum");
-        //On efface les anciennes photos
-        input.value = "";
-        //On supprime les anciennes photos de la view
-        preview.innerHTML = '';
+        // //On efface les anciennes photos
+        // input.value = "";
+        // //On supprime les anciennes photos de la view
+        // preview.innerHTML = '';
     }
+    // input.style.display = "none";
+    // let newInput = document.createElement('input');
+    // newInput.setAttribute('type', 'file');
+    // newInput.setAttribute('onchange', 'handleFiles(files,id)');
+    // newInput.setAttribute('id', 'upload' + (nbchildrenDivInput + 1));
+    // newInput.setAttribute('multiple', '');
+    // newInput.setAttribute('name', 'file[]');
+    // newInput.setAttribute('style', 'color:transparent');
+    // inputDiv.appendChild(newInput);
 }

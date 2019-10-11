@@ -5,9 +5,7 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Modifier votre annonce</h1>
-        <form method="post"
-            action="index.php?page=saveModificationAdvertisement"
-            enctype="multipart/form-data">
+        <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Annonce</h2>
@@ -243,9 +241,9 @@ ob_start();
                             </select>
                         </div>
                     </div>
-                     <!-- Sex colocataires déja présents --> 
-                     <div class="row">
-                    <div class="form-group offset-md-8 col-md-4" id="otherRoommateSex">
+                    <!-- Sex colocataires déja présents -->
+                    <div class="row">
+                        <div class="form-group offset-md-8 col-md-4" id="otherRoommateSex">
                             <label for="roommateSex" class="font-weight-bold">Colocataire(s) déja présent(s)
                                 (sexe)</label>
                             <select id="roommateSex" name="roommateSex" class="custom-select">
@@ -2094,13 +2092,15 @@ ob_start();
                         <?php
                         foreach ($advertisementPicture as $key => $value) {
                             ?>
-                        <label class="image-checkbox col-md-4 p-0 m-0">
-                            <img class="img-responsive img-thumbnail"
-                                src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
-                                alt="Photo de l'annonce">
-                            <input type="checkbox" name=pictureToDelete[]
-                                value="<?=$advertisementPicture[$key]['picture_fileName']?>">
-                        </label>
+                        <div class="col-md-4 p-0 m-0">
+                            <label id="<?='labelImageToDelete'.$key?>" class="image-checkbox" onclick="changeStatue(id,event)">
+                                <img class="img-responsive img-thumbnail"
+                                    src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
+                                    alt="Photo de l'annonce">
+                                <input type="checkbox" name=pictureToDelete[]
+                                    value="<?=$advertisementPicture[$key]['picture_fileName']?>">
+                            </label>
+                        </div>
                         <?php
                         } ?>
                     </div>
@@ -2112,7 +2112,9 @@ ob_start();
                 <div class="container py-3 px-0">
                     <div class="container">
                         <h4>Ajouter des photos</h4>
-                        <input type="file" onchange="handleFiles(files)" id="upload" multiple name="file[]">
+                    </div>
+                    <div id="inputDiv" class="container">
+                        <input type="file" onchange="handleFiles(files,id)" id="upload" multiple name="file[]">
                     </div>
                     <div>
                         <label class="container" for="upload"><span id="preview" class="row p-2"></span></label>
@@ -2131,8 +2133,8 @@ ob_start();
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
 </script>
 <script src="public/js/hiddenInput.js"></script>
-<script src="public/js/caractersCount.js"><script>
-<script src="public/js/pictureCheckbox.js"></script>
+<script src="public/js/caractersCount.js"></script>
+<script src="public/js/selectPictureToDeleteModifyAdvertisement.js"></script>
 <script src="public/js/energyAdvertisement.js"></script>
 <script src="public/js/advertisementUploadFilePreviewOk.js"></script>
 <?php
