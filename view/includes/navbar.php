@@ -25,7 +25,7 @@
                         //Menu utilisateur connecté et admin
                         ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Utilisateurs</a>
+                        <a class="nav-link" href="index.php?page=displayUsers">Utilisateurs</a>
                     </li>
                     <?php
                         } 
