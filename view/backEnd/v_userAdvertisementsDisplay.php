@@ -1,10 +1,10 @@
 <?php
-$title = "Mes annonces";
+$title = "Annonces de l'utilisateur";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="pb-3 text-center">Mes annonces</h1>
+        <h1 class="pb-3 text-center"><?php echo 'Annonces de l\'utilisateur '.$userInformation['user_name'].' '.$userInformation['user_firstName'].'';?> </h1>
         <!-- Affichage message de confirmation ou d'erreur -->
         <?php
                     if ($error){
