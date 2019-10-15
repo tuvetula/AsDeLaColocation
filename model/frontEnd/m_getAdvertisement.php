@@ -29,6 +29,16 @@ function getUserAdvertisement($userId)
     return $userAdvertisements;
 }
 
+//Récupere annonces isRegister=1
+function getUserAdvertisementRegister($userId)
+{
+    $db = connectBdd();
+    $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive FROM advertisements WHERE user_id="'.$userId.'" && advertisement_isRegister="1"');
+    $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
+    $request->closeCursor();
+    return $userAdvertisements;
+}
+
 //Verifie si un id_advertisement et un id_user renvoi bien une annonce
 function verifyAdvertisementBelongsToUser($userId, $advertisementId)
 {

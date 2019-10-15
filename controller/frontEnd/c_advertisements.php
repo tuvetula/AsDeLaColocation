@@ -18,7 +18,7 @@ require_once('controller/frontEnd/functions/calculEnergyGesLetter.php');
 function displayMyAdvertisements($error=null, $message=null)
 {
     //Récupération annonces utilisateurs
-    $userAdvertisements = getUserAdvertisement($_SESSION['id']);
+    $userAdvertisements = getUserAdvertisementRegister($_SESSION['id']);
     //Mise en tableau des id des annonces de l'utilisateur
     $advertisementIdArray = array();
     foreach ($userAdvertisements as $key => $value) {
@@ -637,7 +637,7 @@ function saveNewOrModifyAdvertisement()
         }
     }
     //Verification Titre identiques
-    $titleVerification = getUserAdvertisement($_SESSION['id']);
+    $titleVerification = getUserAdvertisementRegister($_SESSION['id']);
     $countTitle = 0;
     $advertisementIdWithSameTitle = "";
     foreach ($titleVerification as $key => $value){
