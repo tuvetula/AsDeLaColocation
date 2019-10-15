@@ -27,7 +27,7 @@ function displayMyAdvertisements($error=null, $message=null)
     //Récupération de la photo Order 1 de chaque annonce
     $pictureFilename = array();
     foreach ($advertisementIdArray as $key => $value) {
-        $pictureFilename[$value] =getAdvertisementPictureOrder1($value);
+        $pictureFilename[$value] = getAdvertisementPictureOrder1($value);
     }
     //Integration photos dans le tableau $userAdvertisements
     for ($i = 0 ; $i < count($userAdvertisements) ; $i++) {
@@ -39,16 +39,9 @@ function displayMyAdvertisements($error=null, $message=null)
     }
     //Déclaration variable url bouton supprimer
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
-
-    //Fonction qui raccourcit la description pour affichage dans la page "mes annonces"
-    function shortDescription($description){
-        $nbMaxCaracteresToDisplayForDescription = 170;
-        if (strlen($description)>$nbMaxCaracteresToDisplayForDescription && !empty($description)) {
-            return substr($description, 0, $nbMaxCaracteresToDisplayForDescription).' ...';
-        } else{
-            return $description;
-        }
-    }    
+    //Importation de la fonction pour obtenir une description courte
+    require_once('controller/frontEnd/functions/shortDescription.php');
+    
     require_once('view/frontEndUserConnected/v_advertisementsDisplay.php');
 }
 
@@ -66,9 +59,8 @@ function displayMofifyAdvertisementForm()
 {
     //On récupère l'id de l'annonce à modifier
     $advertisementId = $_GET['advertisementId'];
-    //On verifie si l'id de l'annonce($_GET['advertisementId]) appartient bien à l'utilisateur connecté
-    $advertisementVerification = verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementId);
-    if ($advertisementVerification) {
+    //On verifie si l'id de l'annonce($_GET['advertisementId]) appartient bien à l'utilisateur connecté ou si la demande vient d'un admin
+    if (verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementId) || $_SESSION['isAdmin']==true) {
         //On récupère les données de l'annonce et de l'adresse liée à l'annonce
         $advertisementData = getAdvertisementWithAddress($advertisementId);
         //On récupère les photos liées à l'annonce
@@ -709,7 +701,11 @@ function saveNewOrModifyAdvertisement()
                 //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                 if (insertPictures($fileUpload, $advertisementId)) {
                     if ($advertisementIdToModify) {
-                        $message = 'Votre annonce a bien été modifiée';
+                        if($_SESSION['isAdmin']){
+                            $message = 'L\'annonce a bien été modifiée';
+                        }else{
+                            $message = 'Votre annonce a bien été modifiée';
+                        }
                     } else {
                         $message = 'Votre nouvelle annonce a bien été ajoutée';
                     }
@@ -718,7 +714,11 @@ function saveNewOrModifyAdvertisement()
                 }
             } else {
                 if ($advertisementIdToModify) {
-                    $message = 'Votre annonce a bien été modifiée';
+                    if($_SESSION['isAdmin']){
+                        $message = 'L\'annonce a bien été modifiée';
+                    }else{
+                        $message = 'Votre annonce a bien été modifiée';
+                    }
                 } else {
                     $message = 'Votre nouvelle annonce a bien été ajoutée';
                 }
@@ -776,7 +776,11 @@ function saveNewOrModifyAdvertisement()
                     //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
                     if (insertPictures($fileUpload, $advertisementId)) {
                         if ($advertisementIdToModify) {
-                            $message = 'Votre annonce a bien été modifiée';
+                            if($_SESSION['isAdmin']){
+                                $message = 'L\'annonce a bien été modifiée';
+                            }else{
+                                $message = 'Votre annonce a bien été modifiée';
+                            }
                         } else {
                             $message = 'Votre nouvelle annonce a bien été ajoutée';
                         }
@@ -785,7 +789,11 @@ function saveNewOrModifyAdvertisement()
                     }
                 } else {
                     if ($advertisementIdToModify) {
-                        $message = 'Votre annonce a bien été modifiée';
+                        if($_SESSION['isAdmin']){
+                            $message = 'L\'annonce a bien été modifiée';
+                        }else{
+                            $message = 'Votre annonce a bien été modifiée';
+                        }
                     } else {
                         $message = 'Votre nouvelle annonce a bien été ajoutée';
                     }
@@ -797,11 +805,26 @@ function saveNewOrModifyAdvertisement()
             $error = 'Problème technique. Veuillez réessayer ultérieurement';
         }
     }
+    //On récupère l'id du propriétaire de l'annonce modifiée si la demande vient d'un admin
+    if($_SESSION['isAdmin']){
+        require_once('model/backEnd/m_getUsers.php');
+        $userId = getUserIdFromAdvertisementId($advertisementIdToModify)['user_id'];
+    }
     //Appel de la fonction pour afficher la liste des annonces de l'utilisateur en passant en argument les messages d'erreur ou de confirmation
     if (isset($error)) {
-        displayMyAdvertisements($error);
+        if($_SESSION['isAdmin']){
+            require('controller/backEnd/c_userAdvertisements.php');
+            displayUserAdvertisements($userId,$error,null);
+        }else{
+            displayMyAdvertisements($error);
+        }
     } elseif (isset($message)) {
-        displayMyAdvertisements(null, $message);
+        if($_SESSION['isAdmin']){
+            require('controller/backEnd/c_userAdvertisements.php');
+            displayUserAdvertisements($userId,null,$message);
+        }else{
+            displayMyAdvertisements(null,$message);
+        }
     } else {
         displayMyAdvertisements();
     }
@@ -810,8 +833,8 @@ function saveNewOrModifyAdvertisement()
 //Supprime une annonce
 function deleteAdvertisement($advertisementIdToDelete)
 {
-    //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté
-    if (verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementIdToDelete)) {
+    //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté ou si la demande vient d'un admin
+    if (verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementIdToDelete) || $_SESSION['isAdmin']==true) {
         
         //SUPPRESSION PHOTOS
         $picturesRequest = getAdvertisementPictures($advertisementIdToDelete);
@@ -825,10 +848,13 @@ function deleteAdvertisement($advertisementIdToDelete)
         }
         //On récupère l'adress_id de l'annonce avant de la supprimer (peut servir pour suppression adresse)
         $addressId = getAddressIdFromAdvertisement($advertisementIdToDelete);
-        
+        //SI la demande vient d'un admin, on recupere l'id du user de l'annonce à supprimer
+        if ($_SESSION['isAdmin']){
+            require_once('model/backEnd/m_getUsers.php');
+            $userIdFromAdvertisementToDelete = getUserIdFromAdvertisementId($advertisementIdToDelete)['user_id'];
+        }
         //SUPPRESSION ANNONCE
         if (deleteAdvertisementBdd($advertisementIdToDelete)) {
-
             //SUPPRESSION ADRESSE si l'adresse n'appartient à aucun utilisateur et aucune autre annonce
             //On vérifie si un user à cet address-id
             $usersWithAdvertisementAddressId = getUsersWithThisAddressId($addressId);
@@ -840,9 +866,16 @@ function deleteAdvertisement($advertisementIdToDelete)
                     deleteAddressBdd($addressId);
                 }
             }
-            //On appelle la fonction qui affiche la page "mes annonces"
-            $message = 'Votre annonce a été supprimée.';
-            displayMyAdvertisements(null, $message);
+            //Si la demande vient d'un admin
+            if ($_SESSION['isAdmin']){
+                require_once('controller/backEnd/c_userAdvertisements.php');
+                $message = 'L\'annonce a été supprimée';
+                displayUserAdvertisements($userIdFromAdvertisementToDelete,null,$message);
+            }else{
+                //On appelle la fonction qui affiche la page "mes annonces"
+                $message = 'Votre annonce a été supprimée.';
+                displayMyAdvertisements(null, $message);
+            }
         } else {
             $error = "Problème technique. Veuillez réessayer ultérieurement.";
             displayMyAdvertisements($error);

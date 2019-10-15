@@ -70,8 +70,16 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     } else {
         //Si l'utilisateur est un admin
         if ($_SESSION['isAdmin']) {
-            require_once('controller/backEnd/c_backEnd.php');
-            displayHomeUser();
+            require_once('controller/backEnd/c_users.php');
+            require_once('controller/backEnd/c_userAdvertisements.php');
+            if(isset($_GET['page']) && $_GET['page']=="displayUsers"){
+                displayUsers();
+            }else if (isset($_GET['page']) && $_GET['page']=="displayUserAdvertisement"  && isset($_GET['userId'])){
+                displayUserAdvertisements();
+            
+            }else{
+                displayHomeUser();
+            }
         } else {
             displayHomeUser();
         }
