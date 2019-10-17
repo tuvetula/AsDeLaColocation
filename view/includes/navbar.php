@@ -9,26 +9,26 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Accueil</a>
+                    <a class="nav-link text-light" href="index.php">Accueil</a>
                 </li>
                 <?php
                 if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
                     // <!--Menu Utilisateur connecté et non-admin-->?>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=myAdvertisements">Mes annonces</a>
+                    <a class="nav-link text-light" href="index.php?page=myAdvertisements">Mes annonces</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
+                    <a class="nav-link text-light" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=displayMyAccount">Mon compte</a>
+                    <a class="nav-link text-light" href="index.php?page=displayMyAccount">Mon compte</a>
                 </li>
                 <?php 
                     if ($_SESSION['isAdmin']) {
                         //Menu utilisateur connecté et admin
                         ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=displayUsers">Administration</a>
+                        <a class="nav-link ml-lg-5 text-warning" href="index.php?page=displayUsers">Administration</a>
                     </li>
                     <?php
                         } 
