@@ -4,9 +4,10 @@ ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="pb-3 text-center">Modifier mon compte</h1>
-        <form method="post" action="index.php?page=modifyMyAccount">
+        <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userDataToModify['user_id']){echo 'Modifier le compte de '.$userDataToModify['user_name'].' '.$userDataToModify['user_firstName'];}else{echo 'Modifier mon compte';}?></h1>
+        <form method="post" action="<?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']){echo 'index.php?page=modifyMyAccount&userId='.$userId.'';}else{echo 'index.php?page=modifyMyAccount';}?>">
             <div class="container pb-3 pt-3 border-bottom border-dark">
+            <?php if (isset($error)){echo '<p class="font-weight-bold text-danger py-3">'.$error.'</p>';}?>
                 <h2>Coordonnées</h2>
                 <div class="container">
                     <div class="row">

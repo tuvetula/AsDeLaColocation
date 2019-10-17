@@ -20,15 +20,25 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
 
     //Page Mon compte
     } elseif (isset($_GET['page']) && $_GET['page']=="displayMyAccount") {
-        displayMyAccount();
-
+        if(isset($_GET['userId'])){
+            displayMyAccount($_GET['userId']);
+        }else{
+            displayMyAccount();
+        }
     //Page Modifier mon compte (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="displayModifyMyAccount") {
-        displayModifyMyAccount();
-
+        if(isset($_GET['userId'])){
+            displayModifyMyAccount($_GET['userId']);
+        }else{
+            displayModifyMyAccount();
+        }
     //Page qui va modifier le compte User en bdd
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyMyAccount") {
-        modifyMyAccount();
+        if(isset($_GET['userId'])){
+            modifyMyAccount($_GET['userId']);
+        }else{
+            modifyMyAccount();
+        }
 
     //Page Mes annonces
     } elseif (isset($_GET['page']) && $_GET['page']=="myAdvertisements") {
@@ -76,7 +86,6 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
                 displayUsers();
             }else if (isset($_GET['page']) && $_GET['page']=="displayUserAdvertisement"  && isset($_GET['userId'])){
                 displayUserAdvertisements();
-            
             }else{
                 displayHomeUser();
             }

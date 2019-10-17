@@ -15,10 +15,7 @@ ob_start();
                 ?>
         <div class="container">
             <div class="row">
-                <form method="post" action="index.php?page=searchUser" class="offset-md-3 col-md-6 text-center">
-                    <input id="searchBar" type="text" class="col-md-12" placeholder="Recherche">
-                    <!--<button type="submit" class="btn btn-primary col-md-2">Chercher</button>-->
-                </form>
+                <input id="searchBar" type="text" class="offset-md-3 col-md-6" placeholder="Recherche">
             </div>
         </div>
         <?php
@@ -36,29 +33,28 @@ ob_start();
                 <div id="buttonsAdvertisement" class="col-sm-12 col-md-6 col-lg-3 pt-3 pt-md-0">
                     <div class="row">
                         <!-- Bouton switch isActive -->
-                        <div class="col-6 text-center custom-control custom-switch">
+                        <div class="col-4 text-center custom-control custom-switch">
                             <input type="checkbox" onchange="changeIsMemberState(<?=$usersArray[$key]['user_id']?>)"
                                 class="custom-control-input" id="customSwitches<?=$countForIdButton?>" <?php
                         if ($usersArray[$key]['user_isMember']) {
                             echo 'checked';
                         } ?>>
-                            <label class="custom-control-label" title="Activer/Désactiver"
+                            <label class="custom-control-label" title="Non membre / membre"
                                 for="customSwitches<?=$countForIdButton?>"></label>
                         </div>
-                        <!-- Bouton modifier -->
-                        <div class="col-6 text-center">
+                        <!-- Bouton Annonces de l'utilisateur -->
+                        <div class="col-4 text-center">
                             <a href="index.php?page=displayUserAdvertisement&userId=<?=$usersArray[$key]['user_id']?>"><img
                                     src="public/pictures/icons/iconeAnnonce32.png"
                                     alt="Voir les annonces de l'utilisateur"
                                     title="Voir les annonces de l'utilisateur"></a>
                         </div>
-                        <!-- Bouton Supprimer
+                        <!-- Bouton  -->
                         <div class="col-4 text-center">
-                            <a href="#"
-                                onclick="confirmationDeleteUser('<?=$deleteUrl?>','<?=$usersArray[$key]['user_id']?>')"><img
-                                    src="public/pictures/icons/iconeDelete32.png" alt="supprimer l'annonce"
-                                    title="Supprimer"></a>
-                        </div> -->
+                            <a href="index.php?page=displayMyAccount&userId=<?=$usersArray[$key]['user_id']?>">
+                            <img src="public/pictures/icons/iconeMonCompte32.png" alt="Voir les informations personnelles de l'utilisateur"
+                                    title="Voir les informations personnelles de l'utilisateur"></a>
+                        </div>
                     </div>
                 </div>
             </div>

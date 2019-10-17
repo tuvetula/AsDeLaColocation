@@ -20,11 +20,24 @@ searchBar.addEventListener('input', function() {
     for (let i = 0; i < divUserCard.length; i++) {
         let divUserInfo = divUserCard[i].getElementsByClassName('userInfo');
         for (let j = 0; j < divUserInfo.length; j++) {
+            // let divUserInfoNbOfChildren = divUserInfo[j].children.length;
+            let divUserCardStatue = divUserCard[i].hidden;
             for (let k = 0; k < divUserInfo[j].children.length; k++) {
-                if (!divUserInfo[j].children[k].innerText.toLowerCase().includes(searchBar.value.toLowerCase().trim())) {
-                    divUserCard[i].hidden = true;
+                if (k == 0) {
+                    if (divUserInfo[j].children[k].innerText.toLowerCase().includes(searchBar.value.toLowerCase().trim())) {
+                        divUserCard[i].hidden = false;
+                    } else {
+                        divUserCard[i].hidden = true;
+                    }
                 } else {
-                    divUserCard[i].hidden = false;
+                    let divUserCardNewStatue = divUserCard[i].hidden;
+                    if (divUserCardStatue != divUserCardNewStatue && !divUserCardStatue) {
+                        if (divUserInfo[j].children[k].innerText.toLowerCase().includes(searchBar.value.toLowerCase().trim())) {
+                            divUserCard[i].hidden = false;
+                        } else {
+                            divUserCard[i].hidden = true;
+                        }
+                    }
                 }
             }
         }

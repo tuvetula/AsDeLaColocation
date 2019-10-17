@@ -20,19 +20,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?page=displayAddAnAdvertisement">Déposer une annonce</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?page=displayMyAccount">Mon compte</a>
+                </li>
                 <?php 
                     if ($_SESSION['isAdmin']) {
                         //Menu utilisateur connecté et admin
                         ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=displayUsers">Utilisateurs</a>
+                        <a class="nav-link" href="index.php?page=displayUsers">Administration</a>
                     </li>
                     <?php
                         } 
                         ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php?page=displayMyAccount">Mon compte</a>
-                </li>
                 <?php
                 }
                 ?>
