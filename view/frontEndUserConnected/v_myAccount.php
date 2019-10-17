@@ -43,7 +43,7 @@ ob_start();
                         <?=$userData['user_passwordSiteWeb']?></p>
                 </div>
             </div>
-            <?php if(isset($_SESSION['isAdmin']) && !$_SESSION['isAdmin']){?>
+            <?php if(isset($_SESSION['id']) && $_SESSION['id']==$userData['user_id']){?>
             <div class="container pt-3">
                 <h3 class="text-center">Mot de passe</h3>
                 <div class="row pt-1 d-flex justify-content-center">
