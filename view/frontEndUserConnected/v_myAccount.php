@@ -4,10 +4,12 @@ ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="pb-3 text-center">Mon compte</h1>
+        <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userData['user_id']){
+            echo 'Compte de '.$userData['user_name'].' '.$userData['user_firstName'];
+        }else{echo 'Mon compte';}?></h1>
         <div class="card m-0 p-3 my-3 m-md-3">
             <div class="container text-right">
-                <a href="index.php?page=displayModifyMyAccount"><img
+                <a href="<?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']){echo 'index.php?page=displayModifyMyAccount&userId='.$userId.'';}else{echo 'index.php?page=displayModifyMyAccount';}?>"><img
                         src="public/pictures/icons/iconeModifier32.png" alt="Modifier l'annonce" title="Modifier"></a>
             </div>
             <div class="container">
@@ -41,12 +43,14 @@ ob_start();
                         <?=$userData['user_passwordSiteWeb']?></p>
                 </div>
             </div>
+            <?php if(isset($_SESSION['isAdmin']) && !$_SESSION['isAdmin']){?>
             <div class="container pt-3">
                 <h3 class="text-center">Mot de passe</h3>
                 <div class="row pt-1 d-flex justify-content-center">
                     <a href="index.php?page=modifyPassword">Modifier votre mot de passe</a>
                 </div>
             </div>
+            <?php } ?>
         </div>
     </div>
 </div>

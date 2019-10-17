@@ -5,21 +5,46 @@ require_once('model/frontEnd/m_modifyUser.php');
 require_once('model/frontEnd/m_modifyAddress.php');
 
 //Affichage page Mon compte
-function displayMyAccount()
+function displayMyAccount($userId=null)
 {
-    $userData = getUserById($_SESSION['id']);
-    require_once('view/frontEndUserConnected/v_myAccount.php');
+    if ($userId) {
+        $userData = getUserById($userId);
+    } else {
+        $userData = getUserById($_SESSION['id']);
+    }
+    if($userData){
+        require_once('view/frontEndUserConnected/v_myAccount.php');
+    }else{
+        $error = "Erreur!";
+        require_once('view/frontEnd/v_error.php');
+    }
 }
 
 //Affichage page Modifier mon compte
-function displayModifyMyAccount()
+function displayModifyMyAccount($userId = null,$error=null)
 {
-    $userDataToModify = getUserById($_SESSION['id']);
-    require_once('view/frontEndUserConnected/v_myAccountModificationForm.php');
+    if ($userId) {
+        $userDataToModify = getUserById($userId);
+    } else {
+        $userDataToModify = getUserById($_SESSION['id']);
+    }
+    if($userDataToModify){
+        require_once('view/frontEndUserConnected/v_myAccountModificationForm.php');
+    }else{
+        $error = "Erreur!";
+        require_once('view/frontEnd/v_error.php');
+    }
 }
 
 //Traitement modification mon compte
-function modifyMyAccount(){
+function modifyMyAccount($userId=null)
+{
+    //id de l'utilisateur à modifier
+    if($userId){
+        $userIdAccountToModify = $userId; 
+    }else{
+        $userIdAccountToModify = $_SESSION['id'];
+    }
     //Address $_POST
     if (isset($_POST['street'])) {
         $addressStreet = $_POST['street'];
@@ -56,17 +81,32 @@ function modifyMyAccount(){
     //On vérifie si l'adresse existe déjà et si oui on modifie que la table users
     $addressRequest = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
     //Si l'adresse n'existe pas, on modifie l'adresse en base de donnée
-    if (!$addressRequest){
+    if (!$addressRequest) {
         //On récupère l'address_id de l'utilisateur
-        $addressIdUserRequest = getUserAddressId($_SESSION['id']);
+        $addressIdUserRequest = getUserAddressId($userIdAccountToModify);
         $addressIdUser = $addressIdUserRequest['address_id'];
         //On modifie l'adresse (table addresses)
-        modifyAddress($addressIdUser,$addressStreet,$addressZipcode,$addressCity,$addressCountry);
+        modifyAddress($addressIdUser, $addressStreet, $addressZipcode, $addressCity, $addressCountry);
     }
-    //On modifie les coordonnées (table users)
-    modifyUser($_SESSION['id'],$userName,$userFirstName,$usermail,$userPhoneNumber,$userLoginSiteWeb,$userPasswordSiteWeb);
-    //On récupère les nouvelles informations suite à la modification
-    $userData = getUserById($_SESSION['id']);
-    //On affiche la page "mon compte"
-    require_once('view/frontEndUserConnected/v_myAccount.php');
+    //On verifie si l'adresse mail n'existe pas déja
+    if (empty(verifyMailAlreadyPresent($usermail,$userIdAccountToModify))){
+        //On modifie les coordonnées (table users)
+        if(modifyUser($userIdAccountToModify, $userName, $userFirstName, $usermail, $userPhoneNumber, $userLoginSiteWeb, $userPasswordSiteWeb)){
+            //On affiche la page "mon compte"
+            if($_SESSION['isAdmin']){
+                require_once('controller/backEnd/c_users.php');
+                $message = "Les informations personnelles de l'utilisateur ont bien été modifiées.";
+                displayUsers($error=null,$message);
+            }else{
+                //On récupère les nouvelles informations suite à la modification
+                $userData = getUserById($userIdAccountToModify);
+                require_once('view/frontEndUserConnected/v_myAccount.php');
+            }
+        }else{
+            $error = "Problème technique, veuillez réessayer ultérieurement.";
+        }
+    }else{
+        $error = "Un compte est déjà existant avec cette adresse mail";
+        displayModifyMyAccount($userIdAccountToModify,$error);
+    }
 }
