@@ -42,7 +42,7 @@ function forgetPassword()
         }
     } else {
         $error = "Aucun compte ne correspond aux informations que vous avez saisies";
-        require_once('view/frontEnd/v_forgetPasswordTypeMail.php');
+        require_once('view/frontEnd/v_ForgetPasswordTypeMail.php');
     }
     require_once('view/frontEnd/v_error.php');
 }
@@ -77,59 +77,32 @@ function displayChangePasswordPage(){
 //Traitement enregistrement nouveau mot de passe après réinitialisation
 function saveNewPasswordAfterReinitialization()
 {
-    if (isset($_POST['userMail'])) {
-        $mail = $_POST['userMail'];
-    }
-    if (isset($_POST['userToken'])) {
-        $token = $_POST['userToken'];
-    }
+    $mail = $_POST['userMail'];
     $password1 = $_POST['passwordReinitialization1'];
     $password2 = $_POST['passwordReinitialization2'];
-    
+    //Récupération ancien mot de passe si utilisateur connecté
+    if (isset($_SESSION['mail'])){
+        $oldpassword = $_POST['oldPassword'];
+        //On vérifie si l'ancien mot de passe correspond bien à celui en base de donnée
+        if(!verifyPassword($oldpassword)){
+            $error = "Ancien mot de passe incorrect!";
+            require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
+            exit;
+        }
+    }
     //Vérification si les 2 mots de passe sont identiques
     if ($password1 == $password2) {
-        //Si reinitialisation utilisateur non connecté
-        if (!isset($_SESSION['mail'])) {
-            //Vérification mail et token
-            $tokenVerification = getUser($mail);
-            if ($tokenVerification) {
-                //Comparaison $_GET['token] et user_token
-                if ($token == $tokenVerification['user_token']) {
-                    if (modifyPassword($mail, $password1)) {
-                        //on remet le user_token à null
-                        modifyToken($mail);
-                        $message = "Votre mot de passe a bien été réinitialisé.";
-                        require_once('view/frontEnd/v_message.php');
-                    } else {
-                        $error = "Problème technique, veuillez réessayer ultérieurement";
-                        require_once('view/frontEnd/v_error.php');
-                    }
-                } else {
-                    $error = "Le lien utilisé ne fonctionne plus. Veuillez renouveller votre demande de réinitialisation de mot de passe.";
-                    require_once('view/frontEnd/v_error.php');
-                }
-            } else {
-                $error = "Le lien utilisé ne fonctionne plus. Veuillez renouveller votre demande de réinitialisation de mot de passe.";
-                require_once('view/frontEnd/v_error.php');
+        //Enregistrement nouveau mot de passe
+        if (modifyPassword($mail, $password1)) {
+            //Si l'utilisateur n'est pas connecté, on remet le user_token à null
+            if (!isset($_SESSION['mail'])){
+                modifyToken($mail);
             }
-        //Sinon reinitialisation utilisateur connecté
-        } else {
-            //Récupération ancien mot de passe
-            $oldpassword = $_POST['oldPassword'];
-            //On vérifie si l'ancien mot de passe correspond bien à celui en base de donnée
-            if (!verifyPassword($oldpassword)) {
-                $error = "Ancien mot de passe incorrect!";
-                require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
-            }else{
-                //Enregistrement nouveau mot de passe
-                if (modifyPassword($mail, $password1)) {
-                    $message = "Votre mot de passe a bien été réinitialisé.";
-                    require_once('view/frontEnd/v_message.php');
-                } else {
-                    $error = "Problème technique, veuillez réessayer ultérieurement";
-                    require_once('view/frontEnd/v_error.php');
-                }
-            }
+            $message = "Votre mot de passe a bien été réinitialisé.";
+            require_once('view/frontEnd/v_message.php');
+        }else{
+            $error = "Problème technique, veuillez réessayer ultérieurement";
+            require_once('view/frontEnd/v_error.php');
         }
     } else {
         $error = "Les deux mots de passe ne sont pas identiques.";

@@ -8,6 +8,9 @@ ob_start();
         <div class="container col-md-9 col-lg-6">
             <form method="post" action="index.php" class="text-center">
             <input type="hidden" name="userMail" value="<?=$mail?>">
+            <?php if (isset($token)){?>
+            <input type="hidden" name="userToken" value="<?=$token?>">
+            <?php } ?>
             <?php if (isset($_SESSION['mail'])){
                 ?>
                 <div class="form-group text-left">
