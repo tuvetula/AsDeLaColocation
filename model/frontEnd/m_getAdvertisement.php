@@ -56,7 +56,8 @@ function getAdvertisementWithAddress($advertisementId)
     $advertisementId = htmlspecialchars(strip_tags($advertisementId));
     $db = connectBdd();
     $request = $db->query('SELECT * FROM advertisements 
-    join addresses on advertisements.address_id = addresses.address_id 
+    join addresses on advertisements.address_id = addresses.address_id
+    join users on advertisements.user_id = users.user_id 
     WHERE advertisements.advertisement_id='.$advertisementId.' 
     ORDER BY advertisements.advertisement_id DESC');
     $userAdvertisementWithAddress = $request->fetchAll(PDO::FETCH_ASSOC);

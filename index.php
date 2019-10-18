@@ -50,7 +50,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         
     //Page modifier une annonce (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="modifyAdvertisement" && isset($_GET['advertisementId'])) {
-        displayMofifyAdvertisementForm();
+        displayModifyAdvertisementForm();
        
     //Page qui enregistre une nouvelle annonce
     } elseif (isset($_GET['page']) && $_GET['page']=="addAdvertisement") {
