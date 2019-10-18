@@ -4,7 +4,7 @@ ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="pb-3 text-center"><?php echo 'Annonces de l\'utilisateur '.$userInformation['user_name'].' '.$userInformation['user_firstName'].'';?> </h1>
+        <h1 class="pb-3 text-center"><?php  if($_SESSION['id']!=$userId){echo 'Annonces de l\'utilisateur '.$userInformation['user_name'].' '.$userInformation['user_firstName'].'';}else{echo 'Mes annonces';}?> </h1>
         <!-- Affichage message de confirmation ou d'erreur -->
         <?php
                     if ($error){

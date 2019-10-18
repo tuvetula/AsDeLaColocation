@@ -4,7 +4,7 @@ ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="pb-3 text-center">Modifier votre annonce</h1>
+        <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId){echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';}else{echo 'Modifier votre annonce';}?> </h1>
         <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
