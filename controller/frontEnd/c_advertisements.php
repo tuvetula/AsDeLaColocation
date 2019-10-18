@@ -98,6 +98,7 @@ function saveNewOrModifyAdvertisement()
         }
     } else {
         $advertisementIdToModify = null;
+        $userId = $_SESSION['id'];
     }
     
     //Boucle pour transformer les valeurs "on" en 1 (valeur vrai) des checkbox cochées
@@ -743,6 +744,8 @@ function saveNewOrModifyAdvertisement()
         //AJOUT ADRESSE
         //AJOUT NOUVELLE ADRESSE
         //Si l'adresse a bien été ajouté en bdd alors on ajoute l'annonce
+        echo insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry);
+        exit;  
         if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
             //Recup l'id de la dernière addresse ajoutée en bdd
             $addressArray = getLastAddressId();
