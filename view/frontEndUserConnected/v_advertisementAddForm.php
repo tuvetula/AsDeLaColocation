@@ -5,7 +5,7 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Ajouter une nouvelle annonce</h1>
-        <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data">
+        <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data" onsubmit="spinnerSubmitButton()">
             <!-- ----------Annonce---------- -->
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Annonce</h2>
@@ -1313,11 +1313,12 @@ ob_start();
             </div>
             <!-- Bouton submit -->
             <div class="container pt-3">
-                <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
+                <button id="submitButton" type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
             </div>
         </form>
     </div>
 </div>
+<script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
 <script src="public/js/caractersCount.js"></script>
 <script src="public/js/energyAdvertisement.js"></script>
