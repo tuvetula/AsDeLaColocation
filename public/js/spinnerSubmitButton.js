@@ -5,5 +5,6 @@ function spinnerSubmitButton() {
     classListSpinner.add('spinner-border');
     classListSpinner.add('spinner-border-sm');
     submitButton.innerText = 'Chargement...';
+    submitButton.setAttribute('disabled', '');
     submitButton.appendChild(spinner);
 }
