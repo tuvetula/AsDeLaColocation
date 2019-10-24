@@ -107,106 +107,56 @@ function saveNewOrModifyAdvertisement()
             $_POST[$key] = 1;
         }
     }
-    //On créé un tableau pour stocker les erreurs
-    $fillingError = array();
-    
     //Address $_POST
-    if (isset($_POST['street']) && !empty($_POST['street'])) {
+    if (isset($_POST['street'])) {
         $addressStreet = $_POST['street'];
-    }else{
-        $fillingError['street'] = 'Le numéro et nom de rue n\'est pas renseigné';
     }
-    if (isset($_POST['zipcode']) && !empty($_POST['zipcode'])) {
+    if (isset($_POST['zipcode'])) {
         $addressZipcode = $_POST['zipcode'];
-    }else{
-        $fillingError['zipcode'] = 'Le code postal n\'est pas renseigné';
     }
-    if (isset($_POST['city']) && !empty($_POST['city'])) {
+    if (isset($_POST['city'])) {
         $addressCity = $_POST['city'];
-    }else{
-        $fillingError['city'] = 'Le nom de ville n\'est pas renseigné';
     }
-    if (isset($_POST['country']) && !empty($_POST['country'])) {
+    if (isset($_POST['country'])) {
         $addressCountry = $_POST['country'];
-    }else{
-        $fillingError['country'] = 'Le nom de pays n\'est renseigné';
     }
+
     //Advertisement $_POST
-    if (isset($_POST['isActive']) && $_POST['isActive'] == 1) {
+    if (isset($_POST['isActive'])) {
         $isActive = $_POST['isActive'];
     } else {
         $isActive = 0;
     }
-    if (isset($_POST['availableDate']) && !empty($_POST['availableDate'])) {
+    if (isset($_POST['availableDate'])) {
         $availableDate = $_POST['availableDate'];
-    } else {
-        $fillingError['availableDate'] = 'La date n\'est pas valable.';
     }
-    //title
-    if (isset($_POST['title']) && !empty($_POST['title'])) {
-        if(strlen($_POST['title'])>80){
-            $fillingError['title'] = '80 caractères maximum';
-        }else{
-            $title = $_POST['title'];
-        }
-    }else{
-        $fillingError['title'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['title'])) {
+        $title = $_POST['title'];
     }
-    //description
-    if (isset($_POST['description']) && !empty($_POST['description'])) {
-        if(strlen($_POST['description'])>3000){
-            $fillingError['description'] = '3000 caractères maximum';
-        }else{
-            $description = $_POST['description'];
-        }
-    }else{
-        $fillingError['description'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['description'])) {
+        $description = $_POST['description'];
     }
-    //type
-    if (isset($_POST['type']) && ($_POST['type'] == "Maison" || $_POST['type'] == "Appartement")) {
+    if (isset($_POST['type'])) {
         $type = $_POST['type'];
-    }else{
-        $fillingError['type'] = 'Veuillez renseigner ce champ';
     }
-    //Category
-    if (isset($_POST['category']) && ($_POST['category'] == 'Location' || $_POST['category'] == 'Colocation' || $_POST['category'] == 'Sous-location' || $_POST['category'] == 'Courte-durée')) {
+    if (isset($_POST['category'])) {
         $category = $_POST['category'];
-    }else{
-        $fillingError['category'] = 'Veuillez renseigner ce champ';
     }
-    //energyClassNumber
-    if (isset($_POST['energyClassNumber']) && !empty($_POST['energyClassNumber'])) {
-        if (filter_var($_POST['energyClassNumber'],FILTER_VALIDATE_INT) || filter_var($_POST['energyClassNumber'],FILTER_VALIDATE_FLOAT)){
-            $energyClassNumber = $_POST['energyClassNumber'];
-            $energyClassLetter = calculEnergyLetter($energyClassNumber);
-        }else{
-            $fillingError['energyClassNumber'] = "La valeur de ce champ doit être un nombre";
-        }
-    }else{
-        $fillingError['energyClassNumber'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['energyClassNumber'])) {
+        $energyClassNumber = $_POST['energyClassNumber'];
     }
-    //gesNumber
-    if (isset($_POST['gesNumber']) && !empty($_POST['gesNumber'])) {
-        if (filter_var($_POST['gesNumber'],FILTER_VALIDATE_INT) || filter_var($_POST['gesNumber'],FILTER_VALIDATE_FLOAT)){
-            $gesNumber = $_POST['gesNumber'];
-            $gesLetter = calculGesLetter($gesNumber);
-        }else{
-            $fillingError['gesNumber'] = "La valeur de ce champ doit être un nombre";
-        }
-    }else{
-        $fillingError['gesNumber'] = 'Veuillez renseigner ce champ';
+    
+    $energyClassLetter = calculEnergyLetter($energyClassNumber);
+    
+    if (isset($_POST['gesNumber'])) {
+        $gesNumber = $_POST['gesNumber'];
     }
-    //accomodationLivingAreaSize
-    if (isset($_POST['accomodationLivingAreaSize']) && !empty($_POST['accomodationLivingAreaSize'])) {
-        if (filter_var($_POST['accomodationLivingAreaSize'],FILTER_VALIDATE_INT) || filter_var($_POST['accomodationLivingAreaSize'],FILTER_VALIDATE_FLOAT)){
-            $accomodationLivingAreaSize = $_POST['accomodationLivingAreaSize'];
-        }else{
-            $fillingError['accomodationLivingAreaSize'] = 'La valeur de ce champ doit être un nombre';
-        }
-    }else{
-        $fillingError['accomodationLivingAreaSize'] = 'Veuillez renseigner ce champ';
+    
+    $gesLetter = calculGesLetter($gesNumber);
+    
+    if (isset($_POST['accomodationLivingAreaSize'])) {
+        $accomodationLivingAreaSize = $_POST['accomodationLivingAreaSize'];
     }
-    //accomodationFloor
     if (isset($_POST['accomodationFloor'])) {
         $accomodationFloor = $_POST['accomodationFloor'];
     }
@@ -225,38 +175,15 @@ function saveNewOrModifyAdvertisement()
     if (isset($_POST['nbOfBedroomsToRent'])) {
         $nbOfBedroomsToRent = $_POST['nbOfBedroomsToRent'];
     }
-    //monthlyRentExcludingCharges
-    if (isset($_POST['monthlyRentExcludingCharges']) && !empty($_POST['monthlyRentExcludingCharges'])) {
-        if(filter_var($_POST['monthlyRentExcludingCharges'],FILTER_VALIDATE_INT) || filter_var($_POST['monthlyRentExcludingCharges'],FILTER_VALIDATE_FLOAT)){
-            $monthlyRentExcludingCharges = $_POST['monthlyRentExcludingCharges'];
-        }else{
-            $fillingError['monthlyRentExcludingCharges'] = "La valeur de ce champ doit être un nombre";
-        }
-    }else{
-        $fillingError['monthlyRentExcludingCharges'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['monthlyRentExcludingCharges'])) {
+        $monthlyRentExcludingCharges = $_POST['monthlyRentExcludingCharges'];
     }
-    //charges
-    if (isset($_POST['charges']) && !empty($_POST['charges'])) {
-        if (filter_var($_POST['charges'],FILTER_VALIDATE_INT) || filter_var($_POST['charges'],FILTER_VALIDATE_FLOAT)){
-            $charges = $_POST['charges'];
-        }else{
-            $fillingError['charges'] = "La valeur de ce champ doit être un nombre.";
-        }
-    }else{
-        $fillingError['charges'] = 'Veuillez renseigner ce champ';
-
+    if (isset($_POST['charges'])) {
+        $charges = $_POST['charges'];
     }
-    //suretyBond
-    if (isset($_POST['suretyBond']) && !empty($_POST['suretyBond'])) {
-        if (filter_var($_POST['suretyBond'],FILTER_VALIDATE_INT) || filter_var($_POST['suretyBond'],FILTER_VALIDATE_FLOAT)){
-            $suretyBond = $_POST['suretyBond'];
-        }else{
-            $fillingError['suretyBond'] = "La valeur de ce champ doit être un nombre.";
-        }
-    }else{
-        $fillingError['suretyBond'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['suretyBond'])) {
+        $suretyBond = $_POST['suretyBond'];
     }
-    //financialRequirements
     if (isset($_POST['financialRequirements'])) {
         $financialRequirements = $_POST['financialRequirements'];
     } else {
@@ -329,17 +256,9 @@ function saveNewOrModifyAdvertisement()
     if (isset($_POST['livingRoomUse'])) {
         $livingRoomUse = $_POST['livingRoomUse'];
     }
-    //bedroomSize
-    if (isset($_POST['bedroomSize']) && !empty($_POST['bedroomSize'])) {
-        if(filter_var($_POST['bedroomSize'],FILTER_VALIDATE_INT) || filter_var($_POST['bedroomSize'],FILTER_VALIDATE_FLOAT)){
-            $bedroomSize = $_POST['bedroomSize'];
-        }else{
-            $fillingError['bedroomSize'] = 'La valeur de ce champ doit être un nombre';
-        }
-    }else{
-        $fillingError['bedroomSize'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['bedroomSize'])) {
+        $bedroomSize = $_POST['bedroomSize'];
     }
-    //bedroomType
     if (isset($_POST['bedroomType'])) {
         $bedroomType = $_POST['bedroomType'];
     }
@@ -605,91 +524,27 @@ function saveNewOrModifyAdvertisement()
     } else {
         $rentWithoutVisit = 0;
     }
-    //contactNameForVisit
-    if (isset($_POST['contactNameForVisit']) && !empty($_POST['contactNameForVisit'])) {
-        if(strlen($_POST['contactNameForVisit'])>125){
-            $fillingError['contactNameForVisit'] = '125 caractères maximum';
-        }else{
-            $contactNameForVisit = $_POST['contactNameForVisit'];
-        }
-    }else{
-        $fillingError['contactNameForVisit'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['contactNameForVisit'])) {
+        $contactNameForVisit = $_POST['contactNameForVisit'];
     }
-    //contactPhoneNumberForVisit
-    if (isset($_POST['contactPhoneNumberForVisit']) && !empty($_POST['contactPhoneNumberForVisit'])) {
-        if(strlen($_POST['contactPhoneNumberForVisit'])>20){
-            $fillingError['contactPhoneNumberForVisit'] = '20 caractères maximum';
-        }else{
-            $contactPhoneNumberForVisit = $_POST['contactPhoneNumberForVisit'];
-        }
-    }else{
-        $fillingError['contactPhoneNumberForVisit'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['contactPhoneNumberForVisit'])) {
+        $contactPhoneNumberForVisit = $_POST['contactPhoneNumberForVisit'];
     }
-    //contactMailForVisit
-    if (isset($_POST['contactMailForVisit']) && !empty($_POST['contactMailForVisit'])) {
-        if(strlen($_POST['contactMailForVisit']) > 255){
-            $fillingError['contactMailForVisit'] = '255 caractères maximum';
-        }else{
-            if(filter_var($_POST['contactMailForVisit'],FILTER_VALIDATE_EMAIL)){
-                $contactMailForVisit = $_POST['contactMailForVisit'];
-            }else{
-                $fillingError['contactMailForVisit'] = 'L\'adresse mail est incomplète';
-            }
-        }
-    }else{
-        $fillingError['contactMailForVisit'] = 'Veuillez renseigner ce champ';
+    if (isset($_POST['contactMailForVisit'])) {
+        $contactMailForVisit = $_POST['contactMailForVisit'];
     }
-    //Résultat des contrôles
-    if(!empty($fillingError)){
-        if(isset($_POST) && empty($_POST)){
-            header('Location:index.php?page=displayAddAnAdvertisement&error=pbTechnique');
-            exit;
-        }
-        $_SESSION['fillingError'] = $fillingError;
-        $_SESSION['postData'] = $_POST;
-        if($advertisementIdToModify){
-            header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify);
-        }else{
-            header('Location:index.php?page=displayAddAnAdvertisement&error=fillingError');
-        }
-        exit;
-    }else{
-        if(isset($_SESSION['fillingError'])){
-            unset($_SESSION['fillingError']);
-        }
-        if(isset($_SESSION['postData'])){
-            unset($_SESSION['postData']);
-        }
-    }
-    //Verification Titre identiques
-    $titleVerification = getUserAdvertisementRegister($userId);
-    $countTitle = 0;
-    $advertisementIdWithSameTitle = "";
-    foreach ($titleVerification as $key => $value){
-        if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)){
-            $countTitle++;
-            $advertisementIdWithSameTitle = $titleVerification[$key]['advertisement_id'];
-        }
-    }
-    if ($countTitle >= 1 && $advertisementIdToModify != $advertisementIdWithSameTitle && $advertisementIdToModify != null){
-        header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify.'&error=title&title='.$title.'');
-        exit;
-        }
-    if ($countTitle >= 1 && $advertisementIdToModify == null){
-        $_SESSION['postData'] = $_POST;
-        header('Location:index.php?page=displayAddAnAdvertisement&error=title');
-        exit;
-    }
+    
     //Réorganisation du tableau $_FILES
     $filesArray = reArrayFiles($_FILES);
+
     //On verifie s'il y a des photos dans le tableau $filesArray
     if (!empty($filesArray[0]['name'])) {
         //Définition constante
-        define("UPLOAD_REP_PHOTO", "public/pictures/users/");        
+        define("UPLOAD_REP_PHOTO", "public/pictures/users/");
+        define("UPLOAD_SIZEMAX_PHOTO", 10000000); // La taille, en octets.
         define("UPLOAD_EXTENSION_PHOTO", "jpg,jpeg,png,gif");
         define("UPLOAD_MIMETYPE_PHOTO", "image/jpeg,image/png,image/gif");
-        define("UPLOAD_SIZEMAX_PHOTO", 10000000); // La taille, en octets.
-    
+            
         // Messages d'erreurs de chargement de fichiers
         $array_upload_err = [
             UPLOAD_ERR_OK => "Valeur : 0. Aucune erreur, le téléchargement est correct.",
@@ -716,40 +571,35 @@ function saveNewOrModifyAdvertisement()
             if ($filesArray[$i]['error'] != 0) {
                 $errors['upload_err'] = $array_upload_err[$filesArray[$i]['error']];
             } else {
-                //VERIFICATION EXTENSION
                 // Récupère l'extension d'un fichier
                 $splFileInfo = new SplFileInfo($namePicture);
                 $fileExtension = strtolower($splFileInfo->getExtension());
-                if (!in_array($fileExtension, explode(',', constant('UPLOAD_EXTENSION_PHOTO')))) {
-                    $errors['extension'] = 'L\'extension ne correspond pas aux extensions acceptées';
-                }else{
-                    //VERIFICATION TYPE MIME
-                    // Récupère le type mime du fichier
-                    $fileMimeType = mime_content_type($namePictureTmp);
-                    if (!in_array($fileMimeType, explode(',', constant('UPLOAD_MIMETYPE_PHOTO')))) {
-                        $errors['typeMime'] = 'L\'extension ne correspond pas aux extensions acceptées';
-                    }else{
-                        //VERIFICATION TAILLE IMAGE
-                        // On vérifie la taille, en octets, du fichier téléchargé
-                        if ($filesArray[$i]['size'] > UPLOAD_SIZEMAX_PHOTO) {
-                            $errors['size'] = 'Taille de fichier supérieure à la taille maxi autorisée';
-                        }else{
-                            //Verification nombre de pixels png
-                            $pixelImage = getimagesize($namePictureTmp);
-                            if ($pixelImage[0]*$pixelImage[1]>1000000 && $fileExtension == 'png') {
-                                $errors['pixel_err'] = "L'image png sera déformée";
-                            }
-                        }
-                    }
+                    
+                //Verification nombre de pixels png
+                $pixelImage = getimagesize($namePictureTmp);
+                if ($pixelImage[0]*$pixelImage[1]>1000000 && $fileExtension == 'png') {
+                    $errors['pixel_err'] = "L'image png sera déformée";
                 }
+        
+                // Récupère le type mime du fichier
+                $fileMimeType = mime_content_type($namePictureTmp);
+                    
+                // On vérifie la taille, en octets, du fichier téléchargé
+                if ($filesArray[$i]['size'] > UPLOAD_SIZEMAX_PHOTO) {
+                    $errors['size'] = 'Taille de fichier supérieure à la taille maxi autorisée';
+                }
+                    
+                // On vérifie l'extension
+                if (!in_array($fileExtension, explode(',', constant('UPLOAD_EXTENSION_PHOTO')))) {
+                    $errors['ext'] = 'L\'extension ne correspond pas aux extensions acceptées';
+                }
+                    
+                // On vérifie le type mime
+                if (!in_array($fileMimeType, explode(',', constant('UPLOAD_MIMETYPE_PHOTO')))) {
+                    $errors['ext'] = 'L\'extension ne correspond pas aux extensions acceptées';
+                }
+                    
                 if (empty($errors)) {
-                    //On supprime les $_SESSIONS si existantes
-                    if(isset($_SESSION['error'])){
-                        unset($_SESSION['error']);
-                    }
-                    if(isset($_SESSION['postData'])){
-                        unset($_SESSION['postData']);
-                    }
                     //On génère un nom unique pour la photo
                     $namePicture = uniqid().'.'.$fileExtension;
                     //Calcul pourcentage qualité à appliquer
@@ -759,7 +609,6 @@ function saveNewOrModifyAdvertisement()
         
                     //On enregistre la photo dans le dossier
                     if (move_uploaded_file($namePictureTmp, UPLOAD_REP_PHOTO . $namePicture)) {
-                        //On compresse si taille plus de 1mo
                         if ($pictureSize>1000000) {
                             if ($fileExtension == 'jpg' || $fileExtension == 'jpeg') {
                                 $img = imagecreatefromjpeg(UPLOAD_REP_PHOTO . $namePicture);
@@ -768,9 +617,10 @@ function saveNewOrModifyAdvertisement()
                             } elseif ($fileExtension == 'png') {
                                 $pngQuality = ($quality - 100) / 11.111111;
                                 $pngQuality = round(abs($pngQuality));
+                                echo $pngQuality;
                                 ini_set('memory_limit', '-1');
                                 $img = imagecreatefrompng(UPLOAD_REP_PHOTO . $namePicture);
-                                imagepng($img, UPLOAD_REP_PHOTO . $namePicture, $quality);
+                                imagepng($img, UPLOAD_REP_PHOTO . $namePicture, 0, 9);
                                 imagedestroy($img);
                             } elseif ($fileExtension == 'gif') {
                                 $img = imagecreatefromgif(UPLOAD_REP_PHOTO . $namePicture);
@@ -778,21 +628,44 @@ function saveNewOrModifyAdvertisement()
                                 imagedestroy($img);
                             }
                         }
+                        $_SESSION['fileUploadSuccess'][$i] = 'Upload effectué avec succès !';
                         //Enregistrement nom de la photo dans tableau pour ensuite enregistrer en bdd
                         $fileUpload[$i] = $namePicture;
                     } else {
                         $_SESSION['fileUploadEchec'] = 'Echec de l\'upload !';
                     }
                 } else {
-                    $_SESSION['postData'] = $_POST;
                     $_SESSION['error'] = array();
                     array_push($_SESSION['error'], $errors);
-                    header("Location: index.php?page=displayAddAnAdvertisement&error=fillingError");
-                    exit;
+                    // header("Location: index.php?page=errorNewAdvertisement");
                 }
             }
         }
     }
+    //Verification Titre identiques
+    $titleVerification = getUserAdvertisementRegister($userId);
+    $countTitle = 0;
+    $advertisementIdWithSameTitle = "";
+    foreach ($titleVerification as $key => $value){
+        if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)){
+            $countTitle++;
+            $advertisementIdWithSameTitle = $titleVerification[$key]['advertisement_id'];
+        }
+    }
+    if ($countTitle >= 1 && $advertisementIdToModify != $advertisementIdWithSameTitle && $advertisementIdToModify != null){
+        header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify.'&error=title&title='.$title.'');
+        exit();
+        }
+    if ($countTitle >= 1 && $advertisementIdToModify == null){
+        $_SESSION['postData'] = $_POST;
+        header('Location:index.php?page=displayAddAnAdvertisement&error=title');
+        exit();
+    }else{
+        if (isset($_SESSION['postData'])){
+            unset($_SESSION['postData']);
+        }
+    }
+
     //ENREGISTREMENT EN BASE DE DONNEE
     //Vérification si l'adresse postale renseignée existe déja et si oui renvoi l'id
     $addressVerification = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
@@ -870,7 +743,7 @@ function saveNewOrModifyAdvertisement()
     } else {
         //AJOUT ADRESSE
         //AJOUT NOUVELLE ADRESSE
-        //Si l'adresse a bien été ajouté en bdd alors on ajoute l'annonce
+        //Si l'adresse a bien été ajouté en bdd alors on ajoute l'annonce 
         if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
             //Recup l'id de la dernière addresse ajoutée en bdd
             $addressArray = getLastAddressId();

@@ -5,7 +5,7 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
         <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId){echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';}else{echo 'Modifier votre annonce';}?> </h1>
-        <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data">
+        <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data" onsubmit="spinnerSubmitButton()">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Annonce</h2>
@@ -2123,7 +2123,7 @@ ob_start();
             </div>
             <!-- Bouton submit -->
             <div class="container py-3">
-                <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer mes
+                <button id="submitButton" type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer mes
                     modifications</button>
             </div>
         </form>
@@ -2132,6 +2132,7 @@ ob_start();
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
 </script>
+<script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
 <script src="public/js/caractersCount.js"></script>
 <script src="public/js/selectPictureToDeleteModifyAdvertisement.js"></script>
