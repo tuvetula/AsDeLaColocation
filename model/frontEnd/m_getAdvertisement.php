@@ -11,9 +11,11 @@ function getAddressIdFromAdvertisement($advertisementId){
 }
 
 //Récupère MAX(advertisement_id) de la dernière annonce saisie en bdd
-function getLastAdvertisementId(){
+function getLastAdvertisementId($userId){
     $db = connectBdd();
-    $request = $db->query('SELECT MAX(advertisement_id) FROM advertisements');
+    $request = $db->query('SELECT MAX(advertisement_id) 
+    FROM advertisements
+    WHERE user_id='.$userId.'');
     $lastAdvertisementId = $request->fetch(PDO::FETCH_ASSOC);
     $request->closeCursor();
     return $lastAdvertisementId;

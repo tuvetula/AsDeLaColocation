@@ -21,4 +21,5 @@ function modifyAddress($addressId,$addressStreet,$addressZipcode,$addressCity,$a
         ':city'=> $addressCity,
         ':country'=> $addressCountry
     ));
+    return true;
 }
