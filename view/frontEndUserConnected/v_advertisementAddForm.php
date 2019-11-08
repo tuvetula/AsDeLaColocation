@@ -2079,7 +2079,7 @@ ob_start();
         </form>
     </div>
 </div>
-<script src="public/js/autocomplete.js"></script>
+<script src="public/js/autocomplete3.js"></script>
 <script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
 <script src="public/js/caractersCount.js"></script>

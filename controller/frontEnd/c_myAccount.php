@@ -12,25 +12,25 @@ function displayMyAccount($userId=null)
     } else {
         $userData = getUserById($_SESSION['id']);
     }
-    if($userData){
+    if ($userData) {
         require_once('view/frontEndUserConnected/v_myAccount.php');
-    }else{
+    } else {
         $error = "Erreur!";
         require_once('view/frontEnd/v_error.php');
     }
 }
 
 //Affichage page Modifier mon compte
-function displayModifyMyAccount($userId = null,$error=null)
+function displayModifyMyAccount($userId = null, $error=null)
 {
     if ($userId) {
         $userDataToModify = getUserById($userId);
     } else {
         $userDataToModify = getUserById($_SESSION['id']);
     }
-    if($userDataToModify){
+    if ($userDataToModify) {
         require_once('view/frontEndUserConnected/v_myAccountModificationForm.php');
-    }else{
+    } else {
         $error = "Erreur!";
         require_once('view/frontEnd/v_error.php');
     }
@@ -40,9 +40,9 @@ function displayModifyMyAccount($userId = null,$error=null)
 function modifyMyAccount($userId=null)
 {
     //id de l'utilisateur à modifier
-    if($userId){
-        $userIdAccountToModify = $userId; 
-    }else{
+    if ($userId) {
+        $userIdAccountToModify = $userId;
+    } else {
         $userIdAccountToModify = $_SESSION['id'];
     }
     //Address $_POST
@@ -77,36 +77,34 @@ function modifyMyAccount($userId=null)
     if (isset($_POST['passwordSiteWeb'])) {
         $userPasswordSiteWeb = $_POST['passwordSiteWeb'];
     }
-
-    //On vérifie si l'adresse existe déjà et si oui on modifie que la table users
-    $addressRequest = getAddressId($addressStreet, $addressZipcode, $addressCity, $addressCountry);
-    //Si l'adresse n'existe pas, on modifie l'adresse en base de donnée
-    if (!$addressRequest) {
+    
+    //On verifie si l'adresse mail n'existe pas déja
+    if (empty(verifyMailAlreadyPresent($usermail, $userIdAccountToModify))) {
         //On récupère l'address_id de l'utilisateur
         $addressIdUserRequest = getUserAddressId($userIdAccountToModify);
         $addressIdUser = $addressIdUserRequest['address_id'];
         //On modifie l'adresse (table addresses)
-        modifyAddress($addressIdUser, $addressStreet, $addressZipcode, $addressCity, $addressCountry);
-    }
-    //On verifie si l'adresse mail n'existe pas déja
-    if (empty(verifyMailAlreadyPresent($usermail,$userIdAccountToModify))){
-        //On modifie les coordonnées (table users)
-        if(modifyUser($userIdAccountToModify, $userName, $userFirstName, $usermail, $userPhoneNumber, $userLoginSiteWeb, $userPasswordSiteWeb)){
-            //On affiche la page "mon compte"
-            if($_SESSION['isAdmin']){
-                require_once('controller/backEnd/c_users.php');
-                $message = "Les informations personnelles de l'utilisateur ont bien été modifiées.";
-                displayUsers($error=null,$message);
-            }else{
-                //On récupère les nouvelles informations suite à la modification
-                $userData = getUserById($userIdAccountToModify);
-                require_once('view/frontEndUserConnected/v_myAccount.php');
+        if(modifyAddress($addressIdUser, $addressStreet, $addressZipcode, $addressCity, $addressCountry)){
+            //On modifie les coordonnées (table users)
+            if (modifyUser($userIdAccountToModify, $userName, $userFirstName, $usermail, $userPhoneNumber, $userLoginSiteWeb, $userPasswordSiteWeb)) {
+                //On affiche la page "mon compte"
+                if ($_SESSION['isAdmin']) {
+                    require_once('controller/backEnd/c_users.php');
+                    $message = "Les informations personnelles de l'utilisateur ont bien été modifiées.";
+                    displayUsers($error=null, $message);
+                } else {
+                    //On récupère les nouvelles informations suite à la modification
+                    $userData = getUserById($userIdAccountToModify);
+                    require_once('view/frontEndUserConnected/v_myAccount.php');
+                }
+            } else {
+                $error = "Problème technique, veuillez réessayer ultérieurement.";
             }
         }else{
             $error = "Problème technique, veuillez réessayer ultérieurement.";
         }
-    }else{
+    } else {
         $error = "Un compte est déjà existant avec cette adresse mail";
-        displayModifyMyAccount($userIdAccountToModify,$error);
+        displayModifyMyAccount($userIdAccountToModify, $error);
     }
 }
