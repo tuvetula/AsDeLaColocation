@@ -1034,32 +1034,35 @@ ob_start();
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <h2>Logement</h2>
                 <div class="container">
+                <!-- AdresseAutocomplete -->
+                <div id="divForstreetAutocompleteDiv">
+                    </div>
                     <!-- Adresse -->
-                    <div class="form-group" title="Numéro, nom de rue">
+                    <div id="streetDiv" class="form-group">
                         <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
-                        <input id="street" type="text" name="street" class="form-control"
+                        <input id="street" type="text" name="street" title="Numéro, nom de rue" class="form-control"
                             placeholder="Saisir l'adresse du logement"
                             value="<?=$advertisementData[0]['address_street']?>" maxlength="255" required>
                     </div>
                     <!-- Code postal, ville, pays -->
                     <div class="row">
                         <!-- Code postal -->
-                        <div class="form-group col-md-2" title="Code postal">
+                        <div id="zipcodeDiv" class="form-group col-md-2">
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
-                            <input id="zipcode" type="text" name="zipcode" class="form-control"
+                            <input id="zipcode" type="text" name="zipcode" title="Code postal" class="form-control"
                                 placeholder="Code postal" value="<?=$advertisementData[0]['address_zipcode']?>"
                                 maxlength="20" required>
                         </div>
                         <!-- Ville -->
-                        <div class="form-group col-md-6" title="Ville">
+                        <div id="cityDiv" class="form-group col-md-6">
                             <label for="city" class="font-weight-bold">Ville</label>
-                            <input id="city" type="text" name="city" class="form-control" placeholder="Ville"
+                            <input id="city" type="text" name="city" title="Ville" class="form-control" placeholder="Ville"
                                 value="<?=$advertisementData[0]['address_city']?>" maxlength="60" required>
                         </div>
                         <!-- Pays -->
-                        <div class="form-group col-md-4" title="Pays">
+                        <div id="countryDiv" class="form-group col-md-4">
                             <label for="country" class="font-weight-bold">Pays</label>
-                            <input id="country" type="text" name="country" class="form-control" placeholder="Pays"
+                            <input id="country" type="text" name="country" title="Pays" class="form-control" placeholder="Pays"
                                 value="<?=$advertisementData[0]['address_country']?>" maxlength="60" required>
                         </div>
                     </div>
@@ -2132,6 +2135,7 @@ ob_start();
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
 </script>
+<script src="public/js/autocomplete3.js"></script>
 <script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
 <script src="public/js/caractersCount.js"></script>
