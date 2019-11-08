@@ -104,7 +104,7 @@ function modifyMyAccount($userId=null)
             $error = "Problème technique, veuillez réessayer ultérieurement.";
         }
     } else {
-        $error = "Un compte est déjà existant avec cette adresse mail";
+        $error = "mail";
         displayModifyMyAccount($userIdAccountToModify, $error);
     }
 }

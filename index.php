@@ -39,7 +39,6 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         }else{
             modifyMyAccount();
         }
-
     //Page Mes annonces
     } elseif (isset($_GET['page']) && $_GET['page']=="myAdvertisements") {
         displayMyAdvertisements();
