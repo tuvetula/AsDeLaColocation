@@ -41,7 +41,7 @@ ob_start();
                     <div class="form-group pb-3">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
-                            placeholder="maximum 3000 caractères" maxlength="3000" required><?php if(isset($_SESSION['postData'])){
+                            placeholder="maximum 2000 caractères" maxlength="2000" required><?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['description'];
                             }?></textarea>
                         <div class="float-right" id="countDescription"></div>
@@ -2079,7 +2079,7 @@ ob_start();
         </form>
     </div>
 </div>
-<script src="public/js/autocomplete3.js"></script>
+<script src="public/js/autocompleteAddress.js"></script>
 <script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
 <script src="public/js/caractersCount.js"></script>
