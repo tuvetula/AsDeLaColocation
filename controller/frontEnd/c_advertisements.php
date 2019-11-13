@@ -23,6 +23,7 @@ function displayMyAdvertisements($error=null, $message=null)
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
     //Importation de la fonction pour obtenir une description courte
     require_once('controller/frontEnd/functions/shortDescription.php');
+    //Appel de la vue
     require_once('view/frontEndUserConnected/v_advertisementsDisplay.php');
 }
 
@@ -32,7 +33,7 @@ function displayAddAnAdvertisementForm()
     //Variable pour définir date minimum dans "disponible le"
     $dateOfTheDay=date('Y-m-d');
     
-    if(!isset($_GET['error'])){
+    if (!isset($_GET['error'])) {
         if (isset($_SESSION['postData'])) {
             unset($_SESSION['postData']);
         }
@@ -651,23 +652,21 @@ function saveNewOrModifyAdvertisement()
         }
     }
     //Verification Titre identiques
-    $titleVerification = getUserAdvertisementRegister($userId);
-    $countTitle = 0;
-    $advertisementIdWithSameTitle = "";
+    //On récupère tous les titres et id des annonces isRegister=1 de l'utilisateur
+    $titleVerification = getUserAdvertisementTitleRegister($userId);
     foreach ($titleVerification as $key => $value) {
         if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)) {
-            $countTitle++;
-            $advertisementIdWithSameTitle = $titleVerification[$key]['advertisement_id'];
+            if ($advertisementIdToModify && $titleVerification[$key]['advertisement_id'] != $advertisementIdToModify) {
+                if ($titleVerification[$key]['advertisement_id'] != $advertisementIdToModify) {
+                    header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify.'&error=title&title='.$title.'');
+                    exit;
+                }
+            } else {
+                $_SESSION['postData'] = $_POST;
+                header('Location:index.php?page=displayAddAnAdvertisement&error=title');
+                exit;
+            }
         }
-    }
-    if ($countTitle >= 1 && $advertisementIdToModify != $advertisementIdWithSameTitle && $advertisementIdToModify != null) {
-        header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify.'&error=title&title='.$title.'');
-        exit;
-    }
-    if ($countTitle >= 1 && $advertisementIdToModify == null) {
-        $_SESSION['postData'] = $_POST;
-        header('Location:index.php?page=displayAddAnAdvertisement&error=title');
-        exit;
     }
     //Réorganisation du tableau $_FILES
     $filesArray = reArrayFiles($_FILES);
@@ -828,12 +827,12 @@ function saveNewOrModifyAdvertisement()
             } else {
                 //On récupère l'id de la derniere annonce
                 $advertisementIdVerification = getLastAdvertisementId($_SESSION['id']);
-                //Si on a bien récupéré l'id de l'annonce alors enregistrement photo en bdd
+                //On vérifie qu'on bien récupéré l'id et le stocke dans une variable
                 if ($advertisementIdVerification) {
                     $advertisementId = $advertisementIdVerification['MAX(advertisement_id)'];
                 }
             }
-            //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
+            //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $message que l'annonce a bien été ajouté
             if (insertPictures($fileUpload, $advertisementId)) {
                 if ($advertisementIdToModify) {
                     if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
@@ -899,22 +898,21 @@ function deleteAdvertisement($advertisementIdToDelete)
                 unlink('public/pictures/users/'.$picturesRequest[$key]['picture_fileName'].'');
             }
         }
-        //On récupère l'adress_id de l'annonce avant de la supprimer (peut servir pour suppression adresse)
-        $addressId = getAddressIdFromAdvertisement($advertisementIdToDelete);
+        //On ne supprime pas l'adresse car l'annonce n'est pas vraiment supprimée (isRegister=0)
         //SI la demande vient d'un admin, on recupere l'id du user de l'annonce à supprimer
         if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
             require_once('model/backEnd/m_getUsers.php');
             $userIdFromAdvertisementToDelete = getUserIdFromAdvertisementId($advertisementIdToDelete)['user_id'];
         }
         //SUPPRESSION ANNONCE (passe le champ isRegister à 0)
-        if (deleteAdvertisementBdd($advertisementIdToDelete)) {      
+        if (deleteAdvertisementBdd($advertisementIdToDelete)) {
             //Si la demande vient d'un admin
             if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
                 //Si l'annonce supprimée appartient à l'admin
-                if($verifyAdvertisementBelongsToUser){
+                if ($verifyAdvertisementBelongsToUser) {
                     $message = 'Votre annonce a été supprimée.';
                     displayMyAdvertisements(null, $message);
-                }else{
+                } else {
                     require_once('controller/backEnd/c_userAdvertisements.php');
                     $message = 'L\'annonce a été supprimée';
                     displayUserAdvertisements($userIdFromAdvertisementToDelete, null, $message);
