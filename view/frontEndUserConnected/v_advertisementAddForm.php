@@ -13,7 +13,7 @@ ob_start();
                 <p class="text-danger font-weight-bold pb-1"><?php
                 if($_GET['error']=='pbTechnique'){
                     echo 'Problème avec les fichiers téléchargés';
-                }else{
+                }else if($_GET['error'] == 'fillingError'){
                     echo 'Veuillez corriger les erreurs';
                 }
                  ?> </p> <?php } ?>
@@ -1052,13 +1052,18 @@ ob_start();
                     <!-- AdresseAutocomplete -->
                     <div id="divForstreetAutocompleteDiv">
                     </div>
+                    <?php if (isset($_SESSION['fillingError']['street']) || isset($_SESSION['fillingError']['zipcode']) || isset($_SESSION['fillingError']['city']) || isset($_SESSION['fillingError']['country'])){ ?>
+                    <p class="text-danger font-weight-bold pb-1" id="errorAddressPhp"><?php echo 'Veuillez renseigner une adresse valide';?></p>
+                    <?php } ?>
                     <!-- Adresse -->
                     <div id="streetDiv" class="form-group">
                         <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
                         <input id="street" type="text" name="street" title="Numéro et nom de rue" class="form-control"
                             placeholder="Saisir l'adresse du logement" maxlength="255" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['street'];
-                            }?>" required>
+                            }?>">
+                            <p class="text-danger font-weight-bold pb-1">
+                                <?php if (isset($_SESSION['fillingError']['street'])){echo $_SESSION['fillingError']['street'];} ?></p>
                     </div>
                     <!-- Code postal, ville, pays -->
                     <div class="row">
@@ -1068,7 +1073,9 @@ ob_start();
                             <input id="zipcode" type="text" name="zipcode" title="Code postal" class="form-control"
                                 placeholder="Code postal" maxlength="20" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['zipcode'];
-                            }?>" required>
+                            }?>">
+                            <p class="text-danger font-weight-bold pb-1">
+                                <?php if (isset($_SESSION['fillingError']['zipcode'])){echo $_SESSION['fillingError']['zipcode'];} ?></p>
                         </div>
                         <!-- Ville -->
                         <div id="cityDiv" class="form-group col-md-6">
@@ -1076,7 +1083,9 @@ ob_start();
                             <input id="city" type="text" name="city" title="Ville" class="form-control"
                                 placeholder="Ville" maxlength="60" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['city'];
-                            }?>" required>
+                            }?>">
+                            <p class="text-danger font-weight-bold pb-1">
+                                <?php if (isset($_SESSION['fillingError']['city'])){echo $_SESSION['fillingError']['city'];} ?></p>
                         </div>
                         <!-- Pays -->
                         <div id="countryDiv" class="form-group col-md-4">
@@ -1084,7 +1093,9 @@ ob_start();
                             <input id="country" type="text" name="country" title="Pays" class="form-control"
                                 placeholder="Pays" maxlength="60" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['country'];
-                            }?>" required>
+                            }?>">
+                            <p class="text-danger font-weight-bold pb-1">
+                                <?php if (isset($_SESSION['fillingError']['country'])){echo $_SESSION['fillingError']['country'];} ?></p>
                         </div>
                     </div>
                     <div class="row">

@@ -21,23 +21,15 @@ function getLastAdvertisementId($userId){
     return $lastAdvertisementId;
 }
 
-//Récupère titre, description, isActive de toutes les annonces d'un utilisateur
-function getUserAdvertisement($userId)
-{
-    $db = connectBdd();
-    $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive FROM advertisements WHERE user_id="'.$userId.'"');
-    $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
-    $request->closeCursor();
-    return $userAdvertisements;
-}
-
-//Récupere annonces isRegister=1
+//Récupere toutes les annonces isRegister=1 d'un utilisateur par ordre descendant
 function getUserAdvertisementRegister($userId)
 {
     $db = connectBdd();
-    $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive FROM advertisements WHERE user_id="'.$userId.'" && advertisement_isRegister="1"');
+    $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive 
+    FROM advertisements
+    WHERE user_id="'.$userId.'" && advertisement_isRegister="1"
+    ORDER BY advertisement_id DESC');
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
-    $request->closeCursor();
     return $userAdvertisements;
 }
 

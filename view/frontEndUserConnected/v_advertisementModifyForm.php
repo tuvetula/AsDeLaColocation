@@ -8,6 +8,8 @@ ob_start();
         <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data" onsubmit="spinnerSubmitButton()">
             <!-- ----------Annonce---------- -->
             <div class="container pb-3 pt-3 border-bottom border-dark">
+            <?php if (isset($_SESSION['fillingError'])){ ?>
+                <p class="text-danger font-weight-bold pb-1">Veuillez corriger les erreurs</p> <?php } ?>
                 <h2>Annonce</h2>
                 <!-- IsActive, Titre, Description -->
                 <input type="hidden" name="id" value="<?=$advertisementData[0]['advertisement_id']?>">
@@ -40,7 +42,7 @@ ob_start();
                     <div class="form-group">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
-                            placeholder="maximum 3000 charactères" maxlength="3000"
+                            placeholder="maximum 2000 charactères" maxlength="2000"
                             required><?=$advertisementData[0]['advertisement_description']?></textarea>
                         <div class="float-right" id="countDescription"></div>
                     </div>
@@ -145,6 +147,11 @@ ob_start();
                                 placeholder="Nom"
                                 value="<?=$advertisementData[0]['advertisement_contactNameForVisit']?>" maxlength="125"
                                 required>
+                                <?php
+                                if (isset($_SESSION['fillingError']['contactNameForVisit'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['contactNameForVisit'];?></p>
+                            <?php } ?>
                         </div>
                         <!-- Telephone du contact pour les visites -->
                         <div class="form-group col-md-4">
@@ -155,6 +162,11 @@ ob_start();
                                 class="form-control" placeholder="Téléphone"
                                 value="<?=$advertisementData[0]['advertisement_contactPhoneNumberForVisit']?>"
                                 maxlength="20" required>
+                                <?php
+                                if (isset($_SESSION['fillingError']['contactPhoneNumberForVisit'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['contactPhoneNumberForVisit'];?></p>
+                            <?php } ?>
                         </div>
                         <!-- Mail du contact pour les visites -->
                         <div class="form-group col-md-4">
@@ -164,6 +176,11 @@ ob_start();
                                 placeholder="Mail"
                                 value="<?=$advertisementData[0]['advertisement_contactMailForVisit']?>" maxlength="255"
                                 required>
+                                <?php
+                                if (isset($_SESSION['fillingError']['contactMailForVisit'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['contactMailForVisit'];?></p>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="row">
@@ -820,6 +837,11 @@ ob_start();
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
                                 </div>
+                                <?php
+                                if (isset($_SESSION['fillingError']['monthlyRentExcludingCharges'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['monthlyRentExcludingCharges'];?></p>
+                            <?php } ?>
                             </div>
                         </div>
                         <!-- Montant des charges -->
@@ -832,6 +854,11 @@ ob_start();
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
                                 </div>
+                                <?php
+                                if (isset($_SESSION['fillingError']['charges'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['charges'];?></p>
+                            <?php } ?>
                             </div>
                         </div>
                         <!-- Montant de la caution -->
@@ -844,6 +871,11 @@ ob_start();
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">&#8364</span>
                                 </div>
+                                <?php
+                                if (isset($_SESSION['fillingError']['suretyBond'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['suretyBond'];?></p>
+                            <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -1037,12 +1069,20 @@ ob_start();
                 <!-- AdresseAutocomplete -->
                 <div id="divForstreetAutocompleteDiv">
                     </div>
+                    <?php if (isset($_SESSION['fillingError']['street']) || isset($_SESSION['fillingError']['zipcode']) || isset($_SESSION['fillingError']['city']) || isset($_SESSION['fillingError']['country'])){ ?>
+                    <p class="text-danger font-weight-bold pb-1" id="errorAddressPhp"><?php echo 'Veuillez renseigner une adresse valide';?></p>
+                    <?php } ?>                   
                     <!-- Adresse -->
                     <div id="streetDiv" class="form-group">
                         <label for="street" class="font-weight-bold">Numéro et nom de rue</label>
                         <input id="street" type="text" name="street" title="Numéro, nom de rue" class="form-control"
                             placeholder="Saisir l'adresse du logement"
-                            value="<?=$advertisementData[0]['address_street']?>" maxlength="255" required>
+                            value="<?=$advertisementData[0]['address_street']?>" maxlength="255">
+                            <?php
+                                if (isset($_SESSION['fillingError']['street'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['street'];?></p>
+                            <?php } ?>
                     </div>
                     <!-- Code postal, ville, pays -->
                     <div class="row">
@@ -1051,19 +1091,34 @@ ob_start();
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
                             <input id="zipcode" type="text" name="zipcode" title="Code postal" class="form-control"
                                 placeholder="Code postal" value="<?=$advertisementData[0]['address_zipcode']?>"
-                                maxlength="20" required>
+                                maxlength="20">
+                                <?php
+                                if (isset($_SESSION['fillingError']['zipcode'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['zipcode'];?></p>
+                            <?php } ?>
                         </div>
                         <!-- Ville -->
                         <div id="cityDiv" class="form-group col-md-6">
                             <label for="city" class="font-weight-bold">Ville</label>
                             <input id="city" type="text" name="city" title="Ville" class="form-control" placeholder="Ville"
-                                value="<?=$advertisementData[0]['address_city']?>" maxlength="60" required>
+                                value="<?=$advertisementData[0]['address_city']?>" maxlength="60">
+                                <?php
+                                if (isset($_SESSION['fillingError']['city'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['city'];?></p>
+                            <?php } ?>
                         </div>
                         <!-- Pays -->
                         <div id="countryDiv" class="form-group col-md-4">
                             <label for="country" class="font-weight-bold">Pays</label>
                             <input id="country" type="text" name="country" title="Pays" class="form-control" placeholder="Pays"
-                                value="<?=$advertisementData[0]['address_country']?>" maxlength="60" required>
+                                value="<?=$advertisementData[0]['address_country']?>" maxlength="60">
+                                <?php
+                                if (isset($_SESSION['fillingError']['country'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['country'];?></p>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="row">
@@ -1080,6 +1135,11 @@ ob_start();
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">m²</span>
                                 </div>
+                                <?php
+                                if (isset($_SESSION['fillingError']['accomodationLivingAreaSize'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['accomodationLivingAreaSize'];?></p>
+                            <?php } ?>                            
                             </div>
                         </div>
                         <!-- Etage du logement -->
@@ -1492,6 +1552,11 @@ ob_start();
                                 <input id="energyClassLetterInput" type="hidden" name="energyClassLetter"
                                     class="form-control"
                                     value="<?=$advertisementData[0]['advertisement_energyClassLetter']?>">
+                                    <?php
+                                if (isset($_SESSION['fillingError']['energyClassNumber'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['energyClassNumber'];?></p>
+                            <?php } ?>
                             </div>
                         </div>
                         <!-- Ges -->
@@ -1510,6 +1575,11 @@ ob_start();
                                 </div>
                                 <input id="gesLetterInput" type="hidden" name="gesLetter" class="form-control"
                                     value="<?=$advertisementData[0]['advertisement_gesLetter']?>">
+                                    <?php
+                                if (isset($_SESSION['fillingError']['gesNumber'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['gesNumber'];?></p>
+                            <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -1930,6 +2000,11 @@ ob_start();
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">m²</span>
                                 </div>
+                                <?php
+                                if (isset($_SESSION['fillingError']['bedroomSize'])){?>
+                            <p class="text-danger font-weight-bold pb-1"><?php
+                            echo $_SESSION['fillingError']['bedroomSize'];?></p>
+                            <?php } ?>
                             </div>
                         </div>
                         <!-- Type de chambre -->

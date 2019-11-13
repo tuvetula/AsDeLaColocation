@@ -1,11 +1,11 @@
 //Count Description
 let textArea = document.getElementById('description');
 let countDescription = document.getElementById('countDescription');
-countDescription.innerHTML = textArea.value.length + "/3000";
+countDescription.innerHTML = textArea.value.length + "/2000";
 countDescription.style.color = "gray";
 textArea.addEventListener('keyup', function() {
-    countDescription.innerHTML = textArea.value.length + "/3000";
-    if (textArea.value.length >= 3000) {
+    countDescription.innerHTML = textArea.value.length + "/2000";
+    if (textArea.value.length >= 2000) {
         countDescription.style.color = "red";
         countDescription.style.fontWeight = "bold";
     } else {

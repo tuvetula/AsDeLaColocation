@@ -49,6 +49,15 @@ function displayAddAnAdvertisementForm()
 {
     //Variable pour définir date minimum dans "disponible le"
     $dateOfTheDay=date('Y-m-d');
+    
+    if(!isset($_GET['error'])){
+        if (isset($_SESSION['postData'])) {
+            unset($_SESSION['postData']);
+        }
+        if (isset($_SESSION['fillingError'])) {
+            unset($_SESSION['fillingError']);
+        }
+    }
 
     require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
 }
@@ -845,7 +854,7 @@ function saveNewOrModifyAdvertisement()
             //Si les photos ont bien été inséré en bdd alors on stocke dans la variable $_SESSION que l'annonce a bien été ajouté
             if (insertPictures($fileUpload, $advertisementId)) {
                 if ($advertisementIdToModify) {
-                    if ($_SESSION['isAdmin']) {
+                    if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
                         $message = 'L\'annonce a bien été modifiée';
                     } else {
                         $message = 'Votre annonce a bien été modifiée';
@@ -895,7 +904,8 @@ function saveNewOrModifyAdvertisement()
 function deleteAdvertisement($advertisementIdToDelete)
 {
     //On vérifie si l'annonce qui doit etre supprimée appartient à l'utilisateur connecté ou si la demande vient d'un admin
-    if (verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementIdToDelete) || $_SESSION['isAdmin']==true) {
+    $verifyAdvertisementBelongsToUser = verifyAdvertisementBelongsToUser($_SESSION['id'], $advertisementIdToDelete);
+    if ($verifyAdvertisementBelongsToUser || $_SESSION['isAdmin']==true) {
         
         //SUPPRESSION PHOTOS
         $picturesRequest = getAdvertisementPictures($advertisementIdToDelete);
@@ -910,28 +920,23 @@ function deleteAdvertisement($advertisementIdToDelete)
         //On récupère l'adress_id de l'annonce avant de la supprimer (peut servir pour suppression adresse)
         $addressId = getAddressIdFromAdvertisement($advertisementIdToDelete);
         //SI la demande vient d'un admin, on recupere l'id du user de l'annonce à supprimer
-        if ($_SESSION['isAdmin']) {
+        if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
             require_once('model/backEnd/m_getUsers.php');
             $userIdFromAdvertisementToDelete = getUserIdFromAdvertisementId($advertisementIdToDelete)['user_id'];
         }
-        //SUPPRESSION ANNONCE
-        if (deleteAdvertisementBdd($advertisementIdToDelete)) {
-            //SUPPRESSION ADRESSE si l'adresse n'appartient à aucun utilisateur et aucune autre annonce
-            //On vérifie si un user à cet address-id
-            $usersWithAdvertisementAddressId = getUsersWithThisAddressId($addressId);
-            if (!$usersWithAdvertisementAddressId) {
-                //On verifie si une autre annonce à cet address_id
-                $advertisementsWithSameAddressId = getAdvertisementsWithSameAddressId($addressId);
-                if (empty($advertisementsWithSameAddressId)) {
-                    //Si il y aucune annonce en retour, on supprime l'adresse
-                    deleteAddressBdd($addressId);
-                }
-            }
+        //SUPPRESSION ANNONCE (passe le champ isRegister à 0)
+        if (deleteAdvertisementBdd($advertisementIdToDelete)) {      
             //Si la demande vient d'un admin
-            if ($_SESSION['isAdmin']) {
-                require_once('controller/backEnd/c_userAdvertisements.php');
-                $message = 'L\'annonce a été supprimée';
-                displayUserAdvertisements($userIdFromAdvertisementToDelete, null, $message);
+            if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
+                //Si l'annonce supprimée appartient à l'admin
+                if($verifyAdvertisementBelongsToUser){
+                    $message = 'Votre annonce a été supprimée.';
+                    displayMyAdvertisements(null, $message);
+                }else{
+                    require_once('controller/backEnd/c_userAdvertisements.php');
+                    $message = 'L\'annonce a été supprimée';
+                    displayUserAdvertisements($userIdFromAdvertisementToDelete, null, $message);
+                }
             } else {
                 //On appelle la fonction qui affiche la page "mes annonces"
                 $message = 'Votre annonce a été supprimée.';
