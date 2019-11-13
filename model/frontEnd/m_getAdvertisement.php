@@ -21,14 +21,13 @@ function getLastAdvertisementId($userId){
     return $lastAdvertisementId;
 }
 
-//Récupere toutes les annonces isRegister=1 d'un utilisateur par ordre descendant
-function getUserAdvertisementRegister($userId)
-{
+//Récupere toutes les annonces isRegister=1 d'un utilisateur avec photo order1 descendant
+function getUserAdvertisementRegisterWithPictureOrder1($userId){
     $db = connectBdd();
-    $request = $db->query('SELECT advertisement_id,advertisement_title,advertisement_description,advertisement_isActive 
-    FROM advertisements
-    WHERE user_id="'.$userId.'" && advertisement_isRegister="1"
-    ORDER BY advertisement_id DESC');
+    $request = $db->query('SELECT a.advertisement_id,a.advertisement_title,a.advertisement_description,a.advertisement_isActive,p.picture_fileName,p.picture_order 
+    FROM advertisements AS a
+    LEFT JOIN pictures AS p ON a.advertisement_id = p.advertisement_id && p.picture_order="1"
+    WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1"');
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
     return $userAdvertisements;
 }
