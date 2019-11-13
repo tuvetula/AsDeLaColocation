@@ -656,7 +656,7 @@ function saveNewOrModifyAdvertisement()
     $titleVerification = getUserAdvertisementTitleRegister($userId);
     foreach ($titleVerification as $key => $value) {
         if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)) {
-            if ($advertisementIdToModify && $titleVerification[$key]['advertisement_id'] != $advertisementIdToModify) {
+            if ($advertisementIdToModify) {
                 if ($titleVerification[$key]['advertisement_id'] != $advertisementIdToModify) {
                     header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify.'&error=title&title='.$title.'');
                     exit;
