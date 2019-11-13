@@ -45,6 +45,14 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
 
     //Page Ajouter une nouvelle annonce (Formulaire)
     } elseif (isset($_GET['page']) && $_GET['page']=="displayAddAnAdvertisement") {
+        if(!isset($_GET['error'])){
+            if (isset($_SESSION['postData'])) {
+                unset($_SESSION['postData']);
+            }
+            if (isset($_SESSION['fillingError'])) {
+                unset($_SESSION['fillingError']);
+            }
+        }
         displayAddAnAdvertisementForm();
         
     //Page modifier une annonce (Formulaire)

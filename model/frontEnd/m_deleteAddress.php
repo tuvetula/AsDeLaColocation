@@ -7,4 +7,5 @@ function deleteAddressBdd($addressId){
     $db = connectBdd();
     $delete = $db->prepare('DELETE FROM addresses WHERE address_id="'.$addressId.'"');
     $delete->execute();
+    return true;
 }

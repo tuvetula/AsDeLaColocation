@@ -1,6 +1,6 @@
 <?php
 require_once('model/bdd/bddConfig.php');
-//Supprime une annonce avec son id et les photos liées à l'annonce
+//Supprime une annonce avec son id
 function deleteAdvertisementBdd($advertisementId){
     $db = connectBdd();
     $delete = $db->prepare('UPDATE advertisements SET 

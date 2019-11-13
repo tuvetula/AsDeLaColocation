@@ -4,7 +4,6 @@ header("Access-Control-Allow-Origin: *");
 include_once('../bdd/config.php');
 if (isset($_SESSION['mail'])){
     $advertisementId = htmlspecialchars(strip_tags($_POST['advertisementId']));
-    
     //Connexion Base de donnée
     try {
         $bdd = new PDO($acces.$dbName,$login,$password,array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));

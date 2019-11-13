@@ -391,6 +391,9 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationSelogerData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_firstName,
+    users.user_name,
+    users.user_mail,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
     users.user_passwordSiteWeb 
