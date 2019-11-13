@@ -22,14 +22,14 @@ ob_start();
                 <div class="media col-sm-12 col-md-8 col-lg-9">
                     <img class="mr-3" src="
                     <?php
-                    if (array_key_exists('picture_fileName', $userAdvertisements[$key])) {
+                    if (array_key_exists('picture_fileName', $userAdvertisements[$key]) && $userAdvertisements[$key]['picture_fileName']) {
                         echo 'public/pictures/users/'.$userAdvertisements[$key]['picture_fileName'].'';
                     } else {
                         echo 'public/pictures/icons/iconePhoto64.png';
                     } ?>
-                    " alt="image générique" style="width:64px">
+                    " alt="image générique" style="width:64px;height:64px">
                     <div class="media-body">
-                        <h5 class="mt-0 font-weight-bold"><?=$userAdvertisements[$key]['advertisement_title']?></h5>
+                        <a class="text-dark" href="index.php?page=modifyAdvertisement&advertisementId=<?=$userAdvertisements[$key]['advertisement_id']?>"><h5 class="mt-0 font-weight-bold"><?=$userAdvertisements[$key]['advertisement_title']?></h5></a>
                         <p><?=shortDescription($userAdvertisements[$key]['advertisement_description'])?></p>
                     </div>
                 </div>

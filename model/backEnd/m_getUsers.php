@@ -3,7 +3,9 @@ require_once('model/bdd/bddConfig.php');
 //Récupère tous les users (nom, prénom, mail)
 function getUsersForAdmin(){
     $db = connectBdd();
-    $usersRequest = $db->prepare('SELECT user_id,user_name,user_firstName,user_mail,user_isMember FROM users');
+    $usersRequest = $db->prepare('SELECT user_id,user_name,user_firstName,user_mail,user_isMember 
+    FROM users
+    ORDER BY user_name');
     $usersRequest->execute();
     $users = $usersRequest->fetchAll(PDO::FETCH_ASSOC);
     return $users;

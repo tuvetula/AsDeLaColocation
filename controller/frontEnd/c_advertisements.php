@@ -18,25 +18,7 @@ require_once('controller/frontEnd/functions/calculEnergyGesLetter.php');
 function displayMyAdvertisements($error=null, $message=null)
 {
     //Récupération annonces utilisateurs
-    $userAdvertisements = getUserAdvertisementRegister($_SESSION['id']);
-    //Mise en tableau des id des annonces de l'utilisateur
-    $advertisementIdArray = array();
-    foreach ($userAdvertisements as $key => $value) {
-        array_push($advertisementIdArray, $userAdvertisements[$key]['advertisement_id']);
-    }
-    //Récupération de la photo Order 1 de chaque annonce
-    $pictureFilename = array();
-    foreach ($advertisementIdArray as $key => $value) {
-        $pictureFilename[$value] = getAdvertisementPictureOrder1($value);
-    }
-    //Integration photos dans le tableau $userAdvertisements
-    for ($i = 0 ; $i < count($userAdvertisements) ; $i++) {
-        foreach ($pictureFilename as $key => $value) {
-            if ($userAdvertisements[$i]['advertisement_id'] == $key && $pictureFilename[$key]!=false) {
-                $userAdvertisements[$i]['picture_fileName'] = $value;
-            }
-        }
-    }
+    $userAdvertisements = getUserAdvertisementRegisterWithPictureOrder1($_SESSION['id']);
     //Déclaration variable url bouton supprimer
     $deleteUrl = 'index.php?page=deleteAdvertisement&id=';
     //Importation de la fonction pour obtenir une description courte
