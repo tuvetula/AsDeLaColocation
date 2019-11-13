@@ -31,12 +31,15 @@ streetAutocompleteInput.setAttribute('title', 'Adresse complète');
 streetAutocompleteInput.classList.add('form-control');
 streetAutocompleteInput.setAttribute('placeholder', 'Saisir l\'adresse du logement');
 streetAutocompleteInput.setAttribute('maxlength', '255');
+streetAutocompleteInput.setAttribute('required', '');
+streetAutocompleteDiv.appendChild(streetAutocompleteInput);
 if (streetInput.value.length > 0) {
     streetAutocompleteInput.value = streetInput.value + " " + zipcodeInput.value + " " + cityInput.value;
 }
-streetAutocompleteInput.setAttribute('required', '');
-streetAutocompleteDiv.appendChild(streetAutocompleteInput);
-
+//On met une bordure rouge si il y a une erreur
+if (verificationFieldPresence('errorAddressPhp')) {
+    errorRedBorder(streetAutocompleteInput);
+}
 //On cache les champs adresse zipcode city country
 streetDiv.style.display = "none";
 zipcodeDiv.style.display = "none";
@@ -49,7 +52,6 @@ countryDiv.style.display = "none";
 document.addEventListener('click', function() {
     //Si la liste d'adresses existe et que aucune adresse est focus (attribut hasfocus de ul = 0)
     if (verificationFieldPresence('ulAutocompleteChoices') && getValueAttribute('ulAutocompleteChoices', 'hasFocus') == 0) {
-        console.log('click');
         let ulChoices = document.getElementById('ulAutocompleteChoices');
         createMessage("Veuillez sélectionner une adresse dans la liste déroulante", "error");
         //Si le span est présent
@@ -62,7 +64,6 @@ document.addEventListener('click', function() {
         }
         streetAutocompleteInput.focus();
     } else if (verificationFieldPresence('ulAutocompleteChoices') && getValueAttribute('ulAutocompleteChoices', 'hasFocus') == 1) {
-        console.log('click1');
         errorRedBorder(streetAutocompleteInput);
         createMessage("Veuillez sélectionner une adresse dans la liste déroulante", "error");
     }
@@ -72,7 +73,6 @@ document.addEventListener('click', function() {
 streetAutocompleteInput.addEventListener('blur', function() {
     //Si le champ input n'est pas vide
     if (!verificationFieldValueIsEmpty('streetAutocomplete')) {
-        console.log('blur');
         //Si les champs cachés sont vides
         if (verificationFieldValueIsEmpty('street') || verificationFieldValueIsEmpty('zipcode') || verificationFieldValueIsEmpty('city')) {
             //Si la liste d'adresses existe
@@ -94,27 +94,28 @@ streetAutocompleteInput.addEventListener('blur', function() {
                 streetAutocompleteInput.focus();
             }
         } else {
-            streetAutocompleteInput.style.borderColor = "rgb(233, 236, 239)";
+            normalGreyBorder(streetAutocompleteInput);
         }
     } else {
         createMessage("Champ obligatoire", "error");
     }
     if (verificationFieldPresence('message') && getValueAttribute('message', 'type') != 'error') {
-        streetAutocompleteInput.style.borderColor = "rgb(233, 236, 239)";
+        normalGreyBorder(streetAutocompleteInput);
     }
 });
 
 //Attente évènement focus sur saisie dans le champ streetAutocomplete
 streetAutocompleteInput.addEventListener('focus', function() {
     if (verificationFieldPresence('message') && getValueAttribute('message', 'type') != 'error') {
-        streetAutocompleteInput.style.borderColor = "rgb(233, 236, 239)";
+        normalGreyBorder(streetAutocompleteInput);
     }
 })
 
 //Attente évènement input sur saisie dans le champ streetAutocomplete
 streetAutocompleteInput.addEventListener('input', function() {
+    removeElement('errorAddressPhp');
     createSpanUserWrite();
-    streetAutocompleteInput.style.borderColor = "rgb(233, 236, 239)";
+    normalGreyBorder(streetAutocompleteInput);
     streetInput.value = "";
     zipcodeInput.value = "";
     cityInput.value = "";
@@ -279,7 +280,7 @@ function addressButtonBlur(elt) {
 //Focus address line
 function addressButtonFocus(elt) {
     streetAutocompleteInput.value = elt.textContent;
-    elt.style.backgroundColor = "rgb(233, 236, 239)";
+    elt.style.backgroundColor = 'rgb(209,213,216)';
 }
 //Fonction mouseover
 function mouseoverstyle(elt) {
@@ -368,7 +369,11 @@ function createMessage(text, type) {
 function removeElement(id) {
     let errorMessageVerif = document.getElementById(id);
     if (errorMessageVerif) {
-        streetAutocompleteDiv.removeChild(errorMessageVerif);
+        if (errorMessageVerif.id == "errorAddressPhp") {
+            errorMessageVerif.parentNode.removeChild(errorMessageVerif);
+        } else {
+            streetAutocompleteDiv.removeChild(errorMessageVerif);
+        }
     }
 }
 //Fonction creation span (conserver la saisie de l'utilisateur)
@@ -421,6 +426,12 @@ function getValueAttribute(id, attributeName) {
 }
 //Fonction bordure rouge erreur
 function errorRedBorder(element) {
-    element.style.borderColor = "red";
+    element.style.borderColor = "rgb(217,83,79)";
     element.style.borderWidth = "2px";
+}
+//Fonction bordure normale
+function normalGreyBorder(element) {
+    element.style.borderColor = "rgb(209,213,216)";
+    element.style.borderWidth = "1px";
+    //
 }
