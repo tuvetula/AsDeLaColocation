@@ -5,13 +5,6 @@ header('Content-Type: application/json');
 require_once('../bdd/config.php');
 
 if (isset($_GET['id']) && $_GET['id'] == $idJson) {
-    //Stocke la date - 7 jours
-    $date = date('Y-m-d', strtotime('-7 day'));
-    //Stocke la date - 30 jours (pour republication seloger)
-    $dateSeloger = date('Y-m-d', strtotime('-31 day'));
-    //Stocke la date pour site erasmusu
-    $dateErasmusu = date('Y-m-d', strtotime('-6 day'));
-
     //Connexion Base de donnée
     try {
         $bdd = new PDO($acces.$dbName, $login, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
@@ -23,22 +16,22 @@ if (isset($_GET['id']) && $_GET['id'] == $idJson) {
     //Ecriture fichier json
     echo json_encode($json);
 }
-//creation: Annonce inactive + date non null
+//creation: User avec valeur false dans les champs concernés
 function creation($bdd)
 {
     //leboncoin creation
-    $requestcreationLeboncoin=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountLeboncoin=:isCreate');
-    $requestcreationLeboncoin->execute([
-        ':isCreate' => false,
-    ]);
-    $creationLeboncoin = $requestcreationLeboncoin->fetchAll(PDO::FETCH_ASSOC);
-    $jsoncreation['c_Leboncoin'] = $creationLeboncoin;
+    // $requestcreationLeboncoin=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
+    // WHERE user_hasLeboncoin=:isCreate');
+    // $requestcreationLeboncoin->execute([
+    //     ':isCreate' => false,
+    // ]);
+    // $creationLeboncoin = $requestcreationLeboncoin->fetchAll(PDO::FETCH_ASSOC);
+    // $jsoncreation['c_Leboncoin'] = $creationLeboncoin;
 
     //Lacartedescolocs creation
     $requestcreationLacartedesColocs=$bdd->prepare('SELECT 
-    users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountLacartedescolocs=:isCreate');
+    users.user_name,users.user_firstName,users.user_mail,hasCreationDate,users.user_id FROM users
+    WHERE user_hasLacartedescolocsAccount=:isCreate');
     $requestcreationLacartedesColocs->execute([
         ':isCreate' => false,
     ]);
@@ -47,7 +40,7 @@ function creation($bdd)
 
     //Appartager creation
     $requestcreationAppartager=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountAppartager=:isCreate');
+    WHERE user_hasAppartagerAccount=:isCreate');
     $requestcreationAppartager->execute([
         ':isCreate' => false,
     ]);
@@ -55,11 +48,18 @@ function creation($bdd)
     $jsoncreation['c_Appartager'] = $creationAppartager;
 
     //Seloger creation
+    $requestcreationSeloger=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
+    WHERE user_hasSelogerAccount=:isCreate');
+    $requestcreationSeloger->execute([
+        ':isCreate' => false,
+    ]);
+    $creationSeloger = $requestcreationSeloger->fetchAll(PDO::FETCH_ASSOC);
+    $jsoncreation['c_Seloger'] = $creationSeloger;
     
 
     //Studapart creation
     $requestcreationStudapart=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountStudapart=:isCreate');
+    WHERE user_hasStudapartAccount=:isCreate');
     $requestcreationStudapart->execute([
         ':isCreate' => false,
     ]);
@@ -68,7 +68,7 @@ function creation($bdd)
 
     //Erasmusu creation
     $requestcreationErasmusu=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountErasmusu=:isCreate');
+    WHERE user_hasErasmusuAccount=:isCreate');
     $requestcreationErasmusu->execute([
         ':isCreate' => false,
     ]);
@@ -77,7 +77,7 @@ function creation($bdd)
 
     //Roomlala creation
     $requestcreationRoomlala=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountRoomlala=:isCreate');
+    WHERE user_hasRoomlalaAccount=:isCreate');
     $requestcreationRoomlala->execute([
         ':isCreate' => false,
     ]);
@@ -86,7 +86,7 @@ function creation($bdd)
 
     //Bubbleflat creation
     $requestcreationBubbleflat=$bdd->prepare('SELECT users.user_name,users.user_firstName,users.user_mail,users.user_accountCreationDate,users.user_id FROM users
-    WHERE user_accountBubbleflat=:isCreate');
+    WHERE user_hasBubbleflatAccount=:isCreate');
     $requestcreationBubbleflat->execute([
         ':isCreate' => false,
     ]);
