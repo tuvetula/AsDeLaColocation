@@ -1,0 +1,5 @@
+AuthUserFile /home/myhotefrch/appasdelacoloc/model/bdd/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Acces restreint"
+AuthType Basic
+Require valid-user

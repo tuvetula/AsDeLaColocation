@@ -2,7 +2,7 @@
 session_start();
 header("Access-Control-Allow-Origin: *");
 include_once('../bdd/config.php');
-if (isset($_SESSION['mail'])){
+if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']){
     $userId = htmlspecialchars(strip_tags($_POST['userId']));
     //Connexion Base de donnée
     try {
@@ -11,8 +11,12 @@ if (isset($_SESSION['mail'])){
         die('Erreur : '.$e->getMessage());
     }
     //Requete recup etat actuel de advertisement_isActive
-    $request=$bdd->query('SELECT user_isMember FROM users 
-                        WHERE user_id="'.$userId.'"');
+    $request=$bdd->prepare('SELECT user_isMember 
+    FROM users 
+    WHERE user_id=:userId');
+    $request->execute([
+        ':userId'=>$userId
+    ]);
     $userIsMemberState = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();
     //préparation nouvel état de isMember à insérer en bdd

@@ -11,7 +11,8 @@ function handleFiles(files, id) {
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
             if (!imageType.test(file.type)) {
-                alert("veuillez sélectionner une image");
+                alert("Veuillez sélectionner une image");
+                input.value = "";
             } else {
                 if (i == 0) {
                     preview.innerHTML = '';
@@ -41,18 +42,9 @@ function handleFiles(files, id) {
         }
     } else {
         alert("Vous devez sélectionner 10 images maximum");
-        // //On efface les anciennes photos
-        // input.value = "";
-        // //On supprime les anciennes photos de la view
-        // preview.innerHTML = '';
+        //On efface les anciennes photos
+        input.value = "";
+        //On supprime les anciennes photos de la view
+        preview.innerHTML = '';
     }
-    // input.style.display = "none";
-    // let newInput = document.createElement('input');
-    // newInput.setAttribute('type', 'file');
-    // newInput.setAttribute('onchange', 'handleFiles(files,id)');
-    // newInput.setAttribute('id', 'upload' + (nbchildrenDivInput + 1));
-    // newInput.setAttribute('multiple', '');
-    // newInput.setAttribute('name', 'file[]');
-    // newInput.setAttribute('style', 'color:transparent');
-    // inputDiv.appendChild(newInput);
 }

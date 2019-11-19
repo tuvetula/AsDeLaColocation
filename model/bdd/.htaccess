@@ -1,5 +1,4 @@
-AuthUserFile /home/myhotefrchcoloc/moncompteasdelacoloc/.htpasswd
-AuthGroupFile /dev/null
+AuthUserFile /wamp/www/AsDeLaColoc/private/.htpasswd
 AuthName "Accès restreint"
 AuthType Basic
 Require valid-user

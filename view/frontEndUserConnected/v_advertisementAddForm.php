@@ -29,13 +29,12 @@ ob_start();
                                 echo $_SESSION['postData']['title'];
                             }?>" required>
                         <div class="float-right" id="countTitle"></div>
-                        <p class="text-danger font-weight-bold pb-1"><?php
-                        if (isset($_GET['error']) && $_GET['error'] == 'title'){
-                            echo 'Vous avez déja utilisé ce titre dans une autre annonce';
-                        }else if (isset($_SESSION['fillingError']['title'])){
-                            echo $_SESSION['fillingError']['title'];
-                        }
-                        ?></p>
+                        <?php if (isset($_GET['error']) && $_GET['error'] == 'title'){ ?>
+                        <p class="text-danger font-weight-bold pb-1" type="error">Vous avez déja utilisé ce titre dans une autre annonce</p>
+                        <?php
+                        }else if (isset($_SESSION['fillingError']['title'])){ ?>
+                        <p class="text-danger font-weight-bold pb-1" type="error"><?=$_SESSION['fillingError']['title']?></p>
+                        <?php } ?>
                     </div>
                     <!--Description-->
                     <div class="form-group pb-3">
@@ -45,6 +44,9 @@ ob_start();
                                 echo $_SESSION['postData']['description'];
                             }?></textarea>
                         <div class="float-right" id="countDescription"></div>
+                        <?php if (isset($_SESSION['fillingError']['description'])){ ?>
+                        <p class="text-danger font-weight-bold pb-1" type="errorT"><?=$_SESSION['fillingError']['description']?></p>
+                        <?php } ?>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
@@ -2090,6 +2092,7 @@ ob_start();
         </form>
     </div>
 </div>
+<script src="public/js/redBorder.js"></script>
 <script src="public/js/autocompleteAddress.js"></script>
 <script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
