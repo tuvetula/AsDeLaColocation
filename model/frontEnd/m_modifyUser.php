@@ -2,31 +2,41 @@
 require_once('model/bdd/bddConfig.php');
 
 //Modification User ("mon compte")
-function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber,$userLoginSiteWeb,$userPasswordSiteWeb){
+function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber){
     $userId = htmlspecialchars(strip_tags($userId));
     $userName = htmlspecialchars(strip_tags($userName));
     $userFirstName = htmlspecialchars(strip_tags($userFirstName));
     $userMail = htmlspecialchars(strip_tags($userMail));
     $userPhoneNumber = htmlspecialchars(strip_tags($userPhoneNumber));
-    $userLoginSiteWeb = htmlspecialchars(strip_tags($userLoginSiteWeb));
-    $userPasswordSiteWeb = htmlspecialchars(strip_tags($userPasswordSiteWeb));
 
     $db = connectBdd();
     $modifyUser = $db->prepare('UPDATE users SET 
     user_name=:name,
     user_firstName=:firstName,
     user_phoneNumber=:phoneNumber,
-    user_mail=:mail,
-    user_loginSiteWeb=:loginSiteWeb,
-    user_passwordSiteWeb=:passwordSiteWeb
+    user_mail=:mail
     WHERE user_id="'.$userId.'"');
     $modifyUser->execute(array(
-        ':name'=> $userName,
-        ':firstName'=> $userFirstName,
+        ':name'=> ucfirst($userName),
+        ':firstName'=> ucfirst($userFirstName),
         ':phoneNumber'=> $userPhoneNumber,
-        ':mail'=> $userMail,
-        ':loginSiteWeb'=> $userLoginSiteWeb,
-        ':passwordSiteWeb'=> $userPasswordSiteWeb
+        ':mail'=> $userMail
+    ));
+    return true;
+}
+//Modification date création compte et token (après clique sur lien de confirmation d'inscription)
+function validRegistrationBdd($mail){
+    $mail = htmlspecialchars(strip_tags($mail));
+    $db = connectBdd();
+    $validRegistration = $db->prepare('UPDATE users SET 
+    user_token=:token,
+    user_accountCreationDate=:accountCreationDate,
+    user_isMember=:isMember
+    WHERE user_mail="'.$mail.'"');
+    $validRegistration->execute(array(
+        ':token'=> null,
+        ':accountCreationDate'=>date('Y-m-d'),
+        ':isMember'=> 1
     ));
     return true;
 }

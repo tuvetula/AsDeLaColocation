@@ -40,7 +40,11 @@ ob_start();
                     <p class="offset-lg-2 col-lg-4"><strong>Adresse mail:</strong> <?=$userData['user_loginSiteWeb']?>
                     </p>
                     <p class="offset-lg-2 col-lg-4"><strong>Mot de passe:</strong>
-                        <?=$userData['user_passwordSiteWeb']?></p>
+                        <?php if ($userData['user_passwordSiteWeb']){
+                            echo $userData['user_passwordSiteWeb'];
+                            } else {
+                                echo $passwordSiteWeb;
+                            }?></p>
                 </div>
             </div>
             <?php if(isset($_SESSION['id']) && $_SESSION['id']==$userData['user_id']){?>

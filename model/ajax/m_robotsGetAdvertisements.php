@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Origin: *");
 require_once('../bdd/config.php');
 
 if (isset($_GET['id']) && $_GET['id'] == $idJson) {
@@ -31,7 +31,7 @@ function deletion($bdd)
 {
     //leboncoin deletion
     $requestdeleteLeboncoin=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionLeboncoin IS NOT NULL');
@@ -43,7 +43,7 @@ function deletion($bdd)
 
     //Lacartedescolocs deletion
     $requestdeleteLacartedesColocs=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionLacartedescolocs IS NOT NULL');
@@ -54,7 +54,8 @@ function deletion($bdd)
     $jsonDeletion['d_Lacartedescolocs'] = $deletionLacartedescolocs;
 
     //Appartager deletion
-    $requestdeleteAppartager=$bdd->prepare('SELECT advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_monthlyRentExcludingCharges,advertisements.advertisement_charges,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    $requestdeleteAppartager=$bdd->prepare('SELECT 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_monthlyRentExcludingCharges,advertisements.advertisement_charges,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionAppartager IS NOT NULL');
@@ -69,7 +70,7 @@ function deletion($bdd)
 
     //Studapart deletion
     $requestdeleteStudapart=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionStudapart IS NOT NULL');
@@ -81,7 +82,7 @@ function deletion($bdd)
 
     //Erasmusu deletion
     $requestdeleteErasmusu=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionErasmusu IS NOT NULL');
@@ -93,7 +94,7 @@ function deletion($bdd)
 
     //Roomlala deletion
     $requestdeleteRoomlala=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionRoomlala IS NOT NULL');
@@ -105,7 +106,7 @@ function deletion($bdd)
 
     //Bubbleflat deletion
     $requestdeleteBubbleflat=$bdd->prepare('SELECT 
-    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_loginSiteWeb,users.user_passwordSiteWeb FROM advertisements 
+    advertisements.advertisement_id,advertisements.advertisement_title,advertisements.advertisement_description,users.user_id,users.user_loginSiteWeb,users.user_passwordSiteWeb,users.user_accountCreationDate FROM advertisements 
     JOIN users ON advertisements.user_id = users.user_id
     WHERE advertisement_isActive=:isActive 
     AND advertisement_dateOfLastDiffusionBubbleflat IS NOT NULL');
@@ -126,9 +127,11 @@ function publication($bdd)
     $requestPublicationLeboncoin=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -146,9 +149,11 @@ function publication($bdd)
     $requestPublicationLacartedescolocs=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -166,9 +171,11 @@ function publication($bdd)
     $requestPublicationAppartager=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -186,12 +193,14 @@ function publication($bdd)
     $requestPublicationSeloger=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_firstName,
     users.user_name,
     users.user_mail,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -209,9 +218,11 @@ function publication($bdd)
     $requestPublicationStudapart=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -229,9 +240,11 @@ function publication($bdd)
     $requestPublicationErasmusu=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -249,9 +262,11 @@ function publication($bdd)
     $requestPublicationRoomlala=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -269,9 +284,11 @@ function publication($bdd)
     $requestPublicationBubbleflat=$bdd->prepare('SELECT 
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -322,9 +339,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationLeboncoinData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -345,9 +364,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationLacartedescolocsData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -368,9 +389,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationAppartagerData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -391,12 +414,14 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationSelogerData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_firstName,
     users.user_name,
     users.user_mail,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -417,9 +442,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationStudapartData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -440,9 +467,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationErasmusuData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -463,9 +492,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationRoomlalaData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
@@ -486,9 +517,11 @@ function republication($bdd, $date, $dateSeloger,$dateErasmusu)
     $requestRepublicationBubbleflatData=$bdd->prepare('SELECT
     advertisements.*,
     addresses.*,
+    users.user_id,
     users.user_phoneNumber,
     users.user_loginSiteWeb,
-    users.user_passwordSiteWeb 
+    users.user_passwordSiteWeb,
+    users.user_accountCreationDate 
     FROM advertisements 
     JOIN addresses ON advertisements.address_id = addresses.address_id 
     JOIN users ON advertisements.user_id = users.user_id
