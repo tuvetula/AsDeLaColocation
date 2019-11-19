@@ -10,11 +10,15 @@ function insertNewAdress($addressStreet, $addressZipcode, $addressCity, $address
     $addressCountry = htmlspecialchars(strip_tags($addressCountry));
     $db = connectBdd();
     $insertAddress = $db->prepare('INSERT INTO addresses (address_street,address_zipcode,address_city,address_country) VALUES (:addressStreet,:addressZipcode,:addressCity,:addressCountry)');
-    $insertAddress->execute(array(
+    $insertAddressExecute = $insertAddress->execute(array(
     ':addressStreet'=>$addressStreet,
     ':addressZipcode'=>$addressZipcode,
     ':addressCity'=>$addressCity,
     ':addressCountry'=>$addressCountry
 ));
-    return true;
+    if ($insertAddressExecute) {
+        return $db->lastInsertId();
+    } else {
+        return false;
+    }
 }
