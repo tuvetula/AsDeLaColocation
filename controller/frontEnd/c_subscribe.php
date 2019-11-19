@@ -55,39 +55,37 @@ function saveSubscribeForm()
                         if (isset($_POST['passwordSubscribe1'])) {
                             $userpassword = $_POST['passwordSubscribe1'];
                         }
-                        if (isset($_POST['loginSiteWeb'])) {
-                            $userloginSiteWeb = $_POST['loginSiteWeb'];
-                        }
-                        if (isset($_POST['passwordSiteWeb'])) {
-                            $userpasswordSiteWeb = $_POST['passwordSiteWeb'];
-                        }
                      
                         //On enregistre la nouvelle adresse en base de donnée
                         if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
                             //On récupère l'id de l'adresse que l'on vient de créer et on le stocke dans une variable
                             $addressId = getLastAddressId()['MAX(address_id)'];
+                            //Création token
+                            $token = sha1($usermail.time());
                             //On ajoute l'utilisateur à la base de donnée et on redirige vers la page de login
-                            if (insertNewUser($userName, $userfirstName, $userphoneNumber, $usermail, $userpassword, $userloginSiteWeb, $userpasswordSiteWeb, $addressId)) {
+                            if (insertNewUser($userName, $userfirstName, $userphoneNumber, $usermail, $userpassword, $token, $addressId)) {
+                                //On génère le lien à inscrire dans le mail
+                                global $mailLinkToSend;
+                                $link = $mailLinkToSend."action=registration&token=$token&mail=$usermail";
+                                //Création message à envoyer par mail
+                                $to = $usermail;
+                                $subject = "Confirmation de votre inscription As de la coloc";
+                                $body = 'Bonjour,'."\r\n".'veuillez cliquer sur le lien suivant pour confirmer votre inscription :'."\r\n".''.$link.'';
+                                $headers[] = 'From: Asdelacoloc <no-reply@asdelacoloc.fr>'."\r\n".
+                                'Reply-To: no-reply@asdelacoloc.fr'."\r\n";
+                                //Envoi du mail à l'utilisateur
+                                mail($to, $subject, $body, implode("\r\n", $headers));
                                 //On définit un message de confirmation et on redirige vers la page de confirmation
                                 $message = "Votre inscription est bien enregistrée !";
-                                $message2 = "Un membre de notre équipe va valider votre inscription sous 72 heures, vous pourrez ensuite vous connecter à votre compte. Merci et à très bientôt.";
-                                //Création message à envoyer par mail
-                                global $ownMail;
-                                $to = $ownMail;
-                                $subject = "Nouvelle inscription";
-                                $body = 'Bonjour, '."\r\n".$userName.' '.$userfirstName.' vient de s\'inscrire sur le site moncompte.asdelacoloc.fr';
-                                $headers[] = 'MIME-Version: 1.0';
-                                $headers[]= 'Content-type: text/html; charset=utf-8';
-                                //Envoi du mail
-                                mail($to, $subject, $body, implode("\r\n", $headers));
+                                $message2 = "Vous allez recevoir un mail de demande de confirmation. Cliquez sur le lien dans l’email pour confirmer votre inscription";
                                 //Affichage page de confirmation d'inscription
                                 require_once('view/frontEnd/v_message.php');
-                            }else{
+                            } else {
                                 //On efface l'adresse créée
                                 deleteAddressBdd($addressId);
+                                $error = 'Problème technique. Veuillez réessayer ultérieurement';
                             }
                         }
-                        
                     } else {
                         $error = "Les deux mots de passe ne sont pas identiques.";
                     }
@@ -102,4 +100,42 @@ function saveSubscribeForm()
         $error = 'Veuillez renseigner ce champ';
     }
     require_once('view/frontEnd/v_subscribeForm.php');
+}
+
+//Validation de l'inscription
+function validRegistration()
+{
+    $usermail = $_GET['mail'];
+    $token = $_GET['token'];
+    //On récupère les infos de l'utilisateur lié au mail présent dans le lien
+    $userInfo = getUserByMail($usermail);
+    if ($userInfo) {
+        //On vérifie si le token récupéré dans le lien du mail correspond à celui en bdd
+        if ($userInfo['user_token'] == $token) {
+            //On enregistre la date de création de compte en bdd et on supprime le token
+            if (validRegistrationBdd($usermail)) {
+                //Création message à envoyer par mail à l'administrateur
+                global $ownMail;
+                global $addressSite;
+                $to = $ownMail;
+                $subject = "Nouvelle inscription";
+                $body = 'Bonjour,'."\r\n".$userInfo['user_name'].' '.$userInfo['user_firstName'].' vient de s\'inscrire sur le site '.$addressSite.'';
+                $headers[] = 'MIME-Version: 1.0';
+                $headers[]= 'Content-type: text/html; charset=utf-8';
+                $headers[] = 'From: Asdelacoloc <no-reply@asdelacoloc.fr>'."\r\n".
+                'Reply-To: no-reply@asdelacoloc.fr'."\r\n";
+                //Envoi du mail à l'administrateur
+                mail($to, $subject, $body, implode("\r\n", $headers));
+                $message = "Votre inscription a été validée!";
+                $message2 = "Vous pouvez dès à présent vous connecter à votre espace personnel";
+                //Affichage page de confirmation d'inscription
+                require_once('view/frontEnd/v_message.php');
+            }
+        } else {
+            $error = "Veuillez contacter un administrateur du site";
+        }
+    } else {
+        $error = "Veuillez contacter un administrateur du site";
+    }
+    require_once('view/frontEnd/v_error.php');
 }

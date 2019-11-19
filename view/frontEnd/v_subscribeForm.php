@@ -5,7 +5,7 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
         <h1 class="pb-3 text-center">Inscription</h1>
-        <form id="form1" method="post" action="index.php?page=saveSubscribe">
+        <form id="form1" method="post" action="index.php?page=saveSubscribe" onsubmit="spinnerSubmitButton()">
             <div class="container pb-3 pt-3 border-bottom border-dark">
                 <?php
                     if (isset($error) && !empty($error)) {
@@ -111,37 +111,15 @@ ob_start();
                     </div>
                 </div>
             </div>
-            <div class="container pb-3 pt-3 border-bottom border-dark">
-                <h2>Identifiant et mot de passe de connexion aux sites de diffusion</h2>
-                <div class="container">
-                    <div class="row">
-                        <!-- Mail pour connexion site de diffusion -->
-                        <div class="form-group col-md-6">
-                            <label for="loginSiteWeb" class="font-weight-bold">Adresse mail</label>
-                            <input id="loginSiteWeb" type="email" name="loginSiteWeb" class="form-control"
-                                placeholder="Mail" maxlength="255" <?php if (isset($_POST['loginSiteWeb'])) {
-                        echo 'value="'.$_POST['loginSiteWeb'].'"';
-                    }?> required>
-                        </div>
-                        <!-- mot de passe pour connexion site de diffusion -->
-                        <div class="form-group col-md-6">
-                            <label for="passwordSiteWeb" class="font-weight-bold">Mot de passe</label>
-                            <input id="passwordSiteWeb" type="text" name="passwordSiteWeb" class="form-control"
-                                placeholder="Mot de passe" maxlength="255" <?php if (isset($_POST['passwordSiteWeb'])) {
-                        echo 'value="'.$_POST['passwordSiteWeb'].'"';
-                    }?> required>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- Bouton submit -->
             <div class="container pt-3">
-                <button id="buttonSubscribe" type="submit"
+                <button id="submitButton" type="submit"
                     class="btn btn-primary offset-md-5 col-md-2">S'inscrire</button>
             </div>
         </form>
     </div>
 </div>
+<script src="public/js/spinnerSubmitButton.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
