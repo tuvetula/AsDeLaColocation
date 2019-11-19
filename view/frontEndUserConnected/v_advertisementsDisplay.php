@@ -70,7 +70,7 @@ ob_start();
     }
         ?>
         <script src="public/js/confirmBeforeDelete.js"></script>
-        <script src="public/js/changeIsActiveState.js"></script>
+        <script src="public/js/Ajax/changeIsActiveState.js"></script>
         <?php
 $content = ob_get_clean();
 require('view/includes/template.php');

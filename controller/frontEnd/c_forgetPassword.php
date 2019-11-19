@@ -15,21 +15,21 @@ function forgetPassword()
     //Récupération adresse mail depuis $_POST
     $mail = $_POST['mailForgetPassword'];
     //Vérification si l'adresse mail existe en base de donnée
-    $mailVerification = getUser($mail);
+    $mailVerification = getUserByMail($mail);
     if ($mailVerification) {
         //On génère un token et on l'enregistre en base de donnée
         $token = sha1($mail.time());
         if (modifyToken($mail, $token)) {
             //On génère le lien à inscrire dans le mail
             global $mailLinkToSend;
-            $link = $mailLinkToSend."token=$token&mailLink=$mail";
+            $link = $mailLinkToSend."action=password&token=$token&mail=$mail";
             //Création message à envoyer par mail
             $to = $mail;
             $subject = "Réinitialisation de votre mot de passe As de la coloc";
             $body = 'Bonjour,'."\r\n".'veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :'."\r\n".''.$link.'';
             $headers[] = 'From: Asdelacoloc <no-reply@asdelacoloc.fr>'."\r\n".
             'Reply-To: no-reply@asdelacoloc.fr'."\r\n";
-            //Envoi du mail
+            //Envoi du mail à l'utilisateur
             if (mail($to, $subject, $body, implode("\r\n", $headers))) {
                 //Redirection
                 $message = 'Un lien vous permettant de modifier votre mot de passe va vous être envoyé dans quelques minutes à l\'adresse "'.$mail.'"';
@@ -51,10 +51,10 @@ function forgetPassword()
 function displayTypeNewPassword()
 {
     //Récupération mail et token (se trouvant dans le lien reçu par mail)
-    $mail = $_GET['mailLink'];
+    $mail = $_GET['mail'];
     $token = $_GET['token'];
     //Vérification si adresse mail existe en base de donnée
-    $mailVerification = getUser($mail);
+    $mailVerification = getUserByMail($mail);
     if ($mailVerification) {
         //Comparaison $_GET['token] et user_token
         if ($token == $mailVerification['user_token']) {
@@ -70,7 +70,8 @@ function displayTypeNewPassword()
 }
 
 //Affichage page Modifier mon mot de passe (après click dans mo compte, modifier mot de passe)
-function displayChangePasswordPage(){
+function displayChangePasswordPage()
+{
     $mail = $_SESSION['mail'];
     require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
 }
@@ -91,7 +92,7 @@ function saveNewPasswordAfterReinitialization()
         //Si reinitialisation utilisateur non connecté
         if (!isset($_SESSION['mail'])) {
             //Vérification mail et token
-            $tokenVerification = getUser($mail);
+            $tokenVerification = getUserByMail($mail);
             if ($tokenVerification) {
                 //Comparaison $_GET['token] et user_token
                 if ($token == $tokenVerification['user_token']) {
@@ -112,7 +113,7 @@ function saveNewPasswordAfterReinitialization()
                 $error = "Le lien utilisé ne fonctionne plus. Veuillez renouveller votre demande de réinitialisation de mot de passe.";
                 require_once('view/frontEnd/v_error.php');
             }
-        //Sinon reinitialisation utilisateur connecté
+            //Sinon reinitialisation utilisateur connecté
         } else {
             //Récupération ancien mot de passe
             $oldpassword = $_POST['oldPassword'];
@@ -120,7 +121,7 @@ function saveNewPasswordAfterReinitialization()
             if (!verifyPassword($oldpassword)) {
                 $error = "Ancien mot de passe incorrect!";
                 require_once('view/frontEnd/v_forgetPasswordTypeNewPassword.php');
-            }else{
+            } else {
                 //Enregistrement nouveau mot de passe
                 if (modifyPassword($mail, $password1)) {
                     $message = "Votre mot de passe a bien été réinitialisé.";

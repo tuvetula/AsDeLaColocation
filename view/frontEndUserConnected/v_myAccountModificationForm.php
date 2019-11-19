@@ -4,10 +4,14 @@ ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron">
-        <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userDataToModify['user_id']){echo 'Modifier le compte de '.$userDataToModify['user_name'].' '.$userDataToModify['user_firstName'];}else{echo 'Modifier mon compte';}?></h1>
-        <form method="post" action="<?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']){echo 'index.php?page=modifyMyAccount&userId='.$userId.'';}else{echo 'index.php?page=modifyMyAccount';}?>">
+        <h1 class="pb-3 text-center">
+            <?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userDataToModify['user_id']){echo 'Modifier le compte de '.$userDataToModify['user_name'].' '.$userDataToModify['user_firstName'];}else{echo 'Modifier mon compte';}?>
+        </h1>
+        <form method="post"
+            action="<?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']){echo 'index.php?page=modifyMyAccount&userId='.$userId.'';}else{echo 'index.php?page=modifyMyAccount';}?>"
+            onsubmit="spinnerSubmitButton()">
             <div class="container pb-3 pt-3 border-bottom border-dark">
-            <?php if (isset($error)){echo '<p class="font-weight-bold text-danger py-3">Veuillez corriger les erreurs</p>';}?>
+                <?php if (isset($error)){echo '<p class="font-weight-bold text-danger py-3">Veuillez corriger les erreurs</p>';}?>
                 <h2>Coordonnées</h2>
                 <div class="container">
                     <div class="row">
@@ -58,13 +62,17 @@ ob_start();
                         <!-- Mail -->
                         <div class="form-group col-md-6">
                             <label for="mail" class="font-weight-bold">Adresse mail</label>
-                            <input id="mail" type="email" name="mail" class="form-control" placeholder="Mail"
-                                value="<?=$userDataToModify['user_mail']?>" maxlength="255" required>
-                                <p class="text-danger font-weight-bold pb-1"><?php
-                        if (isset($error) && $error== 'mail'){
-                            echo 'Un compte est déja existant avec cette adresse mail';
-                        }
-                        ?></p>
+                            <input id="mail" type="email" name="mail" class="form-control" placeholder="Mail" value=" <?php if (isset($_POST['mail'])){
+                                    echo $_POST['mail'];
+                                }else{
+                                    echo $userDataToModify['user_mail'];
+                                }?>" maxlength="255" required>
+                            <?php if (isset($error) && $error== 'mail'){ ?>
+                            <p class="text-danger font-weight-bold pb-1" type="error">Un compte est déja existant avec
+                                cette adresse mail</p>
+                            <?php }elseif (isset($fillingError['mail'])){ ?>
+                                <p class="text-danger font-weight-bold pb-1" type="error"><?=$fillingError['mail']?></p>
+                                <?php } ?>
                         </div>
                         <!-- Telephone -->
                         <div class="form-group col-md-6">
@@ -76,37 +84,16 @@ ob_start();
                     </div>
                 </div>
             </div>
-            <div class="container pb-3 pt-3 border-bottom border-dark">
-                <h2>Identifiants de connexion aux sites de diffusion</h2>
-                <div class="container">
-                    <div class="row">
-                        <!-- Mail pour connexion site de diffusion -->
-                        <div class="form-group col-md-6">
-                            <label for="loginSiteWeb" class="font-weight-bold">Adresse mail</label>
-                            <input id="loginSiteWeb" type="email" name="loginSiteWeb" class="form-control"
-                                placeholder="Mail" value="<?=$userDataToModify['user_loginSiteWeb']?>" maxlength="255"
-                                required>
-                        </div>
-                        <!-- mot de passe pour connexion site de diffusion -->
-                        <div class="form-group col-md-6">
-                            <label for="passwordSiteWeb" class="font-weight-bold">Mot de passe</label>
-                            <input id="passwordSiteWeb" type="text" name="passwordSiteWeb" class="form-control"
-                                placeholder="Mot de passe" value="<?=$userDataToModify['user_passwordSiteWeb']?>"
-                                maxlength="255" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- Bouton submit -->
             <div class="container pt-3">
-                <button type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
+                <button id="submitButton" type="submit"
+                    class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
             </div>
         </form>
     </div>
 </div>
-
-
-
+<script src="public/js/spinnerSubmitButton.js"></script>
+<script src="public/js/redBorder.js"></script>
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
