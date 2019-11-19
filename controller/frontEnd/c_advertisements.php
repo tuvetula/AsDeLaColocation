@@ -788,11 +788,8 @@ function saveNewOrModifyAdvertisement()
         $addressIdToModify = getAddressIdFromAdvertisement($advertisementIdToModify);
         modifyAddress($addressIdToModify, $addressStreet, $addressZipcode, $addressCity, $addressCountry);
     } else {
-        if (insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry)) {
-            //Recup l'id de la dernière addresse ajoutée en bdd
-            $addressArray = getLastAddressId();
-            $addressId = $addressArray['MAX(address_id)'];
-        }
+        $addressId = insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry);
+        echo $addressId; 
     }
     //AJOUT OU MODIFICATION ANNONCE
     if ($advertisementIdToModify) {
