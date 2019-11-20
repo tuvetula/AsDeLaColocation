@@ -56,56 +56,56 @@ function modifyMyAccount($userId=null)
     if (isset($_POST['street'])) {
         $addressStreet = $_POST['street'];
         if (strlen($addressStreet)>255) {
-            $fillingError['street'] = "255 caractères maximum";
+            $fillingError['street'] = "255 caractères maximum.";
         }
     }
     if (isset($_POST['zipcode'])) {
         $addressZipcode = $_POST['zipcode'];
         if (strlen($addressZipcode)>20) {
-            $fillingError['zipcode'] = "20 caractères maximum";
+            $fillingError['zipcode'] = "20 caractères maximum.";
         }
     }
     if (isset($_POST['city'])) {
         $addressCity = $_POST['city'];
         if (strlen($addressCity)>60) {
-            $fillingError['city'] = "60 caractères maximum";
+            $fillingError['city'] = "60 caractères maximum.";
         }
     }
     if (isset($_POST['country'])) {
         $addressCountry = $_POST['country'];
         if (strlen($addressCountry)>60) {
-            $fillingError['country'] = "60 caractères maximum";
+            $fillingError['country'] = "60 caractères maximum.";
         }
     }
     //User $_POST
     if (isset($_POST['civility'])) {
         $usercivility = $_POST['civility'];
         if (strlen($usercivility)>20) {
-            $fillingError['civility'] = "20 caractères maximum";
+            $fillingError['civility'] = "20 caractères maximum.";
         }
     }
     if (isset($_POST['name'])) {
         $userName = $_POST['name'];
         if (strlen($userName)>125) {
-            $fillingError['name'] = "125 caractères maximum";
+            $fillingError['name'] = "125 caractères maximum.";
         }
     }
     if (isset($_POST['firstName'])) {
         $userfirstName = $_POST['firstName'];
         if (strlen($userfirstName)>125) {
-            $fillingError['firstName'] = "125 caractères maximum";
+            $fillingError['firstName'] = "125 caractères maximum.";
         }
     }
     if (isset($_POST['dateOfBirth'])) {
         //On vérifie si c'est bien un format date
         $dateOfBirth = date_parse_from_format('Y-m-d', $_POST['dateOfBirth']);
         if (!$dateOfBirth['error_count'] == 0 || !checkdate($dateOfBirth['month'], $dateOfBirth['day'], $dateOfBirth['year'])) {
-            $fillingError['dateOfBirth'] = "Vérifier votre date de naissance";
+            $fillingError['dateOfBirth'] = "Vérifier votre date de naissance.";
         } else {
             //On vérifie si la date renseignée n'est pas supérieure à la date du jour
             $dateOfTheDay = date('Y-m-d', strtotime('-18 year'));
             if ($_POST['dateOfBirth'] > $dateOfTheDay) {
-                $fillingError['dateOfBirth'] = "Vous devez avoir plus de 18 ans";
+                $fillingError['dateOfBirth'] = "Date invalide, vous devez avoir plus de 18 ans pour utiliser nos services.";
             } else {
                 $userdateOfBirth = $_POST['dateOfBirth'];
             }
@@ -120,18 +120,18 @@ function modifyMyAccount($userId=null)
             if ($mailVerification) {
                 $fillingError['mail'] = "Un compte est déjà existant avec cette adresse mail.";
             } elseif (strlen($usermail) > 255) {
-                $fillingError['mail'] = '255 caractères maximum';
+                $fillingError['mail'] = '255 caractères maximum.';
             }
         } else {
-            $fillingError['mail'] = 'L\'adresse mail est incomplète';
+            $fillingError['mail'] = 'L\'adresse mail est incomplète.';
         }
     } else {
-        $fillingError['mail'] = 'Veuillez renseigner ce champ';
+        $fillingError['mail'] = 'Veuillez renseigner ce champ.';
     }
     if (isset($_POST['phoneNumber'])) {
         $userphoneNumber = $_POST['phoneNumber'];
         if (strlen($userphoneNumber)>20) {
-            $fillingError['phoneNumber'] = "20 caractères maximum";
+            $fillingError['phoneNumber'] = "20 caractères maximum.";
         }
     }
     //Résultat des contrôles

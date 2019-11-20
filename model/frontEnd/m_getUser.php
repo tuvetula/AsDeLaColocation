@@ -17,7 +17,7 @@ function getUser($mail)
 function getUserByMail($mail){
     $mail = htmlspecialchars(strip_tags($mail));
     $db = connectBdd();
-    $answer = $db->prepare('SELECT user_id,user_mail,user_token,user_name,user_firstName 
+    $answer = $db->prepare('SELECT user_id,user_mail,user_token,user_name,user_firstName,user_isMember 
     FROM users 
     WHERE user_mail=:mail');
     $answer->execute([
@@ -66,22 +66,20 @@ function getUsersWithThisAddressId($addressId){
         return $usersIdWithSameAddress;
 }
 //Vérification du mot de passe (pour changement de mot de passe d'un utilisateur connecté)
-function verifyPassword($password)
+function verifyPassword($password,$id)
 {
     $password = htmlspecialchars(strip_tags($password));
+    $id = htmlspecialchars(strip_tags($id));
     $db = connectBdd();
     $passwordRequest = $db->prepare('SELECT user_password 
-    FROM users WHERE user_id=:userId');
+    FROM users 
+    WHERE user_id=:userId');
     $passwordRequest->execute([
-        ':userId' => $_SESSION['id']
+        ':userId' => $id
     ]);
     $passwordBddArray = $passwordRequest->fetch(PDO::FETCH_ASSOC);
     $passwordBdd = $passwordBddArray['user_password'];
-    if (password_verify($password, $passwordBdd)) {
-        return true;
-    }else{
-        return false;
-    }
+    return $passwordBdd;
 }
 //Verification si un autre user a deja l'adresse mail renseignée (pour eviter doublon)
 function verifyMailAlreadyPresent($mail,$userId){
