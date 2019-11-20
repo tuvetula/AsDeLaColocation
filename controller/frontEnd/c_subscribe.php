@@ -25,68 +25,71 @@ function saveSubscribeForm()
             if ($mailVerification) {
                 $fillingError['mailSubscribe'] = "Un compte est déjà existant avec cette adresse mail.";
             }else if (strlen($usermail) > 255) {
-                $fillingError['mailSubscribe'] = '255 caractères maximum';
+                $fillingError['mailSubscribe'] = '255 caractères maximum.';
             }
         } else {
-            $fillingError['mailSubscribe'] = 'L\'adresse mail est incomplète';
+            $fillingError['mailSubscribe'] = 'L\'adresse mail est incomplète.';
         }
     } else {
-        $fillingError['mailSubscribe'] = 'Veuillez renseigner ce champ';
+        $fillingError['mailSubscribe'] = 'Veuillez renseigner ce champ.';
     }              
     //On stocke dans des variables les $_POST
     //Address $_POST
     if (isset($_POST['street'])) {
         $addressStreet = $_POST['street'];
         if (strlen($addressStreet)>255) {
-            $fillingError['street'] = "255 caractères maximum";
+            $fillingError['street'] = "255 caractères maximum.";
         }
     }
     if (isset($_POST['zipcode'])) {
         $addressZipcode = $_POST['zipcode'];
         if (strlen($addressZipcode)>20) {
-            $fillingError['zipcode'] = "20 caractères maximum";
+            $fillingError['zipcode'] = "20 caractères maximum.";
         }
     }
     if (isset($_POST['city'])) {
         $addressCity = $_POST['city'];
         if (strlen($addressCity)>60) {
-            $fillingError['city'] = "60 caractères maximum";
+            $fillingError['city'] = "60 caractères maximum.";
         }
     }
     if (isset($_POST['country'])) {
         $addressCountry = $_POST['country'];
         if (strlen($addressCountry)>60) {
-            $fillingError['country'] = "60 caractères maximum";
+            $fillingError['country'] = "60 caractères maximum.";
         }
     }
     if (isset($_POST['civility'])) {
         $usercivility = $_POST['civility'];
         if (strlen($usercivility)>20) {
-            $fillingError['civility'] = "20 caractères maximum";
+            $fillingError['civility'] = "20 caractères maximum.";
         }
     }
     if (isset($_POST['name'])) {
         $userName = $_POST['name'];
         if (strlen($userName)>125) {
-            $fillingError['name'] = "125 caractères maximum";
+            $fillingError['name'] = "125 caractères maximum.";
         }
     }
     if (isset($_POST['firstName'])) {
         $userfirstName = $_POST['firstName'];
         if (strlen($userfirstName)>125) {
-            $fillingError['firstName'] = "125 caractères maximum";
+            $fillingError['firstName'] = "125 caractères maximum.";
         }
     }
     if (isset($_POST['dateOfBirth'])) {
         //On vérifie si c'est bien un format date
         $dateOfBirth = date_parse_from_format('Y-m-d', $_POST['dateOfBirth']);
         if (!$dateOfBirth['error_count'] == 0 || !checkdate($dateOfBirth['month'], $dateOfBirth['day'], $dateOfBirth['year'])) {
-            $fillingError['dateOfBirth'] = "Vérifier votre date de naissance";
+            $fillingError['dateOfBirth'] = "Vérifier votre date de naissance.";
         } else {
             //On vérifie si la date renseignée n'est pas supérieure à la date du jour
-            $dateOfTheDay = date('Y-m-d', strtotime('-18 year'));
+            $dateOfTheDay = date('Y-m-d');
+            $dateTobeAdult = date('Y-m-d', strtotime('-18 year'));
             if ($_POST['dateOfBirth'] > $dateOfTheDay) {
-                $fillingError['dateOfBirth'] = "Vous devez avoir plus de 18 ans";
+                $fillingError['dateOfBirth'] = "Vérifier votre date de naissance.";
+            }else if ($_POST['dateOfBirth'] > $dateTobeAdult){
+                $fillingError['dateOfBirth'] = "Date invalide, vous devez avoir plus de 18 ans pour utiliser nos services.";
             } else {
                 $userdateOfBirth = $_POST['dateOfBirth'];
             }
@@ -95,7 +98,7 @@ function saveSubscribeForm()
     if (isset($_POST['phoneNumber'])) {
         $userphoneNumber = $_POST['phoneNumber'];
         if (strlen($userphoneNumber)>20) {
-            $fillingError['phoneNumber'] = "20 caractères maximum";
+            $fillingError['phoneNumber'] = "20 caractères maximum.";
         }
     }
     if (isset($_POST['passwordSubscribe1']) && isset($_POST['passwordSubscribe2']) && $_POST['passwordSubscribe1'] == $_POST['passwordSubscribe2']) {
@@ -133,10 +136,10 @@ function saveSubscribeForm()
             } else {
                 //On efface l'adresse créée
                 deleteAddressBdd($addressId);
-                $error = 'Problème technique. Veuillez réessayer ultérieurement';
+                $error = 'Problème technique. Veuillez réessayer ultérieurement.';
             }
         } else {
-            $error = 'Problème technique. Veuillez réessayer ultérieurement';
+            $error = 'Problème technique. Veuillez réessayer ultérieurement.';
         }
     }
     require_once('view/frontEnd/v_subscribeForm.php');
@@ -172,10 +175,10 @@ function validRegistration()
                 require_once('view/frontEnd/v_message.php');
             }
         } else {
-            $error = "Veuillez contacter un administrateur du site";
+            $error = "Veuillez contacter un administrateur du site.";
         }
     } else {
-        $error = "Veuillez contacter un administrateur du site";
+        $error = "Veuillez contacter un administrateur du site.";
     }
     require_once('view/frontEnd/v_error.php');
 }

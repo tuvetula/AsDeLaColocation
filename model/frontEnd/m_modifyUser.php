@@ -50,9 +50,11 @@ function validRegistrationBdd($mail){
 //Modification user_token
 function modifyToken($mail,$token=null){
     $mail = htmlspecialchars(strip_tags($mail));
+    $token = htmlspecialchars(strip_tags($token));
     $db = connectBdd();
-    $modifyUserToken = $db->prepare('UPDATE users SET 
-    user_token=:token WHERE user_mail="'.$mail.'"');
+    $modifyUserToken = $db->prepare('UPDATE users 
+    SET user_token=:token 
+    WHERE user_mail="'.$mail.'"');
     $modifyUserToken->execute(array(
         ':token'=> $token
     ));
@@ -64,8 +66,9 @@ function modifyPassword($mail,$newPassword){
     $mail = htmlspecialchars(strip_tags($mail));
     $newPassword = password_hash(htmlspecialchars(strip_tags($newPassword)),PASSWORD_DEFAULT);
     $db = connectBdd();
-    $modifyUserPassword = $db->prepare('UPDATE users SET 
-    user_password=:newPassword WHERE user_mail="'.$mail.'"');
+    $modifyUserPassword = $db->prepare('UPDATE users 
+    SET user_password=:newPassword 
+    WHERE user_mail="'.$mail.'"');
     $modifyUserPassword->execute(array(
         ':newPassword'=> $newPassword
     ));
