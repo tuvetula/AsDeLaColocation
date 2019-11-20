@@ -30,7 +30,7 @@ function getUserById($userId)
 {
     $userId = htmlspecialchars(strip_tags($userId));
     $db = connectBdd();
-    $answer = $db->prepare('SELECT users.user_id,users.user_name,users.user_firstName,users.user_phoneNumber,users.user_mail, users.user_loginSiteWeb, users.user_passwordSiteWeb, users.user_accountCreationDate, addresses.address_street,addresses.address_zipcode,addresses.address_city,addresses.address_country 
+    $answer = $db->prepare('SELECT users.user_id,users.user_civility,users.user_name,users.user_firstName,users.user_dateOfBirth,users.user_phoneNumber,users.user_mail, users.user_loginSiteWeb, users.user_passwordSiteWeb, users.user_accountCreationDate, addresses.address_street,addresses.address_zipcode,addresses.address_city,addresses.address_country 
     FROM users 
     join addresses on users.address_id = addresses.address_id 
     WHERE user_id=:userId');
@@ -87,7 +87,8 @@ function verifyPassword($password)
 function verifyMailAlreadyPresent($mail,$userId){
     $db = connectBdd();
     $verifyMailAlreadyPresentRequest = $db->prepare('SELECT user_id,user_mail 
-    FROM users WHERE user_id!=:userId && user_mail=:userMail');
+    FROM users 
+    WHERE user_id!=:userId && user_mail=:userMail');
     $verifyMailAlreadyPresentRequest->execute([
         ':userId' => $userId,
         ':userMail' => $mail
