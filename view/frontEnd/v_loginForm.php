@@ -8,14 +8,14 @@ ob_start();
         <div class="container col-md-9 col-lg-6">
             <form method="post" action="index.php" class="text-center">
                 <div class="form-group text-left">
-                    <label for="mailLogin">Identifiant</label>
+                    <label for="mailLogin" class="font-weight-bold">Identifiant</label>
                     <input type="email" class="form-control form-control-lg" id="mailLogin" name="mailLogin"
                         placeholder="Saisir votre adresse mail" maxlength="255" <?php if (isset($_POST['mailLogin'])) {
                         echo 'value="'.$_POST['mailLogin'].'"';
                     }?> required>
                 </div>
                 <div class="form-group text-left">
-                    <label for="passwordLogin">Mot de passe</label>
+                    <label for="passwordLogin" class="font-weight-bold">Mot de passe</label>
                     <input type="password" class="form-control form-control-lg" id="passwordLogin" name="passwordLogin"
                         placeholder="Saisir votre mot de passe" maxlength="255" required>
                 </div>
@@ -31,10 +31,10 @@ ob_start();
                 ?>
             </form>
 
-            <div class="container text-right">
+            <div class="container text-right pt-3">
                 <a href="index.php?page=displaySubscribeForm">Inscription</a>
             </div>
-            <div class="container text-right">
+            <div class="container text-right pt-1">
                 <a class="text-right" href="index.php?page=forgetPassword">Mot de passe oublié?</a>
             </div>
         </div>
