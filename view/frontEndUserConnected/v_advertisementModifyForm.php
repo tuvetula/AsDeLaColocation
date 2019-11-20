@@ -3,22 +3,21 @@ $title = "Modifier une annonce";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
-    <div class="jumbotron">
+    <div class="jumbotron px-2 px-md-3">
         <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId){echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';}else{echo 'Modifier votre annonce';}?> </h1>
         <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data" onsubmit="spinnerSubmitButton()">
             <!-- ----------Annonce---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
-            <?php if (isset($_SESSION['fillingError'])){ ?>
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
+                <?php if (isset($_SESSION['fillingError'])){ ?>
                 <p class="text-danger font-weight-bold pb-1">Veuillez corriger les erreurs</p> <?php } ?>
                 <h2>Annonce</h2>
                 <!-- IsActive, Titre, Description -->
                 <input type="hidden" name="id" value="<?=$advertisementData[0]['advertisement_id']?>">
                 <div class="container">
                     <!-- isActive -->
-                    <div class=" custom-control custom-checkbox ">
+                    <div class=" custom-control custom-checkbox pb-3">
                         <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" <?php if ($advertisementData[0]['advertisement_isActive']) {
-    echo 'checked';
-}?>>
+                        echo 'checked';}?>>
                         <label class="custom-control-label font-weight-bold" for="isActive">Activation annonce</label>
                     </div>
                     <!--Titre-->
@@ -39,7 +38,7 @@ ob_start();
                         ?></p>
                     </div>
                     <!--Description-->
-                    <div class="form-group">
+                    <div class="form-group pb-3">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
                             placeholder="maximum 2000 charactères" maxlength="2000"
@@ -49,12 +48,11 @@ ob_start();
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
                         <!--Type de logement-->
-                        <div class="form-group col-md-3" title="Sélectionner le type de bien">
+                        <div class="form-group col-6 col-md-4 col-xl-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
                                 <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison" <?php if ($advertisementData[0]['advertisement_type'] == 'Maison') {
-    echo 'checked';
-}?>>
+                                echo 'checked';}?>>
                                 <label class="form-check-label" for="radioType1">
                                     Maison
                                 </label>
@@ -62,21 +60,19 @@ ob_start();
                             <div class="form-check">
                                 <input id="radioType2" class="form-check-input" type="radio" name="type"
                                     value="Appartement" <?php if ($advertisementData[0]['advertisement_type'] == 'Appartement') {
-    echo 'checked';
-}?>>
+                                    echo 'checked';}?>>
                                 <label class="form-check-label" for="radioType2">
                                     Appartement
                                 </label>
                             </div>
                         </div>
                         <!--Catégorie du logement-->
-                        <div class="form-group col-md-3" title="Sélectionner la catégorie correspondante">
+                        <div class="form-group col-6 col-md-4 col-xl-3" title="Sélectionner la catégorie correspondante">
                             <label class="font-weight-bold">Catégorie</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
                                     id="radioButtonAccomodationCategory1" value="Location" <?php if ($advertisementData[0]['advertisement_category'] == 'Location') {
-    echo 'checked';
-}?>>
+                                    echo 'checked';}?>>
                                 <label class="form-check-label" for="radioButtonAccomodationCategory1">
                                     Location
                                 </label>
@@ -110,13 +106,13 @@ ob_start();
                             </div>
                         </div>
                         <!-- Disponible le -->
-                        <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
+                        <div class="form-group col-md-4 col-xl-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
                             <input class="form-control" type="date" id="availableDate" name="availableDate"
                                 value="<?=$advertisementData[0]['advertisement_availableDate']?>" required>
                         </div>
                         <!-- Location sans visite + meublé -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-xl-3">
                             <!-- Meublé -->
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="isFurnished" name="isFurnished" <?php if ($advertisementData[0]['advertisement_isFurnished']) {
@@ -140,7 +136,7 @@ ob_start();
                     <!-- Nom, Telephone, Mail pour les visites-->
                     <div class="row">
                         <!-- Nom du contact pour les visites -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-6 col-xl-4">
                             <label for="contactNameForVisit" class="font-weight-bold">Nom du contact pour les
                                 visites</label>
                             <input id="contactNameForVisit" type="text" name="contactNameForVisit" class="form-control"
@@ -154,7 +150,7 @@ ob_start();
                             <?php } ?>
                         </div>
                         <!-- Telephone du contact pour les visites -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-6 col-xl-4">
                             <label for="contactPhoneNumberForVisit" class="font-weight-bold">Telephone du contact
                                 pour
                                 les visites</label>
@@ -169,7 +165,7 @@ ob_start();
                             <?php } ?>
                         </div>
                         <!-- Mail du contact pour les visites -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-12 col-xl-4">
                             <label for="contactMailForVisit" class="font-weight-bold">Mail du contact pour les
                                 visites</label>
                             <input id="contactMailForVisit" type="email" name="contactMailForVisit" class="form-control"
@@ -185,7 +181,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Situation du loueur -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="renterSituation" class="font-weight-bold">Situation du loueur </label>
                             <select id="renterSituation" name="renterSituation" class="custom-select">
                                 <option value="Propriétaire" <?php if ($advertisementData[0]['advertisement_renterSituation'] == "Propriétaire") {
@@ -197,7 +193,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Durée minimum de séjour -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="locationMinDuration" class="font-weight-bold">Durée minimum de
                                 séjour</label>
                             <select id="locationMinDuration" name="locationMinDuration" class="custom-select">
@@ -219,7 +215,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Nombre de colocataires déja présent -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-6 col-xl-4">
                             <label class="font-weight-bold" for="nbOfOtherRoommatePresent">Nombre de
                                 colocataire(s)
                                 déjà
@@ -260,7 +256,7 @@ ob_start();
                     </div>
                     <!-- Sex colocataires déja présents -->
                     <div class="row">
-                        <div class="form-group offset-md-8 col-md-4" id="otherRoommateSex">
+                        <div class="form-group col-lg-6 offset-xl-8 col-xl-4" id="otherRoommateSex">
                             <label for="roommateSex" class="font-weight-bold">Colocataire(s) déja présent(s)
                                 (sexe)</label>
                             <select id="roommateSex" name="roommateSex" class="custom-select">
@@ -281,7 +277,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Colocataire idéal (sexe) -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="idealRoommateSex" class="font-weight-bold">Colocataire idéal
                                 (sexe)</label>
                             <select id="idealRoommateSex" name="idealRoommateSex" class="custom-select">
@@ -297,7 +293,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Colocataire idéal (situation) -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="idealRoommateSituation" class="font-weight-bold">Colocataire idéal
                                 (situation)</label>
                             <select id="idealRoommateSituation" name="idealRoommateSituation" class="custom-select">
@@ -313,7 +309,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Age minimum -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-6 col-xl-2">
                             <label class="font-weight-bold" for="idealRoommateMinAge">Age minimum</label>
                             <select id="idealRoommateMinAge" name="idealRoommateMinAge" class="custom-select">
                                 <option value="18" <?php if ($advertisementData[0]['advertisement_idealRoommateMinAge'] == "18") {
@@ -565,7 +561,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Age maximum -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-6 col-xl-2">
                             <label class="font-weight-bold" for="idealRoommateMaxAge">Age maximum</label>
                             <select id="idealRoommateMaxAge" name="idealRoommateMaxAge" class="custom-select">
                                 <option value="18" <?php if ($advertisementData[0]['advertisement_idealRoommateMaxAge'] == "18") {
@@ -821,14 +817,14 @@ ob_start();
             </div>
 
             <!-- ----------LOYER---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Loyer</h2>
                 <div class="container">
                     <div class="row">
                         <!-- Montant HC -->
-                        <div class="form-group col-md-4" title="Loyer Hors Charges">
+                        <div class="form-group col-sm-6 col-md-4" title="Loyer Hors Charges">
                             <label class="font-weight-bold" for="monthlyRentExcludingCharges">Loyer mensuel HC</label>
-                            <div id="monthlyRentExcludingChargesDiv" class="input-group mb-3">
+                            <div id="monthlyRentExcludingChargesDiv" class="input-group">
                                 <input id="monthlyRentExcludingCharges" type="number" min="0"
                                     name="monthlyRentExcludingCharges" class="form-control"
                                     aria-describedby="basic-addon2"
@@ -845,9 +841,9 @@ ob_start();
                             </div>
                         </div>
                         <!-- Montant des charges -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-sm-6 col-md-4">
                             <label class="font-weight-bold" for="charges">Montant des charges</label>
-                            <div id="chargesDiv" class="input-group mb-3">
+                            <div id="chargesDiv" class="input-group">
                                 <input id="charges" type="number" min="0" name="charges" class="form-control"
                                     aria-describedby="basic-addon2"
                                     value="<?=$advertisementData[0]['advertisement_charges']?>" required>
@@ -864,7 +860,7 @@ ob_start();
                         <!-- Montant de la caution -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="suretyBond">Montant de la caution</label>
-                            <div id="suretyBondDiv" class="input-group mb-3">
+                            <div id="suretyBondDiv" class="input-group">
                                 <input id="suretyBond" type="number" min="0" name="suretyBond" class="form-control"
                                     aria-describedby="basic-addon2"
                                     value="<?=$advertisementData[0]['advertisement_suretyBond']?>" required>
@@ -881,7 +877,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Le garant doit résider -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label for="guarantorLiving" class="font-weight-bold">Le garant doit résider</label>
                             <select id="guarantorLiving" name="guarantorLiving" class="custom-select">
                                 <option value="France" <?php if ($advertisementData[0]['advertisement_guarantorLiving'] == "France") {
@@ -899,7 +895,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Ratio de solvabilité -->
-                        <div class="form-group col-md-4" title="A combien de loyers le revenu doit-il être supérieur?">
+                        <div class="form-group col-md-6 col-lg-4" title="A combien de loyers le revenu doit-il être supérieur?">
                             <label for="solvencyRatio" class="font-weight-bold">Ratio de solvabilité</label>
                             <select id="solvencyRatio" name="solvencyRatio" class="custom-select">
                                 <option value="PeuImporte" selected>Peu importe</option>
@@ -934,9 +930,9 @@ ob_start();
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row pt-md-2">
                         <!-- Exigences financières -->
-                        <div class="form-group col-md-4" title="J'ai des exigences financières pour le candidat">
+                        <div class="form-group col-sm-6 col-lg-4" title="J'ai des exigences financières pour le candidat">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="financialRequirements"
                                     name="financialRequirements" <?php if ($advertisementData[0]['advertisement_financialRequirements']) {
@@ -946,7 +942,8 @@ ob_start();
                                     for="financialRequirements">Exigences financières</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <!-- Eligible aux aides -->
+                        <div class="form-group col-sm-6 col-lg-4">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="eligibleForAids"
                                     name="eligibleForAids" <?php if ($advertisementData[0]['advertisement_eligibleForAids']) {
@@ -960,7 +957,7 @@ ob_start();
                     <h3 class="pt-3">Inclus dans les charges:</h3>
                     <div class="row">
                         <!-- Electricité -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeElectricity"
                                     name="chargesIncludeElectricity" <?php if ($advertisementData[0]['advertisement_chargesIncludeElectricity']) {
@@ -970,7 +967,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Eau chaude -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeHotWater"
                                     name="chargesIncludeHotWater" <?php if ($advertisementData[0]['advertisement_chargesIncludeHotWater']) {
@@ -980,7 +977,7 @@ ob_start();
                                     chaude</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeHeating"
                                     name="chargesIncludeHeating" <?php if ($advertisementData[0]['advertisement_chargesIncludeHeating']) {
@@ -990,7 +987,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Internet -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeInternet"
                                     name="chargesIncludeInternet" <?php if ($advertisementData[0]['advertisement_chargesIncludeInternet']) {
@@ -999,10 +996,8 @@ ob_start();
                                 <label class="custom-control-label" for="chargesIncludeInternet">Internet</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Charges de co-propriété -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="chargesIncludeCoOwnershipCharges" name="chargesIncludeCoOwnershipCharges" <?php if ($advertisementData[0]['advertisement_chargesIncludeCoOwnershipCharges']) {
@@ -1013,7 +1008,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Assurance habitation -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeHomeInsurance"
                                     name="chargesIncludeHomeInsurance" <?php if ($advertisementData[0]['advertisement_chargesIncludeHomeInsurance']) {
@@ -1024,7 +1019,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Révision chaudière -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeBoilerInspection"
                                     name="chargesIncludeBoilerInspection" <?php if ($advertisementData[0]['advertisement_chargesIncludeBoilerInspection']) {
@@ -1035,7 +1030,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Taxe d'ordures ménagères -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="chargesIncludeHouseholdGarbageTaxes" name="chargesIncludeHouseholdGarbageTaxes" <?php if ($advertisementData[0]['advertisement_chargesIncludeHouseholdGarbageTaxes']) {
@@ -1045,10 +1040,8 @@ ob_start();
                                     d'ordures ménagères</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Service de nettoyage -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeCleaningService"
                                     name="chargesIncludeCleaningService" <?php if ($advertisementData[0]['advertisement_chargesIncludeCleaningService']) {
@@ -1063,7 +1056,7 @@ ob_start();
             </div>
 
             <!-- ---------- LOGEMENT ---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Logement</h2>
                 <div class="container">
                 <!-- AdresseAutocomplete -->
@@ -1123,10 +1116,10 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Surface habitable -->
-                        <div class="form-group col-md-4" title="Surface totale du logement">
+                        <div class="form-group col-md-12 col-lg-4" title="Surface totale du logement">
                             <label class="font-weight-bold" for="accomodationLivingAreaSize">Surface habitable du
                                 logement</label>
-                            <div id="accomodationLivingAreaSizeDiv" class="input-group mb-3">
+                            <div id="accomodationLivingAreaSizeDiv" class="input-group">
                                 <input id="accomodationLivingAreaSize" type="number" min="1"
                                     name="accomodationLivingAreaSize" class="form-control"
                                     aria-describedby="basic-addon2"
@@ -1143,7 +1136,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Etage du logement -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="accomodationFloor">Etage du logement</label>
                             <select id="accomodationFloor" name="accomodationFloor" class="custom-select">
                                 <option value="0" <?php if ($advertisementData[0]['advertisement_accomodationFloor'] == "0") {
@@ -1242,7 +1235,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Nombre d'étages -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="buildingNbOfFloors">Nombre d'etages (immeuble)</label>
                             <select id="buildingNbOfFloors" name="buildingNbOfFloors" class="custom-select">
                                 <option value="0" <?php if ($advertisementData[0]['advertisement_buildingNbOfFloors'] == "0") {
@@ -1343,7 +1336,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Nombre de pièces -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="accomodationNbOfRooms">Nombre de pièces</label>
                             <select id="accomodationNbOfRooms" name="accomodationNbOfRooms" class="custom-select">
                                 <option value="0" <?php if ($advertisementData[0]['advertisement_accomodationNbOfRooms'] == "0") {
@@ -1381,47 +1374,8 @@ ob_start();
 }?>>10</option>
                             </select>
                         </div>
-                        <!-- Nombre de chambres -->
-                        <div class="form-group col-md-4" title="Nombre de chambres que contient au total le logement">
-                            <label class="font-weight-bold" for="accomodationNbOfBedrooms">Nombre de chambres</label>
-                            <select id="accomodationNbOfBedrooms" name="accomodationNbOfBedrooms" class="custom-select">
-                                <option value="0" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "0") {
-    echo 'selected';
-}?>>0</option>
-                                <option value="1" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "1") {
-    echo 'selected';
-}?>>1</option>
-                                <option value="2" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "2") {
-    echo 'selected';
-}?>>2</option>
-                                <option value="3" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "3") {
-    echo 'selected';
-}?>>3</option>
-                                <option value="4" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "4") {
-    echo 'selected';
-}?>>4</option>
-                                <option value="5" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "5") {
-    echo 'selected';
-}?>>5</option>
-                                <option value="6" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "6") {
-    echo 'selected';
-}?>>6</option>
-                                <option value="7" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "7") {
-    echo 'selected';
-}?>>7</option>
-                                <option value="8" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "8") {
-    echo 'selected';
-}?>>8</option>
-                                <option value="9" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "9") {
-    echo 'selected';
-}?>>9</option>
-                                <option value="10" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "10") {
-    echo 'selected';
-}?>>10</option>
-                            </select>
-                        </div>
                         <!-- Nombre de salles de bains -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="accomodationNbOfBathrooms">Nombre de salles de
                                 bain</label>
                             <select id="accomodationNbOfBathrooms" name="accomodationNbOfBathrooms"
@@ -1461,10 +1415,47 @@ ob_start();
 }?>>10</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
+                        <!-- Nombre de chambres -->
+                        <div class="form-group col-md-6 col-lg-4" title="Nombre de chambres que contient au total le logement">
+                            <label class="font-weight-bold" for="accomodationNbOfBedrooms">Nombre de chambres</label>
+                            <select id="accomodationNbOfBedrooms" name="accomodationNbOfBedrooms" class="custom-select">
+                                <option value="0" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "0") {
+    echo 'selected';
+}?>>0</option>
+                                <option value="1" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "1") {
+    echo 'selected';
+}?>>1</option>
+                                <option value="2" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "2") {
+    echo 'selected';
+}?>>2</option>
+                                <option value="3" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "3") {
+    echo 'selected';
+}?>>3</option>
+                                <option value="4" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "4") {
+    echo 'selected';
+}?>>4</option>
+                                <option value="5" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "5") {
+    echo 'selected';
+}?>>5</option>
+                                <option value="6" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "6") {
+    echo 'selected';
+}?>>6</option>
+                                <option value="7" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "7") {
+    echo 'selected';
+}?>>7</option>
+                                <option value="8" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "8") {
+    echo 'selected';
+}?>>8</option>
+                                <option value="9" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "9") {
+    echo 'selected';
+}?>>9</option>
+                                <option value="10" <?php if ($advertisementData[0]['advertisement_accomodationNbOfBedrooms'] == "10") {
+    echo 'selected';
+}?>>10</option>
+                            </select>
+                        </div>
                         <!-- Nombre de chambres à louer-->
-                        <div class="form-group col-md-4" title="Nombre de chambres disponibles">
+                        <div class="form-group col-md-6 col-lg-4" title="Nombre de chambres disponibles">
                             <label class="font-weight-bold" for="nbOfBedroomsToRent">Nombre de chambres à louer</label>
                             <select id="nbOfBedroomsToRent" name="nbOfBedroomsToRent" class="custom-select">
                                 <option value="1" <?php if ($advertisementData[0]['advertisement_nbOfBedroomsToRent'] == "1") {
@@ -1500,7 +1491,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Utilisation de la cuisine -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label for="kitchenUse" class="font-weight-bold">Utilisation de la cuisine</label>
                             <select id="kitchenUse" name="kitchenUse" class="custom-select">
                                 <option value="Commun" <?php if ($advertisementData[0]['advertisement_kitchenUse'] == "Commun") {
@@ -1514,7 +1505,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Utilisation du salon -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label for="livingRoomUse" class="font-weight-bold">Utilisation du salon</label>
                             <select id="livingRoomUse" name="livingRoomUse" class="custom-select">
                                 <option value="Commun" <?php if ($advertisementData[0]['advertisement_livingRoomUse'] == "Commun") {
@@ -1535,7 +1526,7 @@ ob_start();
                     <!-- Classe Energie -->
                     <div class="row">
                         <!--Performance energetique -->
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="EnergeticPerformance">Diagnostic de performance
                                 énergétique</label>
                             <div id="EnergeticPerformance" class="input-group mb-3">
@@ -1560,7 +1551,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Ges -->
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="EnergeticGes">Emissions de gaz à effet de serre</label>
                             <div id="EnergeticGes" class="input-group mb-3">
                                 <input id="gesNumber" type="number" min="1" name="gesNumber" class="form-control"
@@ -1586,7 +1577,7 @@ ob_start();
                     <h3>Le logement comprend:</h3>
                     <div class="row">
                         <!-- Accès handicapé -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="handicapedAccessibility"
                                     name="handicapedAccessibility" <?php if ($advertisementData[0]['advertisement_handicapedAccessibility']) {
@@ -1597,7 +1588,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Ascenceur -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasElevator"
                                     name="accomodationHasElevator" <?php if ($advertisementData[0]['advertisement_accomodationHasElevator']) {
@@ -1607,7 +1598,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Parking commun -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasCommonParkingLot"
                                     name="accomodationHasCommonParkingLot" <?php if ($advertisementData[0]['advertisement_accomodationHasCommonParkingLot']) {
@@ -1618,7 +1609,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Place de parking privée -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasPrivateParkingPlace" name="accomodationHasPrivateParkingPlace" <?php if ($advertisementData[0]['advertisement_accomodationHasPrivateParkingPlace']) {
@@ -1628,10 +1619,8 @@ ob_start();
                                     parking privée</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Jardin -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasGarden"
                                     name="accomodationHasGarden" <?php if ($advertisementData[0]['advertisement_accomodationHasGarden']) {
@@ -1641,7 +1630,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Balcon -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasBalcony"
                                     name="accomodationHasBalcony" <?php if ($advertisementData[0]['advertisement_accomodationHasBalcony']) {
@@ -1651,7 +1640,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Terrasse -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasTerrace"
                                     name="accomodationHasTerrace" <?php if ($advertisementData[0]['advertisement_accomodationHasTerrace']) {
@@ -1661,7 +1650,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Piscine -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasSwimmingPool"
                                     name="accomodationHasSwimmingPool" <?php if ($advertisementData[0]['advertisement_accomodationHasSwimmingPool']) {
@@ -1670,10 +1659,8 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasSwimmingPool">Piscine</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Internet -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasInternet"
                                     name="accomodationHasInternet" <?php if ($advertisementData[0]['advertisement_accomodationHasInternet']) {
@@ -1683,7 +1670,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Wifi -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasWifi"
                                     name="accomodationHasWifi" <?php if ($advertisementData[0]['advertisement_accomodationHasWifi']) {
@@ -1693,7 +1680,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fibre optique -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasFiberOpticInternet" name="accomodationHasFiberOpticInternet" <?php if ($advertisementData[0]['advertisement_accomodationHasFiberOpticInternet']) {
@@ -1704,7 +1691,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Netflix -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasNetflix"
                                     name="accomodationHasNetflix" <?php if ($advertisementData[0]['advertisement_accomodationHasNetflix']) {
@@ -1713,10 +1700,8 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasNetflix">Netflix</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Télévision -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasTv"
                                     name="accomodationHasTv" <?php if ($advertisementData[0]['advertisement_accomodationHasTv']) {
@@ -1726,7 +1711,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Double vitrage -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasDoubleGlazing"
                                     name="accomodationHasDoubleGlazing" <?php if ($advertisementData[0]['advertisement_accomodationHasDoubleGlazing']) {
@@ -1737,7 +1722,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffe eau gaz -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasGasWaterHeater"
                                     name="accomodationHasGasWaterHeater" <?php if ($advertisementData[0]['advertisement_accomodationHasGasWaterHeater']) {
@@ -1748,7 +1733,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Ballon d'eau chaude -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasHotWaterTank"
                                     name="accomodationHasHotWaterTank" <?php if ($advertisementData[0]['advertisement_accomodationHasHotWaterTank']) {
@@ -1758,10 +1743,8 @@ ob_start();
                                     chaude</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Climatisation -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasAirConditioning"
                                     name="accomodationHasAirConditioning" <?php if ($advertisementData[0]['advertisement_accomodationHasAirConditioning']) {
@@ -1772,7 +1755,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffage éléctrique -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasElectricHeating"
                                     name="accomodationHasElectricHeating" <?php if ($advertisementData[0]['advertisement_accomodationHasElectricHeating']) {
@@ -1783,7 +1766,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffage individuel gaz -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasIndividualGasHeating" name="accomodationHasIndividualGasHeating" <?php if ($advertisementData[0]['advertisement_accomodationHasIndividualGasHeating']) {
@@ -1795,7 +1778,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffage collectif gaz -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasCollectiveGasHeating" name="accomodationHasCollectiveGasHeating" <?php if ($advertisementData[0]['advertisement_accomodationHasCollectiveGasHeating']) {
@@ -1809,7 +1792,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Lave linge -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasWashingMachine"
                                     name="accomodationHasWashingMachine" <?php if ($advertisementData[0]['advertisement_accomodationHasWashingMachine']) {
@@ -1821,7 +1804,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Lave vaisselle -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasDishwasher"
                                     name="accomodationHasDishwasher" <?php if ($advertisementData[0]['advertisement_accomodationHasDishwasher']) {
@@ -1832,7 +1815,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Réfrigérateur -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasFridge"
                                     name="accomodationHasFridge" <?php if ($advertisementData[0]['advertisement_accomodationHasFridge']) {
@@ -1842,7 +1825,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Congélateur -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasFreezer"
                                     name="accomodationHasFreezer" <?php if ($advertisementData[0]['advertisement_accomodationHasFreezer']) {
@@ -1854,7 +1837,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Plaques de cuisson -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasBakingTray"
                                     name="accomodationHasBakingTray" <?php if ($advertisementData[0]['advertisement_accomodationHasBakingTray']) {
@@ -1865,7 +1848,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Hotte aspirante -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasExtractorHood"
                                     name="accomodationHasExtractorHood" <?php if ($advertisementData[0]['advertisement_accomodationHasExtractorHood']) {
@@ -1876,7 +1859,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Four -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasOven"
                                     name="accomodationHasOven" <?php if ($advertisementData[0]['advertisement_accomodationHasOven']) {
@@ -1886,7 +1869,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Micro-ondes -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasMicrowaveOven"
                                     name="accomodationHasMicrowaveOven" <?php if ($advertisementData[0]['advertisement_accomodationHasMicrowaveOven']) {
@@ -1899,7 +1882,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Cafetière -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasCoffeeMachine"
                                     name="accomodationHasCoffeeMachine" <?php if ($advertisementData[0]['advertisement_accomodationHasCoffeeMachine']) {
@@ -1910,7 +1893,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Machine à café dosette -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasPodCoffeeMachine"
                                     name="accomodationHasPodCoffeeMachine" <?php if ($advertisementData[0]['advertisement_accomodationHasPodCoffeeMachine']) {
@@ -1921,7 +1904,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Bouilloire -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasKettle"
                                     name="accomodationHasKettle" <?php if ($advertisementData[0]['advertisement_accomodationHasKettle']) {
@@ -1931,7 +1914,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Grille pain -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasToaster"
                                     name="accomodationHasToaster" <?php if ($advertisementData[0]['advertisement_accomodationHasToaster']) {
@@ -1943,7 +1926,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Visites autorisées -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="authorizedVisit"
                                     name="authorizedVisit" <?php if ($advertisementData[0]['advertisement_authorizedVisit']) {
@@ -1953,7 +1936,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Animaux autorisés -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="animalsAllowed"
                                     name="animalsAllowed" <?php if ($advertisementData[0]['advertisement_animalsAllowed']) {
@@ -1963,7 +1946,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fumer autorisé -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="smokingIsAllowed"
                                     name="smokingIsAllowed" <?php if ($advertisementData[0]['advertisement_smokingIsAllowed']) {
@@ -1973,7 +1956,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fêtes autorisées -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="authorizedParty"
                                     name="authorizedParty" <?php if ($advertisementData[0]['advertisement_authorizedParty']) {
@@ -1986,14 +1969,14 @@ ob_start();
                 </div>
             </div>
             <!-- ---------- CHAMBRE ---------- -->
-            <div class="container pb-3 pt-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2>Chambre</h2>
                 <div class="container">
                     <div class="row">
                         <!-- Surface habitable -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-4">
                             <label class="font-weight-bold" for="bedroomSize">Surface habitable de la chambre</label>
-                            <div id="bedroomSizeDiv" class="input-group mb-3">
+                            <div id="bedroomSizeDiv" class="input-group">
                                 <input id="bedroomSize" type="number" min="1" name="bedroomSize" class="form-control"
                                     placeholder="0" aria-describedby="basic-addon2"
                                     value="<?=$advertisementData[0]['advertisement_bedroomSize']?>" required>
@@ -2008,7 +1991,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Type de chambre -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-6 col-lg-4">
                             <label for="bedroomType" class="font-weight-bold">Type de chambre</label>
                             <select id="bedroomType" name="bedroomType" class="custom-select">
                                 <option value="Simple" <?php if ($advertisementData[0]['advertisement_bedroomType'] == "Simple") {
@@ -2026,7 +2009,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Type de lit -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-6 col-lg-4">
                             <label for="bedType" class="font-weight-bold">Type de lit</label>
                             <select id="bedType" name="bedType" class="custom-select">
                                 <option value="Simple" <?php if ($advertisementData[0]['advertisement_bedroomType'] == "Simple") {
@@ -2047,7 +2030,7 @@ ob_start();
                     <h3>La chambre comprend:</h3>
                     <div class="row">
                         <!-- Bureau -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasDesk"
                                     name="bedroomHasDesk" <?php if ($advertisementData[0]['advertisement_bedroomHasDesk']) {
@@ -2057,7 +2040,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chaise -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasChair"
                                     name="bedroomHasChair" <?php if ($advertisementData[0]['advertisement_bedroomHasChair']) {
@@ -2067,7 +2050,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Tv -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasTv"
                                     name="bedroomHasTv" <?php if ($advertisementData[0]['advertisement_bedroomHasTv']) {
@@ -2077,7 +2060,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fauteuil -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasArmchair"
                                     name="bedroomHasArmchair" <?php if ($advertisementData[0]['advertisement_bedroomHasArmchair']) {
@@ -2086,10 +2069,8 @@ ob_start();
                                 <label class="custom-control-label " for="bedroomHasArmchair">Fauteuil</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Table basse -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasCoffeeTable"
                                     name="bedroomHasCoffeeTable" <?php if ($advertisementData[0]['advertisement_bedroomHasCoffeeTable']) {
@@ -2099,7 +2080,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chevet -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasBedside"
                                     name="bedroomHasBedside" <?php if ($advertisementData[0]['advertisement_bedroomHasBedside']) {
@@ -2109,7 +2090,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Lampe -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasLamp"
                                     name="bedroomHasLamp" <?php if ($advertisementData[0]['advertisement_bedroomHasLamp']) {
@@ -2119,7 +2100,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Etagères -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasShelf"
                                     name="bedroomHasShelf" <?php if ($advertisementData[0]['advertisement_bedroomHasShelf']) {
@@ -2128,10 +2109,8 @@ ob_start();
                                 <label class="custom-control-label " for="bedroomHasShelf">Etagère(s)</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Armoire -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasWardrobe"
                                     name="bedroomHasWardrobe" <?php if ($advertisementData[0]['advertisement_bedroomHasWardrobe']) {
@@ -2141,7 +2120,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Penderie -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasCloset"
                                     name="bedroomHasCloset" <?php if ($advertisementData[0]['advertisement_bedroomHasCloset']) {
@@ -2155,7 +2134,7 @@ ob_start();
                 </div>
             </div>
             <!-- Photos -->
-            <div class="container py-3 border-bottom border-dark">
+            <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2 class=>Photos</h2>
                 <!-- Suppression photos -->
                 <?php
@@ -2170,7 +2149,7 @@ ob_start();
                         <?php
                         foreach ($advertisementPicture as $key => $value) {
                             ?>
-                        <div class="col-md-4 p-0 m-0">
+                        <div class="col-md-6 col-lg-4 p-0 m-0">
                             <label id="<?='labelImageToDelete'.$key?>" class="image-checkbox" onclick="changeStatue(id,event)">
                                 <img class="img-responsive img-thumbnail"
                                     src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
@@ -2187,7 +2166,7 @@ ob_start();
                 }
                 ?>
                 <!-- Ajout photos -->
-                <div class="container py-3 px-0">
+                <div class="container  py-3 px-0 px-md-3">
                     <div class="container">
                         <h4>Ajouter des photos</h4>
                     </div>
@@ -2201,7 +2180,7 @@ ob_start();
             </div>
             <!-- Bouton submit -->
             <div class="container py-3">
-                <button id="submitButton" type="submit" class="btn btn-primary offset-md-5 col-md-2">Enregistrer mes
+                <button id="submitButton" type="submit" class="btn btn-primary offset-2 col-8 offset-lg-4 col-lg-4">Enregistrer mes
                     modifications</button>
             </div>
         </form>
