@@ -2,23 +2,29 @@
 require_once('model/bdd/bddConfig.php');
 
 //Modification User ("mon compte")
-function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber){
+function modifyUser($userId,$usercivility,$userName,$userFirstName,$userdateOfBirth,$userMail,$userPhoneNumber){
     $userId = htmlspecialchars(strip_tags($userId));
+    $usercivility = htmlspecialchars(strip_tags($usercivility));
     $userName = htmlspecialchars(strip_tags($userName));
     $userFirstName = htmlspecialchars(strip_tags($userFirstName));
+    $userdateOfBirth = htmlspecialchars(strip_tags($userdateOfBirth));
     $userMail = htmlspecialchars(strip_tags($userMail));
     $userPhoneNumber = htmlspecialchars(strip_tags($userPhoneNumber));
 
     $db = connectBdd();
     $modifyUser = $db->prepare('UPDATE users SET 
+    user_civility=:civility,
     user_name=:name,
     user_firstName=:firstName,
+    user_dateOfBirth=:dateOfBirth,
     user_phoneNumber=:phoneNumber,
     user_mail=:mail
     WHERE user_id="'.$userId.'"');
     $modifyUser->execute(array(
+        ':civility'=>$usercivility,
         ':name'=> ucfirst($userName),
         ':firstName'=> ucfirst($userFirstName),
+        ':dateOfBirth'=>$userdateOfBirth,
         ':phoneNumber'=> $userPhoneNumber,
         ':mail'=> $userMail
     ));
