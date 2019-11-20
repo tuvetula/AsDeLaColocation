@@ -60,28 +60,27 @@ ob_start();
                     </div>
                     <!-- Date de naissance -->
                     <div class="row">
-                    <div class="form-group col-lg-4" title="Date de naissance">
+                        <div class="form-group col-lg-4" title="Date de naissance">
                             <label for="dateOfBirth" class="font-weight-bold">Date de naissance</label>
                             <input class="form-control" type="date" id="dateOfBirth"
                                 name="dateOfBirth"
                                 value="<?php if(isset($_POST['dateOfBirth'])){echo $_POST['dateOfBirth'];}?>"
                                 required>
-                                <?php if (isset($fillingError['dateOfBirth'])){ ?>
-                        <p class="text-danger font-weight-bold mb-0 pb-1" type="error"><?=$fillingError['dateOfBirth']?></p>
-                        <?php } ?>
+                            <?php if (isset($fillingError['dateOfBirth'])){ ?>
+                            <p class="text-danger font-weight-bold mb-0 pb-1" type="error"><?=$fillingError['dateOfBirth']?></p>
+                            <?php } ?>
                         </div>
-                        </div>
-                        <!-- Adresse -->
-                        <div class="row">
+                    </div>
+                    <!-- Adresse -->
+                    <div class="row">
                         <div class="form-group col-md-12" title="Numéro, nom de rue">
                             <label for="street" class="font-weight-bold">Adresse</label>
                             <input id="street" type="text" name="street" class="form-control"
                                 placeholder="Numéro et nom de rue" maxlength="255" <?php if (isset($_POST['street'])) {
-                        echo 'value="'.$_POST['street'].'"';
-                    } ?> required>
-                    <?php if (isset($fillingError['street'])){ ?>
-                        <p class="text-danger font-weight-bold mb-0 pb-1" type="error"><?=$fillingError['street']?></p>
-                        <?php } ?>
+                                echo 'value="'.$_POST['street'].'"';} ?> required>
+                            <?php if (isset($fillingError['street'])){ ?>
+                            <p class="text-danger font-weight-bold mb-0 pb-1" type="error"><?=$fillingError['street']?></p>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="row">
