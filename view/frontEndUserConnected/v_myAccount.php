@@ -14,9 +14,15 @@ ob_start();
             </div>
             <div class="container">
                 <h3 class="text-center">Coordonnées</h3>
+                <div class=row>
+                    <p class="offset-lg-2 col-lg-4"><strong>Civilité:</strong> <?=$userData['user_civility']?></p>
+                </div>
                 <div class="row">
                     <p class="offset-lg-2 col-lg-4"><strong>Nom:</strong> <?=$userData['user_name']?></p>
                     <p class="offset-lg-2 col-lg-4"><strong>Prénom:</strong> <?=$userData['user_firstName']?></p>
+                </div>
+                <div class=row>
+                    <p class="offset-lg-2 col-lg-4"><strong>Date de naissance:</strong> <?=$userData['user_dateOfBirth']?></p>
                 </div>
                 <div class="row">
                     <p class="offset-lg-2 col-lg-10"><strong>Rue:</strong> <?=$userData['address_street']?></p>
