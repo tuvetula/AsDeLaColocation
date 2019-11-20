@@ -20,6 +20,7 @@ function handleFiles(files, id) {
 
                 let imgDiv = document.createElement("div");
                 imgDiv.classList.add("imageAddPreview");
+                imgDiv.classList.add("col-sm-6");
                 imgDiv.classList.add("col-md-4");
                 imgDiv.classList.add("p-0");
                 preview.appendChild(imgDiv);
