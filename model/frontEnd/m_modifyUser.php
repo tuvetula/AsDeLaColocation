@@ -2,31 +2,47 @@
 require_once('model/bdd/bddConfig.php');
 
 //Modification User ("mon compte")
-function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber,$userLoginSiteWeb,$userPasswordSiteWeb){
+function modifyUser($userId,$usercivility,$userName,$userFirstName,$userdateOfBirth,$userMail,$userPhoneNumber){
     $userId = htmlspecialchars(strip_tags($userId));
+    $usercivility = htmlspecialchars(strip_tags($usercivility));
     $userName = htmlspecialchars(strip_tags($userName));
     $userFirstName = htmlspecialchars(strip_tags($userFirstName));
+    $userdateOfBirth = htmlspecialchars(strip_tags($userdateOfBirth));
     $userMail = htmlspecialchars(strip_tags($userMail));
     $userPhoneNumber = htmlspecialchars(strip_tags($userPhoneNumber));
-    $userLoginSiteWeb = htmlspecialchars(strip_tags($userLoginSiteWeb));
-    $userPasswordSiteWeb = htmlspecialchars(strip_tags($userPasswordSiteWeb));
 
     $db = connectBdd();
     $modifyUser = $db->prepare('UPDATE users SET 
+    user_civility=:civility,
     user_name=:name,
     user_firstName=:firstName,
+    user_dateOfBirth=:dateOfBirth,
     user_phoneNumber=:phoneNumber,
-    user_mail=:mail,
-    user_loginSiteWeb=:loginSiteWeb,
-    user_passwordSiteWeb=:passwordSiteWeb
+    user_mail=:mail
     WHERE user_id="'.$userId.'"');
     $modifyUser->execute(array(
-        ':name'=> $userName,
-        ':firstName'=> $userFirstName,
+        ':civility'=>$usercivility,
+        ':name'=> ucfirst($userName),
+        ':firstName'=> ucfirst($userFirstName),
+        ':dateOfBirth'=>$userdateOfBirth,
         ':phoneNumber'=> $userPhoneNumber,
-        ':mail'=> $userMail,
-        ':loginSiteWeb'=> $userLoginSiteWeb,
-        ':passwordSiteWeb'=> $userPasswordSiteWeb
+        ':mail'=> $userMail
+    ));
+    return true;
+}
+//Modification date création compte et token (après clique sur lien de confirmation d'inscription)
+function validRegistrationBdd($mail){
+    $mail = htmlspecialchars(strip_tags($mail));
+    $db = connectBdd();
+    $validRegistration = $db->prepare('UPDATE users SET 
+    user_token=:token,
+    user_accountCreationDate=:accountCreationDate,
+    user_isMember=:isMember
+    WHERE user_mail="'.$mail.'"');
+    $validRegistration->execute(array(
+        ':token'=> null,
+        ':accountCreationDate'=>date('Y-m-d'),
+        ':isMember'=> 1
     ));
     return true;
 }
@@ -34,9 +50,11 @@ function modifyUser($userId,$userName,$userFirstName,$userMail,$userPhoneNumber,
 //Modification user_token
 function modifyToken($mail,$token=null){
     $mail = htmlspecialchars(strip_tags($mail));
+    $token = htmlspecialchars(strip_tags($token));
     $db = connectBdd();
-    $modifyUserToken = $db->prepare('UPDATE users SET 
-    user_token=:token WHERE user_mail="'.$mail.'"');
+    $modifyUserToken = $db->prepare('UPDATE users 
+    SET user_token=:token 
+    WHERE user_mail="'.$mail.'"');
     $modifyUserToken->execute(array(
         ':token'=> $token
     ));
@@ -48,8 +66,9 @@ function modifyPassword($mail,$newPassword){
     $mail = htmlspecialchars(strip_tags($mail));
     $newPassword = password_hash(htmlspecialchars(strip_tags($newPassword)),PASSWORD_DEFAULT);
     $db = connectBdd();
-    $modifyUserPassword = $db->prepare('UPDATE users SET 
-    user_password=:newPassword WHERE user_mail="'.$mail.'"');
+    $modifyUserPassword = $db->prepare('UPDATE users 
+    SET user_password=:newPassword 
+    WHERE user_mail="'.$mail.'"');
     $modifyUserPassword->execute(array(
         ':newPassword'=> $newPassword
     ));

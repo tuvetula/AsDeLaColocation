@@ -64,7 +64,7 @@ ob_start();
     }
         ?>
         <script src="public/js/searchBarSelect.js"></script>
-        <script src="public/js/changeIsMemberState.js"></script>
+        <script src="public/js/Ajax/changeIsMemberState.js"></script>
         <?php
 $content = ob_get_clean();
 require('view/includes/template.php');

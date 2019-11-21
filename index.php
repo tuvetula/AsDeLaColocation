@@ -116,7 +116,7 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
         forgetPassword();
 
     //Affichage page réinitialisation mot de passe (après clique sur lien reçu par mail)
-    } elseif (isset($_GET['token']) && isset($_GET['mailLink'])) {
+    } elseif (isset($_GET['action']) && $_GET['action'] == 'password' && isset($_GET['token']) && isset($_GET['mail'])) {
         displayTypeNewPassword();
 
     //Traitement enregistrement nouveau mot de passe (après saisie de 2 nouveaux mots de passe)
@@ -132,7 +132,12 @@ if (isset($_SESSION['mail']) && isset($_SESSION['isAdmin'])) {
     } elseif (isset($_GET['page']) && $_GET['page']=="saveSubscribe") {
         require_once('controller/frontEnd/c_subscribe.php');
         saveSubscribeForm();
-    
+
+    //Traitement validation inscription (après clique sur lien reçu par mail)
+    }elseif(isset($_GET['action']) && $_GET['action']=='registration' && isset($_GET['token']) && isset($_GET['mail'])){
+        require_once('controller/frontEnd/c_subscribe.php');
+        validRegistration();
+
     //Affichage page de connexion
     } else {
         displayLoginPage();
