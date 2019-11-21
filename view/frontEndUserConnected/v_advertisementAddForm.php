@@ -12,9 +12,9 @@ ob_start();
                 <?php if (isset($_GET['error'])){ ?>
                 <p class="text-danger font-weight-bold pb-1"><?php
                 if($_GET['error']=='pbTechnique'){
-                    echo 'Problème avec les fichiers téléchargés';
+                    echo 'Problème avec les fichiers téléchargés.';
                 }else if($_GET['error'] == 'fillingError'){
-                    echo 'Veuillez corriger les erreurs';
+                    echo 'Veuillez corriger les erreurs.';
                 }
                  ?> </p> <?php } ?>
                 <h2>Annonce</h2>
@@ -22,7 +22,7 @@ ob_start();
                 <div class="container">
                     <!--Titre-->
                     <div class="form-group"
-                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis. Attention, votre titre est définitif, il ne pourra être modifié">
+                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.Attention, votre titre est définitif, il ne pourra être modifié.">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
                             maxlength="80" value="<?php if(isset($_SESSION['postData'])){
