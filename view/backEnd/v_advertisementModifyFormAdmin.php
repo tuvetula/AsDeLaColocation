@@ -10,17 +10,31 @@ ob_start();
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <?php if (isset($_SESSION['fillingError'])){ ?>
                 <p class="text-danger font-weight-bold pb-1">Veuillez corriger les erreurs</p> <?php } ?>
-                <!-- <h2>Annonce</h2> -->
+                <h2>Annonce</h2>
                 <!-- IsActive, Titre, Description -->
                 <input type="hidden" name="id" value="<?=$advertisementData[0]['advertisement_id']?>">
                 <div class="container">
-                    <!--Titre-->
-                        <h3 class="font-weight-bold text-center pb-3">"<?=$advertisementData[0]['advertisement_title']?>"</h3>
                     <!-- isActive -->
                     <div class=" custom-control custom-checkbox pb-3">
                         <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" <?php if ($advertisementData[0]['advertisement_isActive']) {
                         echo 'checked';}?>>
                         <label class="custom-control-label font-weight-bold" for="isActive">Activation annonce</label>
+                    </div>
+                    <!--Titre-->
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="title">Titre</label>
+                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce" title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis."
+                            maxlength="80" value="<?php
+                            if(isset($_GET['error']) && isset($_GET['title'])){
+                                echo $_GET['title'];}else{
+                                    echo $advertisementData[0]['advertisement_title'];
+                                }?>" required>
+                        <div class="float-right" id="countTitle"></div>
+                        <p class="text-danger font-weight-bold pb-1"><?php
+                        if (isset($_GET['error']) && $_GET['error'] == 'title'){
+                            echo 'Vous avez déja utilisé ce titre dans une autre annonce';
+                        }
+                        ?></p>
                     </div>
                     <!--Description-->
                     <div class="form-group pb-3">
