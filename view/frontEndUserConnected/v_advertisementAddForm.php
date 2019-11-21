@@ -3,7 +3,7 @@ $title = "Déposer une nouvelle annonce";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
-    <div class="jumbotron px-2 px-md-3">
+    <div class="jumbotron px-1 px-md-3">
         <h1 class="pb-3 text-center">Ajouter une nouvelle annonce</h1>
         <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data"
             onsubmit="spinnerSubmitButton()">
@@ -22,7 +22,7 @@ ob_start();
                 <div class="container">
                     <!--Titre-->
                     <div class="form-group"
-                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
+                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis. Attention, votre titre est définitif, il ne pourra être modifié">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
                             maxlength="80" value="<?php if(isset($_SESSION['postData'])){
@@ -2048,18 +2048,19 @@ ob_start();
                     <div id="inputDiv">
                         <input type="file" onchange="handleFiles(files,id)" id="upload" multiple name="file[]" required>
                     </div>
-                    <?php if (isset($_SESSION['error'])){ foreach($_SESSION['error'][0] as $key => $value){?>
-                <p class="text-danger font-weight-bold pb-1"><?php
-                echo $_SESSION['error'][0][$key] ?> </p> <?php }} ?>
+                    <?php if (isset($_SESSION['error'])){ 
+                        foreach($_SESSION['error'][0] as $key => $value){?>
+                            <p class="text-danger font-weight-bold pb-1"><?=$_SESSION['error'][0][$key]?></p><?php }
+                        }else if(isset($_SESSION['fillingError']['file'])){?>
+                            <p class="text-danger font-weight-bold pb-1" type="error"><?=$_SESSION['fillingError']['file']?></p><?php } ?>
                     <div>
                         <span id="preview" class="row"></span>
                     </div>
                 </div>
             </div>
             <!-- Bouton submit -->
-            <div class="container pt-3">
-                <button id="submitButton" type="submit"
-                    class="btn btn-primary offset-3 col-6 offset-sm-4 col-sm-4">Enregistrer</button>
+            <div class="container pt-3 text-center">
+                <button id="submitButton" type="submit" class="btn btn-primary col-6 col-sm-4 col-lg-3">Enregistrer</button>
             </div>
         </form>
     </div>
