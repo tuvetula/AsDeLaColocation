@@ -1968,7 +1968,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Type de chambre -->
-                        <div class="form-group col-6 col-lg-4">
+                        <div class="form-group col-sm-6 col-lg-4">
                             <label for="bedroomType" class="font-weight-bold">Type de chambre</label>
                             <select id="bedroomType" name="bedroomType" class="custom-select">
                                 <option value="Simple" <?php if ($advertisementData[0]['advertisement_bedroomType'] == "Simple") {
@@ -1986,7 +1986,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Type de lit -->
-                        <div class="form-group col-6 col-lg-4">
+                        <div class="form-group col-sm-6 col-lg-4">
                             <label for="bedType" class="font-weight-bold">Type de lit</label>
                             <select id="bedType" name="bedType" class="custom-select">
                                 <option value="Simple" <?php if ($advertisementData[0]['advertisement_bedroomType'] == "Simple") {
