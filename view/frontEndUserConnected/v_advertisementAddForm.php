@@ -3,7 +3,7 @@ $title = "Déposer une nouvelle annonce";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
-    <div class="jumbotron">
+    <div class="jumbotron px-1 px-md-3">
         <h1 class="pb-3 text-center">Ajouter une nouvelle annonce</h1>
         <form method="post" action="index.php?page=addAdvertisement" enctype="multipart/form-data"
             onsubmit="spinnerSubmitButton()">
@@ -22,20 +22,19 @@ ob_start();
                 <div class="container">
                     <!--Titre-->
                     <div class="form-group"
-                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
+                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis. Attention, votre titre est définitif, il ne pourra être modifié">
                         <label class="font-weight-bold" for="title">Titre</label>
                         <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
                             maxlength="80" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['title'];
                             }?>" required>
                         <div class="float-right" id="countTitle"></div>
-                        <p class="text-danger font-weight-bold pb-1"><?php
-                        if (isset($_GET['error']) && $_GET['error'] == 'title'){
-                            echo 'Vous avez déja utilisé ce titre dans une autre annonce';
-                        }else if (isset($_SESSION['fillingError']['title'])){
-                            echo $_SESSION['fillingError']['title'];
-                        }
-                        ?></p>
+                        <?php if (isset($_GET['error']) && $_GET['error'] == 'title'){ ?>
+                        <p class="text-danger font-weight-bold pb-1" type="error">Vous avez déja utilisé ce titre dans une autre annonce</p>
+                        <?php
+                        }else if (isset($_SESSION['fillingError']['title'])){ ?>
+                        <p class="text-danger font-weight-bold pb-1" type="error"><?=$_SESSION['fillingError']['title']?></p>
+                        <?php } ?>
                     </div>
                     <!--Description-->
                     <div class="form-group pb-3">
@@ -45,11 +44,14 @@ ob_start();
                                 echo $_SESSION['postData']['description'];
                             }?></textarea>
                         <div class="float-right" id="countDescription"></div>
+                        <?php if (isset($_SESSION['fillingError']['description'])){ ?>
+                        <p class="text-danger font-weight-bold pb-1" type="errorT"><?=$_SESSION['fillingError']['description']?></p>
+                        <?php } ?>
                     </div>
                     <!-- Type, catégorie, disponible le, location sans visite -->
                     <div class="row">
                         <!--Type de logement-->
-                        <div class="form-group col-md-3" title="Sélectionner le type de bien">
+                        <div class="form-group col-6 col-md-4 col-xl-3" title="Sélectionner le type de bien">
                             <label class="font-weight-bold">Type de logement</label>
                             <div class="form-check">
                                 <input id="radioType1" class="form-check-input" type="radio" name="type" value="Maison" <?php if(isset($_SESSION['postData']) && $_SESSION['postData']['type']=="Maison"){
@@ -70,7 +72,7 @@ ob_start();
                             </div>
                         </div>
                         <!--Catégorie du logement-->
-                        <div class="form-group col-md-3" title="Sélectionner la catégorie correspondante">
+                        <div class="form-group col-6 col-md-4 col-xl-3" title="Sélectionner la catégorie correspondante">
                             <label class="font-weight-bold">Catégorie</label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="category"
@@ -110,7 +112,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Disponible le -->
-                        <div class="form-group col-md-3" title="Donner la date à laquelle le locataire pourra entrer">
+                        <div class="form-group col-md-4 col-xl-3" title="Donner la date à laquelle le locataire pourra entrer">
                             <label for="availableDate" class="font-weight-bold">Disponible le</label>
                             <input class="form-control" type="date" min="<?=$dateOfTheDay?>" id="availableDate"
                                 name="availableDate"
@@ -118,7 +120,7 @@ ob_start();
                                 required>
                         </div>
                         <!-- Location sans visite + meublé -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-xl-3">
                             <!-- Meublé -->
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="isFurnished" name="isFurnished"
@@ -140,7 +142,7 @@ ob_start();
                     <!-- Nom, Telephone, Mail pour les visites-->
                     <div class="row">
                         <!-- Nom du contact pour les visites -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-6 col-xl-4">
                             <label for="contactNameForVisit" class="font-weight-bold">Nom du contact pour les
                                 visites</label>
                             <input id="contactNameForVisit" type="text" name="contactNameForVisit" class="form-control"
@@ -154,7 +156,7 @@ ob_start();
                             <?php } ?>
                         </div>
                         <!-- Telephone du contact pour les visites -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-6 col-xl-4">
                             <label for="contactPhoneNumberForVisit" class="font-weight-bold">Telephone du contact
                                 pour
                                 les visites</label>
@@ -169,7 +171,7 @@ ob_start();
                             <?php } ?>
                         </div>
                         <!-- Mail du contact pour les visites -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-12 col-xl-4">
                             <label for="contactMailForVisit" class="font-weight-bold">Mail du contact pour les
                                 visites</label>
                             <input id="contactMailForVisit" type="email" name="contactMailForVisit" class="form-control"
@@ -185,7 +187,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Situation du loueur -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="renterSituation" class="font-weight-bold">Situation du loueur </label>
                             <select id="renterSituation" name="renterSituation" class="custom-select">
                                 <option value="Propriétaire"
@@ -197,7 +199,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Durée minimum de séjour -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="locationMinDuration" class="font-weight-bold">Durée minimum de
                                 séjour</label>
                             <select id="locationMinDuration" name="locationMinDuration" class="custom-select">
@@ -219,7 +221,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Nombre de colocataires déjà présent -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-6 col-xl-4">
                             <label class="font-weight-bold" for="nbOfOtherRoommatePresent">Nombre de
                                 colocataire(s)
                                 déjà
@@ -257,10 +259,8 @@ ob_start();
                                     9</option>
                             </select>
                         </div>
-                    </div>
                     <!-- Sex colocataires déja présents -->
-                    <div class="row">
-                        <div class="form-group offset-md-8 col-md-4" id="otherRoommateSex">
+                        <div class="form-group col-lg-6 offset-xl-8 col-xl-4" id="otherRoommateSex">
                             <label for="roommateSex" class="font-weight-bold">Colocataire(s) déja présent(s)
                                 (sexe)</label>
                             <select id="roommateSex" name="roommateSex" class="custom-select">
@@ -281,7 +281,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Colocataire idéal (sexe) -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="idealRoommateSex" class="font-weight-bold">Colocataire idéal
                                 (sexe)</label>
                             <select id="idealRoommateSex" name="idealRoommateSex" class="custom-select">
@@ -297,7 +297,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Colocataire idéal (situation) -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-xl-4">
                             <label for="idealRoommateSituation" class="font-weight-bold">Colocataire idéal
                                 (situation)</label>
                             <select id="idealRoommateSituation" name="idealRoommateSituation" class="custom-select">
@@ -313,7 +313,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Age minimum -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-6 col-xl-2">
                             <label class="font-weight-bold" for="idealRoommateMinAge">Age minimum</label>
                             <select id="idealRoommateMinAge" name="idealRoommateMinAge" class="custom-select">
                                 <option value="18"
@@ -565,7 +565,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Age maximum -->
-                        <div class="form-group col-md-2">
+                        <div class="form-group col-6 col-xl-2">
                             <label class="font-weight-bold" for="idealRoommateMaxAge">Age maximum</label>
                             <select id="idealRoommateMaxAge" name="idealRoommateMaxAge" class="custom-select">
                                 <option value="18"
@@ -826,9 +826,9 @@ ob_start();
                 <div class="container">
                     <div class="row">
                         <!-- Montant HC -->
-                        <div class="form-group col-md-4" title="Loyer Hors Charges">
+                        <div class="form-group col-sm-6 col-md-4" title="Loyer Hors Charges">
                             <label class="font-weight-bold" for="monthlyRentExcludingCharges">Loyer mensuel HC</label>
-                            <div id="monthlyRentExcludingChargesDiv" class="input-group mb-3">
+                            <div id="monthlyRentExcludingChargesDiv" class="input-group">
                                 <input id="monthlyRentExcludingCharges" type="number" min="0"
                                     name="monthlyRentExcludingCharges" class="form-control"
                                     aria-describedby="basic-addon2" value="<?php if(isset($_SESSION['postData'])){
@@ -845,9 +845,9 @@ ob_start();
                             </div>
                         </div>
                         <!-- Montant des charges -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-sm-6 col-md-4">
                             <label class="font-weight-bold" for="charges">Montant des charges</label>
-                            <div id="chargesDiv" class="input-group mb-3">
+                            <div id="chargesDiv" class="input-group">
                                 <input id="charges" type="number" min="0" name="charges" class="form-control"
                                     aria-describedby="basic-addon2" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['charges'];
@@ -865,7 +865,7 @@ ob_start();
                         <!-- Montant de la caution -->
                         <div class="form-group col-md-4">
                             <label class="font-weight-bold" for="suretyBond">Montant de la caution</label>
-                            <div id="suretyBondDiv" class="input-group mb-3">
+                            <div id="suretyBondDiv" class="input-group">
                                 <input id="suretyBond" type="number" min="0" name="suretyBond" class="form-control"
                                     aria-describedby="basic-addon2" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['suretyBond'];
@@ -883,7 +883,7 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Le garant doit résider -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label for="guarantorLiving" class="font-weight-bold">Le garant doit résider</label>
                             <select id="guarantorLiving" name="guarantorLiving" class="custom-select">
                                 <option value="France"
@@ -898,7 +898,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Ratio de solvabilité -->
-                        <div class="form-group col-md-4" title="A combien de loyers le revenu doit-il être supérieur?">
+                        <div class="form-group col-md-6 col-lg-4" title="A combien de loyers le revenu doit-il être supérieur?">
                             <label for="solvencyRatio" class="font-weight-bold">Ratio de solvabilité</label>
                             <select id="solvencyRatio" name="solvencyRatio" class="custom-select">
                                 <option value="PeuImporte"
@@ -928,9 +928,9 @@ ob_start();
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row pt-md-2">
                         <!-- Exigences financières -->
-                        <div class="form-group col-md-4" title="J'ai des exigences financières pour le candidat">
+                        <div class="form-group col-sm-6 col-lg-4" title="J'ai des exigences financières pour le candidat">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="financialRequirements"
                                     name="financialRequirements"
@@ -939,7 +939,8 @@ ob_start();
                                     for="financialRequirements">Exigences financières</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
+                        <!-- Eligible aux aides -->
+                        <div class="form-group col-sm-6 col-lg-4">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="eligibleForAids"
                                     name="eligibleForAids"
@@ -952,7 +953,7 @@ ob_start();
                     <h3 class="pt-3">Inclus dans les charges:</h3>
                     <div class="row">
                         <!-- Electricité -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeElectricity"
                                     name="chargesIncludeElectricity"
@@ -961,7 +962,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Eau chaude -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeHotWater"
                                     name="chargesIncludeHotWater"
@@ -970,7 +971,8 @@ ob_start();
                                     chaude</label>
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <!-- Chauffage -->
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeHeating"
                                     name="chargesIncludeHeating"
@@ -979,7 +981,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Internet -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeInternet"
                                     name="chargesIncludeInternet"
@@ -987,10 +989,8 @@ ob_start();
                                 <label class="custom-control-label" for="chargesIncludeInternet">Internet</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Charges de co-propriété -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="chargesIncludeCoOwnershipCharges" name="chargesIncludeCoOwnershipCharges"
@@ -1000,7 +1000,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Assurance habitation -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeHomeInsurance"
                                     name="chargesIncludeHomeInsurance"
@@ -1010,7 +1010,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Révision chaudière -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeBoilerInspection"
                                     name="chargesIncludeBoilerInspection"
@@ -1020,7 +1020,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Taxe d'ordures ménagères -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="chargesIncludeHouseholdGarbageTaxes" name="chargesIncludeHouseholdGarbageTaxes"
@@ -1029,10 +1029,8 @@ ob_start();
                                     d'ordures ménagères</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Service de nettoyage -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="chargesIncludeCleaningService"
                                     name="chargesIncludeCleaningService"
@@ -1100,10 +1098,10 @@ ob_start();
                     </div>
                     <div class="row">
                         <!-- Surface habitable -->
-                        <div class="form-group col-md-4" title="Surface totale du logement">
+                        <div class="form-group col-md-12 col-lg-4" title="Surface totale du logement">
                             <label class="font-weight-bold" for="accomodationLivingAreaSize">Surface habitable du
                                 logement</label>
-                            <div id="accomodationLivingAreaSizeDiv" class="input-group mb-3">
+                            <div id="accomodationLivingAreaSizeDiv" class="input-group">
                                 <input id="accomodationLivingAreaSize" type="number" min="1"
                                     name="accomodationLivingAreaSize" class="form-control"
                                     aria-describedby="basic-addon2" value="<?php if(isset($_SESSION['postData'])){
@@ -1120,7 +1118,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Etage du logement -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="accomodationFloor">Etage du logement</label>
                             <select id="accomodationFloor" name="accomodationFloor" class="custom-select">
                                 <option value="0"
@@ -1219,7 +1217,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Nombre d'étages -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="buildingNbOfFloors">Nombre d'etages (immeuble)</label>
                             <select id="buildingNbOfFloors" name="buildingNbOfFloors" class="custom-select">
                                 <option value="0"
@@ -1317,10 +1315,8 @@ ob_start();
                                     30</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Nombre de pièces -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="accomodationNbOfRooms">Nombre de pièces</label>
                             <select id="accomodationNbOfRooms" name="accomodationNbOfRooms" class="custom-select">
                                 <option value="0"
@@ -1358,47 +1354,8 @@ ob_start();
                                     10</option>
                             </select>
                         </div>
-                        <!-- Nombre de chambres -->
-                        <div class="form-group col-md-4" title="Nombre de chambres que contient au total le logement">
-                            <label class="font-weight-bold" for="accomodationNbOfBedrooms">Nombre de chambres</label>
-                            <select id="accomodationNbOfBedrooms" name="accomodationNbOfBedrooms" class="custom-select">
-                                <option value="0"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 0){echo "selected";}else if(!isset($_SESSION['postData'])){echo "selected";}?>>
-                                    0</option>
-                                <option value="1"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 1){echo "selected";}?>>
-                                    1</option>
-                                <option value="2"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 2){echo "selected";}?>>
-                                    2</option>
-                                <option value="3"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 3){echo "selected";}?>>
-                                    3</option>
-                                <option value="4"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 4){echo "selected";}?>>
-                                    4</option>
-                                <option value="5"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 5){echo "selected";}?>>
-                                    5</option>
-                                <option value="6"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 6){echo "selected";}?>>
-                                    6</option>
-                                <option value="7"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 7){echo "selected";}?>>
-                                    7</option>
-                                <option value="8"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 8){echo "selected";}?>>
-                                    8</option>
-                                <option value="9"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 9){echo "selected";}?>>
-                                    9</option>
-                                <option value="10"
-                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 10){echo "selected";}?>>
-                                    10</option>
-                            </select>
-                        </div>
                         <!-- Nombre de salles de bains -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label class="font-weight-bold" for="accomodationNbOfBathrooms">Nombre de salles de
                                 bain</label>
                             <select id="accomodationNbOfBathrooms" name="accomodationNbOfBathrooms"
@@ -1438,10 +1395,47 @@ ob_start();
                                     10</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="row">
+                        <!-- Nombre de chambres -->
+                        <div class="form-group col-md-6 col-lg-4" title="Nombre de chambres que contient au total le logement">
+                            <label class="font-weight-bold" for="accomodationNbOfBedrooms">Nombre de chambres</label>
+                            <select id="accomodationNbOfBedrooms" name="accomodationNbOfBedrooms" class="custom-select">
+                                <option value="0"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 0){echo "selected";}else if(!isset($_SESSION['postData'])){echo "selected";}?>>
+                                    0</option>
+                                <option value="1"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 1){echo "selected";}?>>
+                                    1</option>
+                                <option value="2"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 2){echo "selected";}?>>
+                                    2</option>
+                                <option value="3"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 3){echo "selected";}?>>
+                                    3</option>
+                                <option value="4"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 4){echo "selected";}?>>
+                                    4</option>
+                                <option value="5"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 5){echo "selected";}?>>
+                                    5</option>
+                                <option value="6"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 6){echo "selected";}?>>
+                                    6</option>
+                                <option value="7"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 7){echo "selected";}?>>
+                                    7</option>
+                                <option value="8"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 8){echo "selected";}?>>
+                                    8</option>
+                                <option value="9"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 9){echo "selected";}?>>
+                                    9</option>
+                                <option value="10"
+                                    <?php if (isset($_SESSION['postData']) && $_SESSION['postData']['accomodationNbOfBedrooms'] == 10){echo "selected";}?>>
+                                    10</option>
+                            </select>
+                        </div>
                         <!-- Nombre de chambres à louer-->
-                        <div class="form-group col-md-4" title="Nombre de chambres disponibles">
+                        <div class="form-group col-md-6 col-lg-4" title="Nombre de chambres disponibles">
                             <label class="font-weight-bold" for="nbOfBedroomsToRent">Nombre de chambres à louer</label>
                             <select id="nbOfBedroomsToRent" name="nbOfBedroomsToRent" class="custom-select">
                                 <option value="1"
@@ -1477,7 +1471,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Utilisation de la cuisine -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label for="kitchenUse" class="font-weight-bold">Utilisation de la cuisine</label>
                             <select id="kitchenUse" name="kitchenUse" class="custom-select">
                                 <option value="Commun"
@@ -1489,7 +1483,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Utilisation du salon -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6 col-lg-4">
                             <label for="livingRoomUse" class="font-weight-bold">Utilisation du salon</label>
                             <select id="livingRoomUse" name="livingRoomUse" class="custom-select">
                                 <option value="Commun"
@@ -1507,7 +1501,7 @@ ob_start();
                     <!-- Classe Energie -->
                     <div class="row">
                         <!--Performance energetique -->
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="EnergeticPerformance">Diagnostic de performance
                                 énergétique</label>
                             <div id="EnergeticPerformance" class="input-group mb-3">
@@ -1529,7 +1523,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Ges -->
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-lg-6">
                             <label class="font-weight-bold" for="EnergeticGes">Emissions de gaz à effet de serre</label>
                             <div id="EnergeticGes" class="input-group mb-3">
                                 <input id="gesNumber" type="number" min="1" name="gesNumber" class="form-control"
@@ -1553,7 +1547,7 @@ ob_start();
                     <h3>Le logement comprend:</h3>
                     <div class="row">
                         <!-- Accès handicapé -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="handicapedAccessibility"
                                     name="handicapedAccessibility"
@@ -1563,7 +1557,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Ascenceur -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasElevator"
                                     name="accomodationHasElevator"
@@ -1572,7 +1566,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Parking commun -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasCommonParkingLot"
                                     name="accomodationHasCommonParkingLot"
@@ -1582,7 +1576,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Place de parking privée -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasPrivateParkingPlace" name="accomodationHasPrivateParkingPlace"
@@ -1591,10 +1585,8 @@ ob_start();
                                     parking privée</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Jardin -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasGarden"
                                     name="accomodationHasGarden"
@@ -1603,7 +1595,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Balcon -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasBalcony"
                                     name="accomodationHasBalcony"
@@ -1612,7 +1604,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Terrasse -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasTerrace"
                                     name="accomodationHasTerrace"
@@ -1621,7 +1613,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Piscine -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasSwimmingPool"
                                     name="accomodationHasSwimmingPool"
@@ -1629,10 +1621,8 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasSwimmingPool">Piscine</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Internet -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasInternet"
                                     name="accomodationHasInternet"
@@ -1641,7 +1631,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Wifi -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasWifi"
                                     name="accomodationHasWifi"
@@ -1650,7 +1640,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fibre optique -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasFiberOpticInternet" name="accomodationHasFiberOpticInternet"
@@ -1660,7 +1650,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Netflix -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasNetflix"
                                     name="accomodationHasNetflix"
@@ -1668,10 +1658,8 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasNetflix">Netflix</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Télévision -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasTv"
                                     name="accomodationHasTv"
@@ -1680,7 +1668,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Double vitrage -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasDoubleGlazing"
                                     name="accomodationHasDoubleGlazing"
@@ -1690,7 +1678,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffe eau gaz -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasGasWaterHeater"
                                     name="accomodationHasGasWaterHeater"
@@ -1700,7 +1688,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Ballon d'eau chaude -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasHotWaterTank"
                                     name="accomodationHasHotWaterTank"
@@ -1709,10 +1697,8 @@ ob_start();
                                     chaude</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Climatisation -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasAirConditioning"
                                     name="accomodationHasAirConditioning"
@@ -1722,7 +1708,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffage éléctrique -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasElectricHeating"
                                     name="accomodationHasElectricHeating"
@@ -1732,7 +1718,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffage individuel gaz -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasIndividualGasHeating" name="accomodationHasIndividualGasHeating"
@@ -1742,7 +1728,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chauffage collectif gaz -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input"
                                     id="accomodationHasCollectiveGasHeating" name="accomodationHasCollectiveGasHeating"
@@ -1751,10 +1737,8 @@ ob_start();
                                     collectif gaz</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Lave linge -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasWashingMachine"
                                     name="accomodationHasWashingMachine"
@@ -1764,7 +1748,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Lave vaisselle -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasDishwasher"
                                     name="accomodationHasDishwasher"
@@ -1774,7 +1758,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Réfrigérateur -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasFridge"
                                     name="accomodationHasFridge"
@@ -1783,7 +1767,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Congélateur -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasFreezer"
                                     name="accomodationHasFreezer"
@@ -1791,10 +1775,8 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasFreezer">Congélateur</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Plaques de cuisson -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasBakingTray"
                                     name="accomodationHasBakingTray"
@@ -1804,7 +1786,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Hotte aspirante -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasExtractorHood"
                                     name="accomodationHasExtractorHood"
@@ -1814,7 +1796,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Four -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasOven"
                                     name="accomodationHasOven"
@@ -1823,7 +1805,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Micro-ondes -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasMicrowaveOven"
                                     name="accomodationHasMicrowaveOven"
@@ -1832,10 +1814,8 @@ ob_start();
                                     micro-ondes</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Cafetière -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasCoffeeMachine"
                                     name="accomodationHasCoffeeMachine"
@@ -1845,7 +1825,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Machine à café dosette -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasPodCoffeeMachine"
                                     name="accomodationHasPodCoffeeMachine"
@@ -1855,7 +1835,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Bouilloire -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasKettle"
                                     name="accomodationHasKettle"
@@ -1864,7 +1844,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Grille pain -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="accomodationHasToaster"
                                     name="accomodationHasToaster"
@@ -1872,10 +1852,8 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasToaster">Grille pain</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Visites autorisées -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="authorizedVisit"
                                     name="authorizedVisit"
@@ -1884,7 +1862,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Animaux autorisés -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="animalsAllowed"
                                     name="animalsAllowed"
@@ -1893,7 +1871,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fumer autorisé -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="smokingIsAllowed"
                                     name="smokingIsAllowed"
@@ -1902,7 +1880,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fêtes autorisées -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="authorizedParty"
                                     name="authorizedParty"
@@ -1919,9 +1897,9 @@ ob_start();
                 <div class="container">
                     <div class="row">
                         <!-- Surface habitable -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-lg-4">
                             <label class="font-weight-bold" for="bedroomSize">Surface habitable de la chambre</label>
-                            <div id="bedroomSizeDiv" class="input-group mb-3">
+                            <div id="bedroomSizeDiv" class="input-group">
                                 <input id="bedroomSize" type="number" min="1" name="bedroomSize" class="form-control"
                                     placeholder="0" aria-describedby="basic-addon2" value="<?php if(isset($_SESSION['postData'])){
                                 echo $_SESSION['postData']['bedroomSize'];
@@ -1937,7 +1915,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Type de chambre -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-6 col-lg-4">
                             <label for="bedroomType" class="font-weight-bold">Type de chambre</label>
                             <select id="bedroomType" name="bedroomType" class="custom-select">
                                 <option value="Simple"
@@ -1952,7 +1930,7 @@ ob_start();
                             </select>
                         </div>
                         <!-- Type de lit -->
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-6 col-lg-4">
                             <label for="bedType" class="font-weight-bold">Type de lit</label>
                             <select id="bedType" name="bedType" class="custom-select">
                                 <option value="Simple"
@@ -1970,7 +1948,7 @@ ob_start();
                     <h3>La chambre comprend:</h3>
                     <div class="row">
                         <!-- Bureau -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasDesk"
                                     name="bedroomHasDesk"
@@ -1979,7 +1957,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chaise -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasChair"
                                     name="bedroomHasChair"
@@ -1988,7 +1966,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Tv -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasTv"
                                     name="bedroomHasTv"
@@ -1997,7 +1975,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Fauteuil -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasArmchair"
                                     name="bedroomHasArmchair"
@@ -2005,10 +1983,8 @@ ob_start();
                                 <label class="custom-control-label " for="bedroomHasArmchair">Fauteuil</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Table basse -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasCoffeeTable"
                                     name="bedroomHasCoffeeTable"
@@ -2017,7 +1993,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Chevet -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasBedside"
                                     name="bedroomHasBedside"
@@ -2026,7 +2002,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Lampe -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasLamp"
                                     name="bedroomHasLamp"
@@ -2035,7 +2011,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Etagères -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasShelf"
                                     name="bedroomHasShelf"
@@ -2043,10 +2019,8 @@ ob_start();
                                 <label class="custom-control-label " for="bedroomHasShelf">Etagère(s)</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Armoire -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasWardrobe"
                                     name="bedroomHasWardrobe"
@@ -2055,7 +2029,7 @@ ob_start();
                             </div>
                         </div>
                         <!-- Penderie -->
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-6 col-md-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
                                 <input type="checkbox" class="custom-control-input" id="bedroomHasCloset"
                                     name="bedroomHasCloset"
@@ -2074,22 +2048,24 @@ ob_start();
                     <div id="inputDiv">
                         <input type="file" onchange="handleFiles(files,id)" id="upload" multiple name="file[]" required>
                     </div>
-                    <?php if (isset($_SESSION['error'])){ foreach($_SESSION['error'][0] as $key => $value){?>
-                <p class="text-danger font-weight-bold pb-1"><?php
-                echo $_SESSION['error'][0][$key] ?> </p> <?php }} ?>
+                    <?php if (isset($_SESSION['error'])){ 
+                        foreach($_SESSION['error'][0] as $key => $value){?>
+                            <p class="text-danger font-weight-bold pb-1"><?=$_SESSION['error'][0][$key]?></p><?php }
+                        }else if(isset($_SESSION['fillingError']['file'])){?>
+                            <p class="text-danger font-weight-bold pb-1" type="error"><?=$_SESSION['fillingError']['file']?></p><?php } ?>
                     <div>
                         <span id="preview" class="row"></span>
                     </div>
                 </div>
             </div>
             <!-- Bouton submit -->
-            <div class="container pt-3">
-                <button id="submitButton" type="submit"
-                    class="btn btn-primary offset-md-5 col-md-2">Enregistrer</button>
+            <div class="container pt-3 text-center">
+                <button id="submitButton" type="submit" class="btn btn-primary col-6 col-sm-4 col-lg-3">Enregistrer</button>
             </div>
         </form>
     </div>
 </div>
+<script src="public/js/redBorder.js"></script>
 <script src="public/js/autocompleteAddress.js"></script>
 <script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>

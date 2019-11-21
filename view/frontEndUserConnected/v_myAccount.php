@@ -3,7 +3,7 @@ $title = "Mon compte";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
-    <div class="jumbotron">
+    <div class="jumbotron px-1 px-md-3">
         <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userData['user_id']){
             echo 'Compte de '.$userData['user_name'].' '.$userData['user_firstName'];
         }else{echo 'Mon compte';}?></h1>
@@ -14,9 +14,15 @@ ob_start();
             </div>
             <div class="container">
                 <h3 class="text-center">Coordonnées</h3>
+                <div class=row>
+                    <p class="offset-lg-2 col-lg-4"><strong>Civilité:</strong> <?=$userData['user_civility']?></p>
+                </div>
                 <div class="row">
                     <p class="offset-lg-2 col-lg-4"><strong>Nom:</strong> <?=$userData['user_name']?></p>
                     <p class="offset-lg-2 col-lg-4"><strong>Prénom:</strong> <?=$userData['user_firstName']?></p>
+                </div>
+                <div class=row>
+                    <p class="offset-lg-2 col-lg-4"><strong>Date de naissance:</strong> <?=$userData['user_dateOfBirth']?></p>
                 </div>
                 <div class="row">
                     <p class="offset-lg-2 col-lg-10"><strong>Rue:</strong> <?=$userData['address_street']?></p>
@@ -40,7 +46,11 @@ ob_start();
                     <p class="offset-lg-2 col-lg-4"><strong>Adresse mail:</strong> <?=$userData['user_loginSiteWeb']?>
                     </p>
                     <p class="offset-lg-2 col-lg-4"><strong>Mot de passe:</strong>
-                        <?=$userData['user_passwordSiteWeb']?></p>
+                        <?php if ($userData['user_passwordSiteWeb']){
+                            echo $userData['user_passwordSiteWeb'];
+                            } else {
+                                echo $passwordSiteWeb;
+                            }?></p>
                 </div>
             </div>
             <?php if(isset($_SESSION['id']) && $_SESSION['id']==$userData['user_id']){?>

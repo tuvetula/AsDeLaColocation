@@ -12,8 +12,12 @@ if (isset($_SESSION['mail'])){
     }
     
     //Requete recup etat actuel de advertisement_isActive
-    $request=$bdd->query('SELECT advertisement_isActive FROM advertisements 
-                        WHERE advertisement_id="'.$advertisementId.'"');
+    $request=$bdd->prepare('SELECT advertisement_isActive 
+    FROM advertisements 
+    WHERE advertisement_id=:advertisementId');
+    $request->execute([
+        ':advertisementId'=>$advertisementId
+    ]);
     $advertisementIsActiveState = $request->fetchAll(PDO::FETCH_ASSOC);
     $request->closeCursor();
     

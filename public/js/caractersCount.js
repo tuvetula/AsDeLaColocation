@@ -14,17 +14,19 @@ textArea.addEventListener('keyup', function() {
     }
 });
 //Count Title
-let inputTitle = document.getElementById('title');
-let countTitle = document.getElementById('countTitle');
-countTitle.innerHTML = inputTitle.value.length + "/80";
-countTitle.style.color = "gray";
-inputTitle.addEventListener('keyup', function() {
+if (document.getElementById('title')) {
+    let inputTitle = document.getElementById('title');
+    let countTitle = document.getElementById('countTitle');
     countTitle.innerHTML = inputTitle.value.length + "/80";
-    if (inputTitle.value.length >= 80) {
-        countTitle.style.color = "red";
-        countTitle.style.fontWeight = "bold";
-    } else {
-        countTitle.style.color = "gray";
-        countTitle.style.fontWeight = "normal";
-    }
-});
+    countTitle.style.color = "gray";
+    inputTitle.addEventListener('keyup', function() {
+        countTitle.innerHTML = inputTitle.value.length + "/80";
+        if (inputTitle.value.length >= 80) {
+            countTitle.style.color = "red";
+            countTitle.style.fontWeight = "bold";
+        } else {
+            countTitle.style.color = "gray";
+            countTitle.style.fontWeight = "normal";
+        }
+    });
+}
