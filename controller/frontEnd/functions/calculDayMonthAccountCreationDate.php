@@ -1,5 +1,5 @@
 <?php
-function calculAccountCreationDateYearMonth($accountCreationDate){
+function calculAccountCreationDateDayMonth($accountCreationDate){
     $accountCreationDateArray = explode('-',$accountCreationDate);
-    return ($accountCreationDateArray[2]).$accountCreationDateArray[1];
+    return $accountCreationDateArray[2].$accountCreationDateArray[1];
 }
