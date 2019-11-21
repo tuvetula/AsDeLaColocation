@@ -48,10 +48,6 @@ body {
     outline: 0;
 }
 
-.image-checkbox input[type="checkbox"] {
-    display: none;
-}
-
 .image-checkbox-checked {
     border-color: red;
 }

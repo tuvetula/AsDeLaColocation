@@ -3,7 +3,7 @@ $title = "Mon compte";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
-    <div class="jumbotron">
+    <div class="jumbotron px-1 px-md-3">
         <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userData['user_id']){
             echo 'Compte de '.$userData['user_name'].' '.$userData['user_firstName'];
         }else{echo 'Mon compte';}?></h1>
