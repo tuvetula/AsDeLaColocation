@@ -405,7 +405,7 @@ function insertNewAdvertisement($availableDate, $title, $description, $type, $ca
     ':idealRoommateMaxAge'=> $idealRoommateMaxAge,
     ':locationMinDuration'=> $locationMinDuration,
     ':rentWithoutVisit'=> $rentWithoutVisit,
-    ':contactNameForVisit'=> $contactNameForVisit,
+    ':contactNameForVisit'=> ucfirst($contactNameForVisit),
     ':contactPhoneNumberForVisit'=> $contactPhoneNumberForVisit,
     ':contactMailForVisit'=> $contactMailForVisit,
     ':addressId'=> $addressId,
