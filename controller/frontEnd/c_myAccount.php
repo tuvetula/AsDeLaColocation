@@ -15,8 +15,8 @@ function displayMyAccount($userId=null)
     }
     if ($userData) {
         //Construction mot de passe
-        $yearMonth = calculAccountCreationDateYearMonth($userData['user_accountCreationDate']);
-        $passwordSiteWeb = 'Coloc'.$userData['user_id'].$yearMonth;
+        $dayMonth = calculAccountCreationDateDayMonth($userData['user_accountCreationDate']);
+        $passwordSiteWeb = 'Coloc'.$userData['user_id'].$dayMonth;
         //Date dans le bon sens
         $dateOfBirth = date_parse_from_format('Y-m-d', $userData['user_dateOfBirth']);
         $userData['user_dateOfBirth'] = $dateOfBirth['day'].'-'.$dateOfBirth['month'].'-'.$dateOfBirth['year'];
