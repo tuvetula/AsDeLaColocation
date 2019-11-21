@@ -3,40 +3,26 @@ $title = "Modifier une annonce";
 ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
-    <div class="jumbotron px-2 px-md-3">
+    <div class="jumbotron px-1 px-md-3">
         <h1 class="pb-3 text-center"><?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId){echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';}else{echo 'Modifier votre annonce';}?> </h1>
         <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data" onsubmit="spinnerSubmitButton()">
             <!-- ----------Annonce---------- -->
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <?php if (isset($_SESSION['fillingError'])){ ?>
                 <p class="text-danger font-weight-bold pb-1">Veuillez corriger les erreurs</p> <?php } ?>
-                <h2>Annonce</h2>
+                <!-- <h2>Annonce</h2> -->
                 <!-- IsActive, Titre, Description -->
                 <input type="hidden" name="id" value="<?=$advertisementData[0]['advertisement_id']?>">
                 <div class="container">
+                    <!--Titre-->
+                        <h3 class="font-weight-bold text-center pb-3">"<?=$advertisementData[0]['advertisement_title']?>"</h3>
                     <!-- isActive -->
                     <div class=" custom-control custom-checkbox pb-3">
                         <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" <?php if ($advertisementData[0]['advertisement_isActive']) {
                         echo 'checked';}?>>
                         <label class="custom-control-label font-weight-bold" for="isActive">Activation annonce</label>
                     </div>
-                    <!--Titre-->
-                    <div class="form-group"
-                        title="Le titre doit être unique si vous avez plusieurs annonces. Soyez précis et concis.">
-                        <label class="font-weight-bold" for="title">Titre</label>
-                        <input type="text" name="title" class="form-control" id="title" placeholder="Titre de l'annonce"
-                            maxlength="80" value="<?php
-                            if(isset($_GET['error']) && isset($_GET['title'])){
-                                echo $_GET['title'];}else{
-                                    echo $advertisementData[0]['advertisement_title'];
-                                }?>" required>
-                        <div class="float-right" id="countTitle"></div>
-                        <p class="text-danger font-weight-bold pb-1"><?php
-                        if (isset($_GET['error']) && $_GET['error'] == 'title'){
-                            echo 'Vous avez déja utilisé ce titre dans une autre annonce';
-                        }
-                        ?></p>
-                    </div>
+                    
                     <!--Description-->
                     <div class="form-group pb-3">
                         <label class="font-weight-bold" for="description">Description</label>
@@ -1789,8 +1775,6 @@ ob_start();
                                     collectif gaz</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Lave linge -->
                         <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
@@ -1834,8 +1818,6 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasFreezer">Congélateur</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Plaques de cuisson -->
                         <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
@@ -1879,8 +1861,6 @@ ob_start();
                                     micro-ondes</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Cafetière -->
                         <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
@@ -1923,8 +1903,6 @@ ob_start();
                                 <label class="custom-control-label " for="accomodationHasToaster">Grille pain</label>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <!-- Visites autorisées -->
                         <div class="form-group col-md-6 col-lg-4 col-xl-3">
                             <div class=" custom-control custom-checkbox ">
@@ -2154,7 +2132,7 @@ ob_start();
                                 <img class="img-responsive img-thumbnail"
                                     src="<?=$picturePath.$advertisementPicture[$key]['picture_fileName']?>"
                                     alt="Photo de l'annonce">
-                                <input type="checkbox" name=pictureToDelete[]
+                                <input class="PictureCheckbox" type="checkbox" name=pictureToDelete[]
                                     value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                             </label>
                         </div>
@@ -2166,15 +2144,15 @@ ob_start();
                 }
                 ?>
                 <!-- Ajout photos -->
-                <div class="container  py-3 px-0 px-md-3">
-                    <div class="container">
-                        <h4>Ajouter des photos</h4>
-                    </div>
+                <div class="py-3 px-0 px-md-3">
+                    <h4>Ajouter des photos</h4>
                     <div id="inputDiv" class="container">
                         <input type="file" onchange="handleFiles(files,id)" id="upload" multiple name="file[]">
+                    <?php if(isset($_SESSION['fillingError']['file'])){?>
+                        <p class="text-danger font-weight-bold pb-1" type="error"><?=$_SESSION['fillingError']['file']?></p><?php } ?>
                     </div>
                     <div>
-                        <label class="container" for="upload"><span id="preview" class="row p-2"></span></label>
+                        <label for="upload"><span id="preview" class="row p-2"></span></label>
                     </div>
                 </div>
             </div>
@@ -2186,9 +2164,6 @@ ob_start();
         </form>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-</script>
 <script src="public/js/autocompleteAddress.js"></script>
 <script src="public/js/spinnerSubmitButton.js"></script>
 <script src="public/js/hiddenInput.js"></script>
