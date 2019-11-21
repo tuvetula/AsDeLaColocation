@@ -30,11 +30,9 @@ ob_start();
                                     echo $advertisementData[0]['advertisement_title'];
                                 }?>" required>
                         <div class="float-right" id="countTitle"></div>
-                        <p class="text-danger font-weight-bold pb-1"><?php
-                        if (isset($_GET['error']) && $_GET['error'] == 'title'){
-                            echo 'Vous avez déja utilisé ce titre dans une autre annonce';
-                        }
-                        ?></p>
+                        <?php if (isset($_GET['error']) && $_GET['error'] == 'title'){?>
+                            <p class="text-danger font-weight-bold pb-1" type="error">Vous avez déja utilisé ce titre dans une autre annonce</p>
+                        <?php } ?>
                     </div>
                     <!--Description-->
                     <div class="form-group pb-3">
@@ -2128,18 +2126,12 @@ ob_start();
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <h2 class=>Photos</h2>
                 <!-- Suppression photos -->
-                <?php
-                if ($advertisementPicture) {
-                    ?>
-                <div class="container">
+                <?php if ($advertisementPicture) { ?>
+                <div class="container pt-3">
                     <h4>Supprimer des photos</h4>
                     <p>Cocher les photos que vous voulez supprimer</p>
-                </div>
-                <div class="container">
                     <div id="previewImageCheckbox" class="row p-2">
-                        <?php
-                        foreach ($advertisementPicture as $key => $value) {
-                            ?>
+                        <?php foreach ($advertisementPicture as $key => $value) { ?>
                         <div class="col-md-6 col-lg-4 p-0 m-0">
                             <label id="<?='labelImageToDelete'.$key?>" class="image-checkbox" onclick="changeStatue(id,event)">
                                 <img class="img-responsive img-thumbnail"
@@ -2149,19 +2141,16 @@ ob_start();
                                     value="<?=$advertisementPicture[$key]['picture_fileName']?>">
                             </label>
                         </div>
-                        <?php
-                        } ?>
+                        <?php } ?>
                     </div>
                 </div>
-                <?php
-                }
-                ?>
+                <?php } ?>
                 <!-- Ajout photos -->
-                <div class="py-3 px-0 px-md-3">
+                <div class="container pt-3">
                     <h4>Ajouter des photos</h4>
                     <div id="inputDiv" class="container">
                         <input type="file" onchange="handleFiles(files,id)" id="upload" multiple name="file[]">
-                    <?php if(isset($_SESSION['fillingError']['file'])){?>
+                        <?php if(isset($_SESSION['fillingError']['file'])){?>
                         <p class="text-danger font-weight-bold pb-1" type="error"><?=$_SESSION['fillingError']['file']?></p><?php } ?>
                     </div>
                     <div>
@@ -2184,6 +2173,8 @@ ob_start();
 <script src="public/js/selectPictureToDeleteModifyAdvertisement.js"></script>
 <script src="public/js/energyAdvertisement.js"></script>
 <script src="public/js/advertisementUploadFilePreviewOk.js"></script>
+<script src="public/js/redBorder.js"></script>
+
 <?php
 $content = ob_get_clean();
 require('view/includes/template.php');
