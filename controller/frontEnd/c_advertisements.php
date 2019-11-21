@@ -361,117 +361,117 @@ function saveNewOrModifyAdvertisement()
     } else {
         $bedroomHasDesk = 0;
     }
-    if (isset($_POST['bedroomHasWardrobe'])) {
+    if (isset($_POST['bedroomHasWardrobe']) && $_POST['bedroomHasWardrobe'] == 1) {
         $bedroomHasWardrobe = $_POST['bedroomHasWardrobe'];
     } else {
         $bedroomHasWardrobe = 0;
     }
-    if (isset($_POST['bedroomHasChair'])) {
+    if (isset($_POST['bedroomHasChair']) && $_POST['bedroomHasChair'] == 1) {
         $bedroomHasChair = $_POST['bedroomHasChair'];
     } else {
         $bedroomHasChair = 0;
     }
-    if (isset($_POST['bedroomHasTv'])) {
+    if (isset($_POST['bedroomHasTv']) && $_POST['bedroomHasTv'] == 1) {
         $bedroomHasTv = $_POST['bedroomHasTv'];
     } else {
         $bedroomHasTv = 0;
     }
-    if (isset($_POST['bedroomHasArmchair'])) {
+    if (isset($_POST['bedroomHasArmchair']) && $_POST['bedroomHasArmchair'] == 1) {
         $bedroomHasArmchair = $_POST['bedroomHasArmchair'];
     } else {
         $bedroomHasArmchair = 0;
     }
-    if (isset($_POST['bedroomHasCoffeeTable'])) {
+    if (isset($_POST['bedroomHasCoffeeTable']) && $_POST['bedroomHasCoffeeTable'] == 1) {
         $bedroomHasCoffeeTable = $_POST['bedroomHasCoffeeTable'];
     } else {
         $bedroomHasCoffeeTable = 0;
     }
-    if (isset($_POST['bedroomHasBedside'])) {
+    if (isset($_POST['bedroomHasBedside']) && $_POST['bedroomHasBedside'] == 1) {
         $bedroomHasBedside = $_POST['bedroomHasBedside'];
     } else {
         $bedroomHasBedside = 0;
     }
-    if (isset($_POST['bedroomHasLamp'])) {
+    if (isset($_POST['bedroomHasLamp']) && $_POST['bedroomHasLamp'] == 1) {
         $bedroomHasLamp = $_POST['bedroomHasLamp'];
     } else {
         $bedroomHasLamp = 0;
     }
-    if (isset($_POST['bedroomHasCloset'])) {
+    if (isset($_POST['bedroomHasCloset']) && $_POST['bedroomHasCloset'] == 1) {
         $bedroomHasCloset = $_POST['bedroomHasCloset'];
     } else {
         $bedroomHasCloset = 0;
     }
-    if (isset($_POST['bedroomHasShelf'])) {
+    if (isset($_POST['bedroomHasShelf']) && $_POST['bedroomHasShelf'] == 1) {
         $bedroomHasShelf = $_POST['bedroomHasShelf'];
     } else {
         $bedroomHasShelf = 0;
     }
-    if (isset($_POST['handicapedAccessibility'])) {
+    if (isset($_POST['handicapedAccessibility']) && $_POST['handicapedAccessibility'] == 1) {
         $handicapedAccessibility = $_POST['handicapedAccessibility'];
     } else {
         $handicapedAccessibility = 0;
     }
-    if (isset($_POST['accomodationHasElevator'])) {
+    if (isset($_POST['accomodationHasElevator']) && $_POST['accomodationHasElevator'] == 1) {
         $accomodationHasElevator = $_POST['accomodationHasElevator'];
     } else {
         $accomodationHasElevator = 0;
     }
-    if (isset($_POST['accomodationHasCommonParkingLot'])) {
+    if (isset($_POST['accomodationHasCommonParkingLot']) && $_POST['accomodationHasCommonParkingLot'] == 1) {
         $accomodationHasCommonParkingLot = $_POST['accomodationHasCommonParkingLot'];
     } else {
         $accomodationHasCommonParkingLot = 0;
     }
-    if (isset($_POST['accomodationHasPrivateParkingPlace'])) {
+    if (isset($_POST['accomodationHasPrivateParkingPlace']) && $_POST['accomodationHasPrivateParkingPlace'] == 1) {
         $accomodationHasPrivateParkingPlace = $_POST['accomodationHasPrivateParkingPlace'];
     } else {
         $accomodationHasPrivateParkingPlace = 0;
     }
-    if (isset($_POST['accomodationHasGarden'])) {
+    if (isset($_POST['accomodationHasGarden']) && $_POST['accomodationHasGarden'] == 1) {
         $accomodationHasGarden = $_POST['accomodationHasGarden'];
     } else {
         $accomodationHasGarden = 0;
     }
-    if (isset($_POST['accomodationHasBalcony'])) {
+    if (isset($_POST['accomodationHasBalcony']) && $_POST['accomodationHasBalcony'] == 1) {
         $accomodationHasBalcony = $_POST['accomodationHasBalcony'];
     } else {
         $accomodationHasBalcony = 0;
     }
-    if (isset($_POST['accomodationHasTerrace'])) {
+    if (isset($_POST['accomodationHasTerrace']) && $_POST['accomodationHasTerrace'] == 1) {
         $accomodationHasTerrace = $_POST['accomodationHasTerrace'];
     } else {
         $accomodationHasTerrace = 0;
     }
-    if (isset($_POST['accomodationHasSwimmingPool'])) {
+    if (isset($_POST['accomodationHasSwimmingPool']) && $_POST['accomodationHasSwimmingPool'] == 1) {
         $accomodationHasSwimmingPool = $_POST['accomodationHasSwimmingPool'];
     } else {
         $accomodationHasSwimmingPool = 0;
     }
-    if (isset($_POST['accomodationHasTv'])) {
+    if (isset($_POST['accomodationHasTv']) && $_POST['accomodationHasTv'] == 1) {
         $accomodationHasTv = $_POST['accomodationHasTv'];
     } else {
         $accomodationHasTv = 0;
     }
-    if (isset($_POST['accomodationHasInternet'])) {
+    if (isset($_POST['accomodationHasInternet']) && $_POST['accomodationHasInternet'] == 1) {
         $accomodationHasInternet = $_POST['accomodationHasInternet'];
     } else {
         $accomodationHasInternet = 0;
     }
-    if (isset($_POST['accomodationHasWifi'])) {
+    if (isset($_POST['accomodationHasWifi']) && $_POST['accomodationHasWifi'] == 1) {
         $accomodationHasWifi = $_POST['accomodationHasWifi'];
     } else {
         $accomodationHasWifi = 0;
     }
-    if (isset($_POST['accomodationHasFiberOpticInternet'])) {
+    if (isset($_POST['accomodationHasFiberOpticInternet']) && $_POST['accomodationHasFiberOpticInternet'] == 1) {
         $accomodationHasFiberOpticInternet = $_POST['accomodationHasFiberOpticInternet'];
     } else {
         $accomodationHasFiberOpticInternet = 0;
     }
-    if (isset($_POST['accomodationHasNetflix'])) {
+    if (isset($_POST['accomodationHasNetflix']) && $_POST['accomodationHasNetflix'] == 1) {
         $accomodationHasNetflix = $_POST['accomodationHasNetflix'];
     } else {
         $accomodationHasNetflix = 0;
     }
-    if (isset($_POST['accomodationHasDoubleGlazing'])) {
+    if (isset($_POST['accomodationHasDoubleGlazing']) && $_POST['accomodationHasDoubleGlazing'] == 1) {
         $accomodationHasDoubleGlazing = $_POST['accomodationHasDoubleGlazing'];
     } else {
         $accomodationHasDoubleGlazing = 0;
@@ -556,32 +556,32 @@ function saveNewOrModifyAdvertisement()
     } else {
         $accomodationHasKettle = 0;
     }
-    if (isset($_POST['accomodationHasToaster'])) {
+    if (isset($_POST['accomodationHasToaster']) && $_POST['accomodationHasToaster'] == 1) {
         $accomodationHasToaster = $_POST['accomodationHasToaster'];
     } else {
         $accomodationHasToaster = 0;
     }
-    if (isset($_POST['accomodationHasExtractorHood'])) {
+    if (isset($_POST['accomodationHasExtractorHood']) && $_POST['accomodationHasExtractorHood'] == 1) {
         $accomodationHasExtractorHood = $_POST['accomodationHasExtractorHood'];
     } else {
         $accomodationHasExtractorHood = 0;
     }
-    if (isset($_POST['animalsAllowed'])) {
+    if (isset($_POST['animalsAllowed']) && $_POST['animalsAllowed'] == 1) {
         $animalsAllowed = $_POST['animalsAllowed'];
     } else {
         $animalsAllowed = 0;
     }
-    if (isset($_POST['smokingIsAllowed'])) {
+    if (isset($_POST['smokingIsAllowed']) && $_POST['smokingIsAllowed'] == 1) {
         $smokingIsAllowed = $_POST['smokingIsAllowed'];
     } else {
         $smokingIsAllowed = 0;
     }
-    if (isset($_POST['authorizedParty'])) {
+    if (isset($_POST['authorizedParty']) && $_POST['authorizedParty'] == 1) {
         $authorizedParty = $_POST['authorizedParty'];
     } else {
         $authorizedParty = 0;
     }
-    if (isset($_POST['authorizedVisit'])) {
+    if (isset($_POST['authorizedVisit']) && $_POST['authorizedVisit'] == 1) {
         $authorizedVisit = $_POST['authorizedVisit'];
     } else {
         $authorizedVisit = 0;
@@ -601,10 +601,10 @@ function saveNewOrModifyAdvertisement()
     if (isset($_POST['idealRoommateSituation'])) {
         $idealRoommateSituation = $_POST['idealRoommateSituation'];
     }
-    if (isset($_POST['idealRoommateMinAge'])) {
+    if (isset($_POST['idealRoommateMinAge']) && strlen($_POST['idealRoommateMinAge']) < 3) {
         $idealRoommateMinAge = $_POST['idealRoommateMinAge'];
     }
-    if (isset($_POST['idealRoommateMaxAge'])) {
+    if (isset($_POST['idealRoommateMaxAge']) && strlen($_POST['idealRoommateMaxAge']) < 3) {
         $idealRoommateMaxAge = $_POST['idealRoommateMaxAge'];
     }
     if (isset($_POST['locationMinDuration'])) {
@@ -648,6 +648,34 @@ function saveNewOrModifyAdvertisement()
         }
     } else {
         $fillingError['contactMailForVisit'] = $errorEmptyField;
+    }
+    //Contrôle nombre de photos
+    $nbOfpictures = 0;
+    if ($advertisementIdToModify) {
+        //On récupère le nombre de photos en bdd
+        $pictureInBddArray = getAdvertisementPictures($advertisementIdToModify);
+        $numberOfPictureInBdd = count($pictureInBddArray);
+        $nbOfpictures+=$numberOfPictureInBdd;
+
+        if (isset($_POST['pictureToDelete'])) {
+            $numberPictureToDelete = count($_POST['pictureToDelete']);
+            $nbOfpictures-=$numberPictureToDelete;
+        }
+        if (isset($_FILES) && !empty($_FILES['file']['name'][0])) {
+            $numberNewPictures = count($_FILES['file']['name']);
+            $nbOfpictures+=$numberNewPictures;
+
+        }
+    } else {
+        if (isset($_FILES)) {
+            $numberNewPictures = count($_FILES['file']['name']);
+            $nbOfpictures+=$numberNewPictures;
+        }
+    }
+    if ($nbOfpictures>10) {
+        $fillingError['file'] = "Votre annonce peut contenir 10 photos maximum.";
+    } else if ($nbOfpictures < 1){
+        $fillingError['file'] = "Votre annonce doit contenir au moins une photo.";
     }
     //Résultat des contrôles
     if (!empty($fillingError)) {
@@ -879,12 +907,14 @@ function saveNewOrModifyAdvertisement()
                     }
                     //Création message à envoyer par mail
                     $to = $userMail;
-                    $subject = "Confirmation du dépôt de votre annonce sur As de la coloc.";
+                    $subject = "Asdelacoloc - Votre dépôt d'annonce";
                     $body = 'Bonjour,'."\r\n".'';
                     $body.= 'Votre annonce va se diffuser sur tous les sites pour lesquels votre compte a pu être créé.'."\r\n"."\r\n".'';
                     $body.= 'D\'ici 48h environ, pour consulter vos messages sur chaques sites, merci de vous connecter avec les identifiants ci-dessous :'."\r\n".'';
                     $body.= 'Identifiant : '.$userMail.''."\r\n".'';
                     $body.= 'Mot de passe : '.$userPassword.''."\r\n"."\r\n".'';
+                    $body.= 'Veuillez ne jamais modifier votre titre sur les sites où l\'annonce est diffusée.'."\r\n".'';
+                    $body.= 'Si vous devez effectuer une modification de vos descriptions, veuillez le faire sur le site app.asdelacoloc.fr'."\r\n"."\r\n".'';
                     $body.= 'Merci.'."\r\n".'';
                     $body.= 'A bientôt'."\r\n"."\r\n".'';
                     $body.= 'Aurélien'."\r\n".'';
@@ -917,7 +947,7 @@ function saveNewOrModifyAdvertisement()
                 }
                 //Création message à envoyer par mail
                 $to = $userMail;
-                $subject = "Confirmation du dépôt de votre annonce sur As de la coloc.";
+                $subject = "Asdelacoloc - Votre dépôt d'annonce";
                 $body = 'Bonjour,'."\r\n".'';
                 $body.= 'Votre annonce va se diffuser sur tous les sites pour lesquels votre compte a pu être créé.'."\r\n"."\r\n".'';
                 $body.= 'D\'ici 48h environ, pour consulter vos messages sur chaques sites, merci de vous connecter avec les identifiants ci-dessous :'."\r\n".'';
