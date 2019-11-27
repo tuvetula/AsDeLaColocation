@@ -13,7 +13,6 @@ require_once('model/frontEnd/m_deletePicture.php');
 require_once('model/frontEnd/m_deleteAddress.php');
 require_once('controller/frontEnd/functions/rearrangeDataFilesArray.php');
 require_once('controller/frontEnd/functions/calculEnergyGesLetter.php');
-require_once('controller/frontEnd/functions/calculDayMonthAccountCreationDate.php');
 
 //Affichage de la page "Mes annonces"
 function displayMyAdvertisements($error=null, $message=null)
@@ -27,11 +26,25 @@ function displayMyAdvertisements($error=null, $message=null)
     //Appel de la vue
     require_once('view/frontEndUserConnected/v_advertisementsDisplay.php');
 }
+
 //Affichage page "Ajouter une annonce" (formulaire)
 function displayAddAnAdvertisementForm()
 {
+    //Variable pour définir date minimum dans "disponible le"
+    $dateOfTheDay=date('Y-m-d');
+    
+    if (!isset($_GET['error'])) {
+        if (isset($_SESSION['postData'])) {
+            unset($_SESSION['postData']);
+        }
+        if (isset($_SESSION['fillingError'])) {
+            unset($_SESSION['fillingError']);
+        }
+    }
+
     require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
 }
+
 //Affichage page "modifier une annonce" (formulaire)
 function displayModifyAdvertisementForm()
 {
@@ -54,25 +67,19 @@ function displayModifyAdvertisementForm()
         $deletePictureUrl = 'index.php?page=saveModificationAdvertisementDeletePicture&idAdvertisement='.$advertisementId.'';
         //On définit le chemin ou sont enregistrer les photos
         $picturePath = "public/pictures/users/";
-        if($_SESSION['isAdmin']){
-            require_once('view/backEnd/v_advertisementModifyFormAdmin.php');
-        }else{
-            require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
-        }
+        require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
     } else {
         $error = "Erreur";
         require_once('view/frontEnd/v_error.php');
     }
 }
+
 //Traitement enregistrement nouvelle annonce ou modification annonce en base de donnée
 function saveNewOrModifyAdvertisement()
 {
-    $errorEmptyField = 'Veuillez renseigner ce champ';
     //Nous permet de savoir si il faut modifier une annonce ou en créer une nouvelle
     if (isset($_POST['id'])) {
-        if(filter_var($_POST['id'],FILTER_VALIDATE_INT)){
-            $advertisementIdToModify = $_POST['id'];
-        }
+        $advertisementIdToModify = $_POST['id'];
         //Si modif vient d'un admin, on recupère l'id du propriétaire de l'annonce qui est modifiée
         if ($_SESSION['isAdmin']) {
             require_once('model/backEnd/m_getUsers.php');
@@ -96,40 +103,24 @@ function saveNewOrModifyAdvertisement()
     
     //Address $_POST
     if (isset($_POST['street']) && !empty($_POST['street'])) {
-        if(strlen($_POST['street'])>255){
-            $fillingError['street'] = '255 caractères maximum.';
-        }else{
-            $addressStreet = $_POST['street'];
-        }
+        $addressStreet = $_POST['street'];
     } else {
-        $fillingError['street'] = $errorEmptyField;
+        $fillingError['street'] = 'Le numéro et nom de rue n\'est pas renseigné';
     }
     if (isset($_POST['zipcode']) && !empty($_POST['zipcode'])) {
-        if(strlen($_POST['zipcode'])>20){
-            $fillingError['zipcode'] = '20 caractères maximum.';
-        }else{
-            $addressZipcode = $_POST['zipcode'];
-        }
+        $addressZipcode = $_POST['zipcode'];
     } else {
-        $fillingError['zipcode'] = $errorEmptyField;
+        $fillingError['zipcode'] = 'Le code postal n\'est pas renseigné';
     }
     if (isset($_POST['city']) && !empty($_POST['city'])) {
-        if(strlen($_POST['city'])>60){
-            $fillingError['city'] = '60 caractères maximum.';
-        }else{
-            $addressCity = $_POST['city'];
-        }
+        $addressCity = $_POST['city'];
     } else {
-        $fillingError['city'] = $errorEmptyField;
+        $fillingError['city'] = 'Le nom de ville n\'est pas renseigné';
     }
     if (isset($_POST['country']) && !empty($_POST['country'])) {
-        if(strlen($_POST['country'])>60){
-            $fillingError['country'] = '60 caractères maximum.';
-        }else{
-            $addressCountry = $_POST['country'];
-        }
+        $addressCountry = $_POST['country'];
     } else {
-        $fillingError['country'] = $errorEmptyField;
+        $fillingError['country'] = 'Le nom de pays n\'est renseigné';
     }
     //Advertisement $_POST
     if (isset($_POST['isActive']) && $_POST['isActive'] == 1) {
@@ -143,17 +134,17 @@ function saveNewOrModifyAdvertisement()
         $fillingError['availableDate'] = 'La date n\'est pas valable.';
     }
     //title
-    if (isset($_POST['title'])){
-        if(!empty($_POST['title'])) {
+    if(!$advertisementIdToModify){
+        if (isset($_POST['title']) && !empty($_POST['title'])) {
             if (strlen($_POST['title'])>80) {
                 $fillingError['title'] = '80 caractères maximum';
             } else {
                 $title = $_POST['title'];
             }
         } else {
-            $fillingError['title'] = $errorEmptyField;
+            $fillingError['title'] = 'Veuillez renseigner ce champ';
         }
-    } 
+    }
     //description
     if (isset($_POST['description']) && !empty($_POST['description'])) {
         if (strlen($_POST['description'])>3000) {
@@ -162,19 +153,19 @@ function saveNewOrModifyAdvertisement()
             $description = $_POST['description'];
         }
     } else {
-        $fillingError['description'] = $errorEmptyField;
+        $fillingError['description'] = 'Veuillez renseigner ce champ';
     }
     //type
     if (isset($_POST['type']) && ($_POST['type'] == "Maison" || $_POST['type'] == "Appartement")) {
         $type = $_POST['type'];
     } else {
-        $fillingError['type'] = $errorEmptyField;
+        $fillingError['type'] = 'Veuillez renseigner ce champ';
     }
     //Category
     if (isset($_POST['category']) && ($_POST['category'] == 'Location' || $_POST['category'] == 'Colocation' || $_POST['category'] == 'Sous-location' || $_POST['category'] == 'Courte-durée')) {
         $category = $_POST['category'];
     } else {
-        $fillingError['category'] = $errorEmptyField;
+        $fillingError['category'] = 'Veuillez renseigner ce champ';
     }
     //energyClassNumber
     if (isset($_POST['energyClassNumber']) && !empty($_POST['energyClassNumber'])) {
@@ -185,7 +176,7 @@ function saveNewOrModifyAdvertisement()
             $fillingError['energyClassNumber'] = "La valeur de ce champ doit être un nombre";
         }
     } else {
-        $fillingError['energyClassNumber'] = $errorEmptyField;
+        $fillingError['energyClassNumber'] = 'Veuillez renseigner ce champ';
     }
     //gesNumber
     if (isset($_POST['gesNumber']) && !empty($_POST['gesNumber'])) {
@@ -196,7 +187,7 @@ function saveNewOrModifyAdvertisement()
             $fillingError['gesNumber'] = "La valeur de ce champ doit être un nombre";
         }
     } else {
-        $fillingError['gesNumber'] = $errorEmptyField;
+        $fillingError['gesNumber'] = 'Veuillez renseigner ce champ';
     }
     //accomodationLivingAreaSize
     if (isset($_POST['accomodationLivingAreaSize']) && !empty($_POST['accomodationLivingAreaSize'])) {
@@ -206,7 +197,7 @@ function saveNewOrModifyAdvertisement()
             $fillingError['accomodationLivingAreaSize'] = 'La valeur de ce champ doit être un nombre';
         }
     } else {
-        $fillingError['accomodationLivingAreaSize'] = $errorEmptyField;
+        $fillingError['accomodationLivingAreaSize'] = 'Veuillez renseigner ce champ';
     }
     //accomodationFloor
     if (isset($_POST['accomodationFloor'])) {
@@ -235,7 +226,7 @@ function saveNewOrModifyAdvertisement()
             $fillingError['monthlyRentExcludingCharges'] = "La valeur de ce champ doit être un nombre";
         }
     } else {
-        $fillingError['monthlyRentExcludingCharges'] = $errorEmptyField;
+        $fillingError['monthlyRentExcludingCharges'] = 'Veuillez renseigner ce champ';
     }
     //charges
     if (isset($_POST['charges']) && !empty($_POST['charges'])) {
@@ -245,7 +236,7 @@ function saveNewOrModifyAdvertisement()
             $fillingError['charges'] = "La valeur de ce champ doit être un nombre.";
         }
     } else {
-        $fillingError['charges'] = $err;
+        $fillingError['charges'] = 'Veuillez renseigner ce champ';
     }
     //suretyBond
     if (isset($_POST['suretyBond']) && !empty($_POST['suretyBond'])) {
@@ -255,10 +246,10 @@ function saveNewOrModifyAdvertisement()
             $fillingError['suretyBond'] = "La valeur de ce champ doit être un nombre.";
         }
     } else {
-        $fillingError['suretyBond'] = $err;
+        $fillingError['suretyBond'] = 'Veuillez renseigner ce champ';
     }
     //financialRequirements
-    if (isset($_POST['financialRequirements']) && $_POST['financialRequirements'] == 1) {
+    if (isset($_POST['financialRequirements'])) {
         $financialRequirements = $_POST['financialRequirements'];
     } else {
         $financialRequirements = 0;
@@ -269,57 +260,57 @@ function saveNewOrModifyAdvertisement()
     if (isset($_POST['solvencyRatio'])) {
         $solvencyRatio = $_POST['solvencyRatio'];
     }
-    if (isset($_POST['eligibleForAids']) && $_POST['eligibleForAids'] == 1) {
+    if (isset($_POST['eligibleForAids'])) {
         $eligibleForAids = $_POST['eligibleForAids'];
     } else {
         $eligibleForAids = 0;
     }
-    if (isset($_POST['chargesIncludeCoOwnershipCharges']) && $_POST['chargesIncludeCoOwnershipCharges'] == 1) {
+    if (isset($_POST['chargesIncludeCoOwnershipCharges'])) {
         $chargesIncludeCoOwnershipCharges = $_POST['chargesIncludeCoOwnershipCharges'];
     } else {
         $chargesIncludeCoOwnershipCharges = 0;
     }
-    if (isset($_POST['chargesIncludeElectricity']) && $_POST['chargesIncludeElectricity'] == 1) {
+    if (isset($_POST['chargesIncludeElectricity'])) {
         $chargesIncludeElectricity = $_POST['chargesIncludeElectricity'];
     } else {
         $chargesIncludeElectricity = 0;
     }
-    if (isset($_POST['chargesIncludeHotWater']) && $_POST['chargesIncludeHotWater'] == 1) {
+    if (isset($_POST['chargesIncludeHotWater'])) {
         $chargesIncludeHotWater = $_POST['chargesIncludeHotWater'];
     } else {
         $chargesIncludeHotWater = 0;
     }
-    if (isset($_POST['chargesIncludeHeating']) && $_POST['chargesIncludeHeating'] == 1) {
+    if (isset($_POST['chargesIncludeHeating'])) {
         $chargesIncludeHeating = $_POST['chargesIncludeHeating'];
     } else {
         $chargesIncludeHeating = 0;
     }
-    if (isset($_POST['chargesIncludeInternet']) && $_POST['chargesIncludeInternet'] == 1) {
+    if (isset($_POST['chargesIncludeInternet'])) {
         $chargesIncludeInternet = $_POST['chargesIncludeInternet'];
     } else {
         $chargesIncludeInternet = 0;
     }
-    if (isset($_POST['chargesIncludeHomeInsurance']) && $_POST['chargesIncludeHomeInsurance'] == 1) {
+    if (isset($_POST['chargesIncludeHomeInsurance'])) {
         $chargesIncludeHomeInsurance = $_POST['chargesIncludeHomeInsurance'];
     } else {
         $chargesIncludeHomeInsurance = 0;
     }
-    if (isset($_POST['chargesIncludeBoilerInspection']) && $_POST['chargesIncludeBoilerInspection'] == 1) {
+    if (isset($_POST['chargesIncludeBoilerInspection'])) {
         $chargesIncludeBoilerInspection = $_POST['chargesIncludeBoilerInspection'];
     } else {
         $chargesIncludeBoilerInspection = 0;
     }
-    if (isset($_POST['chargesIncludeHouseholdGarbageTaxes']) && $_POST['chargesIncludeHouseholdGarbageTaxes'] == 1) {
+    if (isset($_POST['chargesIncludeHouseholdGarbageTaxes'])) {
         $chargesIncludeHouseholdGarbageTaxes = $_POST['chargesIncludeHouseholdGarbageTaxes'];
     } else {
         $chargesIncludeHouseholdGarbageTaxes = 0;
     }
-    if (isset($_POST['chargesIncludeCleaningService']) && $_POST['chargesIncludeCleaningService'] == 1) {
+    if (isset($_POST['chargesIncludeCleaningService'])) {
         $chargesIncludeCleaningService = $_POST['chargesIncludeCleaningService'];
     } else {
         $chargesIncludeCleaningService = 0;
     }
-    if (isset($_POST['isFurnished']) && $_POST['isFurnished'] == 1) {
+    if (isset($_POST['isFurnished'])) {
         $isFurnished = $_POST['isFurnished'];
     } else {
         $isFurnished = 0;
@@ -338,7 +329,7 @@ function saveNewOrModifyAdvertisement()
             $fillingError['bedroomSize'] = 'La valeur de ce champ doit être un nombre';
         }
     } else {
-        $fillingError['bedroomSize'] = $errorEmptyField;
+        $fillingError['bedroomSize'] = 'Veuillez renseigner ce champ';
     }
     //bedroomType
     if (isset($_POST['bedroomType'])) {
@@ -347,232 +338,232 @@ function saveNewOrModifyAdvertisement()
     if (isset($_POST['bedType'])) {
         $bedType = $_POST['bedType'];
     }
-    if (isset($_POST['bedroomHasDesk']) && $_POST['bedroomHasDesk'] == 1) {
+    if (isset($_POST['bedroomHasDesk'])) {
         $bedroomHasDesk = $_POST['bedroomHasDesk'];
     } else {
         $bedroomHasDesk = 0;
     }
-    if (isset($_POST['bedroomHasWardrobe']) && $_POST['bedroomHasWardrobe'] == 1) {
+    if (isset($_POST['bedroomHasWardrobe'])) {
         $bedroomHasWardrobe = $_POST['bedroomHasWardrobe'];
     } else {
         $bedroomHasWardrobe = 0;
     }
-    if (isset($_POST['bedroomHasChair']) && $_POST['bedroomHasChair'] == 1) {
+    if (isset($_POST['bedroomHasChair'])) {
         $bedroomHasChair = $_POST['bedroomHasChair'];
     } else {
         $bedroomHasChair = 0;
     }
-    if (isset($_POST['bedroomHasTv']) && $_POST['bedroomHasTv'] == 1) {
+    if (isset($_POST['bedroomHasTv'])) {
         $bedroomHasTv = $_POST['bedroomHasTv'];
     } else {
         $bedroomHasTv = 0;
     }
-    if (isset($_POST['bedroomHasArmchair']) && $_POST['bedroomHasArmchair'] == 1) {
+    if (isset($_POST['bedroomHasArmchair'])) {
         $bedroomHasArmchair = $_POST['bedroomHasArmchair'];
     } else {
         $bedroomHasArmchair = 0;
     }
-    if (isset($_POST['bedroomHasCoffeeTable']) && $_POST['bedroomHasCoffeeTable'] == 1) {
+    if (isset($_POST['bedroomHasCoffeeTable'])) {
         $bedroomHasCoffeeTable = $_POST['bedroomHasCoffeeTable'];
     } else {
         $bedroomHasCoffeeTable = 0;
     }
-    if (isset($_POST['bedroomHasBedside']) && $_POST['bedroomHasBedside'] == 1) {
+    if (isset($_POST['bedroomHasBedside'])) {
         $bedroomHasBedside = $_POST['bedroomHasBedside'];
     } else {
         $bedroomHasBedside = 0;
     }
-    if (isset($_POST['bedroomHasLamp']) && $_POST['bedroomHasLamp'] == 1) {
+    if (isset($_POST['bedroomHasLamp'])) {
         $bedroomHasLamp = $_POST['bedroomHasLamp'];
     } else {
         $bedroomHasLamp = 0;
     }
-    if (isset($_POST['bedroomHasCloset']) && $_POST['bedroomHasCloset'] == 1) {
+    if (isset($_POST['bedroomHasCloset'])) {
         $bedroomHasCloset = $_POST['bedroomHasCloset'];
     } else {
         $bedroomHasCloset = 0;
     }
-    if (isset($_POST['bedroomHasShelf']) && $_POST['bedroomHasShelf'] == 1) {
+    if (isset($_POST['bedroomHasShelf'])) {
         $bedroomHasShelf = $_POST['bedroomHasShelf'];
     } else {
         $bedroomHasShelf = 0;
     }
-    if (isset($_POST['handicapedAccessibility']) && $_POST['handicapedAccessibility'] == 1) {
+    if (isset($_POST['handicapedAccessibility'])) {
         $handicapedAccessibility = $_POST['handicapedAccessibility'];
     } else {
         $handicapedAccessibility = 0;
     }
-    if (isset($_POST['accomodationHasElevator']) && $_POST['accomodationHasElevator'] == 1) {
+    if (isset($_POST['accomodationHasElevator'])) {
         $accomodationHasElevator = $_POST['accomodationHasElevator'];
     } else {
         $accomodationHasElevator = 0;
     }
-    if (isset($_POST['accomodationHasCommonParkingLot']) && $_POST['accomodationHasCommonParkingLot'] == 1) {
+    if (isset($_POST['accomodationHasCommonParkingLot'])) {
         $accomodationHasCommonParkingLot = $_POST['accomodationHasCommonParkingLot'];
     } else {
         $accomodationHasCommonParkingLot = 0;
     }
-    if (isset($_POST['accomodationHasPrivateParkingPlace']) && $_POST['accomodationHasPrivateParkingPlace'] == 1) {
+    if (isset($_POST['accomodationHasPrivateParkingPlace'])) {
         $accomodationHasPrivateParkingPlace = $_POST['accomodationHasPrivateParkingPlace'];
     } else {
         $accomodationHasPrivateParkingPlace = 0;
     }
-    if (isset($_POST['accomodationHasGarden']) && $_POST['accomodationHasGarden'] == 1) {
+    if (isset($_POST['accomodationHasGarden'])) {
         $accomodationHasGarden = $_POST['accomodationHasGarden'];
     } else {
         $accomodationHasGarden = 0;
     }
-    if (isset($_POST['accomodationHasBalcony']) && $_POST['accomodationHasBalcony'] == 1) {
+    if (isset($_POST['accomodationHasBalcony'])) {
         $accomodationHasBalcony = $_POST['accomodationHasBalcony'];
     } else {
         $accomodationHasBalcony = 0;
     }
-    if (isset($_POST['accomodationHasTerrace']) && $_POST['accomodationHasTerrace'] == 1) {
+    if (isset($_POST['accomodationHasTerrace'])) {
         $accomodationHasTerrace = $_POST['accomodationHasTerrace'];
     } else {
         $accomodationHasTerrace = 0;
     }
-    if (isset($_POST['accomodationHasSwimmingPool']) && $_POST['accomodationHasSwimmingPool'] == 1) {
+    if (isset($_POST['accomodationHasSwimmingPool'])) {
         $accomodationHasSwimmingPool = $_POST['accomodationHasSwimmingPool'];
     } else {
         $accomodationHasSwimmingPool = 0;
     }
-    if (isset($_POST['accomodationHasTv']) && $_POST['accomodationHasTv'] == 1) {
+    if (isset($_POST['accomodationHasTv'])) {
         $accomodationHasTv = $_POST['accomodationHasTv'];
     } else {
         $accomodationHasTv = 0;
     }
-    if (isset($_POST['accomodationHasInternet']) && $_POST['accomodationHasInternet'] == 1) {
+    if (isset($_POST['accomodationHasInternet'])) {
         $accomodationHasInternet = $_POST['accomodationHasInternet'];
     } else {
         $accomodationHasInternet = 0;
     }
-    if (isset($_POST['accomodationHasWifi']) && $_POST['accomodationHasWifi'] == 1) {
+    if (isset($_POST['accomodationHasWifi'])) {
         $accomodationHasWifi = $_POST['accomodationHasWifi'];
     } else {
         $accomodationHasWifi = 0;
     }
-    if (isset($_POST['accomodationHasFiberOpticInternet']) && $_POST['accomodationHasFiberOpticInternet'] == 1) {
+    if (isset($_POST['accomodationHasFiberOpticInternet'])) {
         $accomodationHasFiberOpticInternet = $_POST['accomodationHasFiberOpticInternet'];
     } else {
         $accomodationHasFiberOpticInternet = 0;
     }
-    if (isset($_POST['accomodationHasNetflix']) && $_POST['accomodationHasNetflix'] == 1) {
+    if (isset($_POST['accomodationHasNetflix'])) {
         $accomodationHasNetflix = $_POST['accomodationHasNetflix'];
     } else {
         $accomodationHasNetflix = 0;
     }
-    if (isset($_POST['accomodationHasDoubleGlazing']) && $_POST['accomodationHasDoubleGlazing'] == 1) {
+    if (isset($_POST['accomodationHasDoubleGlazing'])) {
         $accomodationHasDoubleGlazing = $_POST['accomodationHasDoubleGlazing'];
     } else {
         $accomodationHasDoubleGlazing = 0;
     }
-    if (isset($_POST['accomodationHasAirConditioning']) && $_POST['accomodationHasAirConditioning'] == 1) {
+    if (isset($_POST['accomodationHasAirConditioning'])) {
         $accomodationHasAirConditioning = $_POST['accomodationHasAirConditioning'];
     } else {
         $accomodationHasAirConditioning = 0;
     }
-    if (isset($_POST['accomodationHasElectricHeating']) && $_POST['accomodationHasElectricHeating'] == 1) {
+    if (isset($_POST['accomodationHasElectricHeating'])) {
         $accomodationHasElectricHeating = $_POST['accomodationHasElectricHeating'];
     } else {
         $accomodationHasElectricHeating = 0;
     }
-    if (isset($_POST['accomodationHasIndividualGasHeating']) && $_POST['accomodationHasIndividualGasHeating'] == 1) {
+    if (isset($_POST['accomodationHasIndividualGasHeating'])) {
         $accomodationHasIndividualGasHeating = $_POST['accomodationHasIndividualGasHeating'];
     } else {
         $accomodationHasIndividualGasHeating = 0;
     }
-    if (isset($_POST['accomodationHasCollectiveGasHeating']) && $_POST['accomodationHasCollectiveGasHeating'] == 1) {
+    if (isset($_POST['accomodationHasCollectiveGasHeating'])) {
         $accomodationHasCollectiveGasHeating = $_POST['accomodationHasCollectiveGasHeating'];
     } else {
         $accomodationHasCollectiveGasHeating = 0;
     }
-    if (isset($_POST['accomodationHasHotWaterTank']) && $_POST['accomodationHasHotWaterTank'] == 1) {
+    if (isset($_POST['accomodationHasHotWaterTank'])) {
         $accomodationHasHotWaterTank = $_POST['accomodationHasHotWaterTank'];
     } else {
         $accomodationHasHotWaterTank = 0;
     }
-    if (isset($_POST['accomodationHasGasWaterHeater']) && $_POST['accomodationHasGasWaterHeater'] == 1) {
+    if (isset($_POST['accomodationHasGasWaterHeater'])) {
         $accomodationHasGasWaterHeater = $_POST['accomodationHasGasWaterHeater'];
     } else {
         $accomodationHasGasWaterHeater = 0;
     }
-    if (isset($_POST['accomodationHasFridge']) && $_POST['accomodationHasFridge'] == 1) {
+    if (isset($_POST['accomodationHasFridge'])) {
         $accomodationHasFridge = $_POST['accomodationHasFridge'];
     } else {
         $accomodationHasFridge = 0;
     }
-    if (isset($_POST['accomodationHasFreezer']) && $_POST['accomodationHasFreezer'] == 1) {
+    if (isset($_POST['accomodationHasFreezer'])) {
         $accomodationHasFreezer = $_POST['accomodationHasFreezer'];
     } else {
         $accomodationHasFreezer = 0;
     }
-    if (isset($_POST['accomodationHasOven']) && $_POST['accomodationHasOven'] == 1) {
+    if (isset($_POST['accomodationHasOven'])) {
         $accomodationHasOven = $_POST['accomodationHasOven'];
     } else {
         $accomodationHasOven = 0;
     }
-    if (isset($_POST['accomodationHasBakingTray'])  && $_POST['accomodationHasBakingTray'] == 1) {
+    if (isset($_POST['accomodationHasBakingTray'])) {
         $accomodationHasBakingTray = $_POST['accomodationHasBakingTray'];
     } else {
         $accomodationHasBakingTray = 0;
     }
-    if (isset($_POST['accomodationHasWashingMachine'])  && $_POST['accomodationHasWashingMachine'] == 1) {
+    if (isset($_POST['accomodationHasWashingMachine'])) {
         $accomodationHasWashingMachine = $_POST['accomodationHasWashingMachine'];
     } else {
         $accomodationHasWashingMachine = 0;
     }
-    if (isset($_POST['accomodationHasDishwasher']) && $_POST['accomodationHasDishwasher'] == 1) {
+    if (isset($_POST['accomodationHasDishwasher'])) {
         $accomodationHasDishwasher = $_POST['accomodationHasDishwasher'];
     } else {
         $accomodationHasDishwasher = 0;
     }
-    if (isset($_POST['accomodationHasMicrowaveOven']) && $_POST['accomodationHasMicrowaveOven'] == 1) {
+    if (isset($_POST['accomodationHasMicrowaveOven'])) {
         $accomodationHasMicrowaveOven = $_POST['accomodationHasMicrowaveOven'];
     } else {
         $accomodationHasMicrowaveOven = 0;
     }
-    if (isset($_POST['accomodationHasCoffeeMachine']) && $_POST['accomodationHasCoffeeMachine'] == 1) {
+    if (isset($_POST['accomodationHasCoffeeMachine'])) {
         $accomodationHasCoffeeMachine = $_POST['accomodationHasCoffeeMachine'];
     } else {
         $accomodationHasCoffeeMachine = 0;
     }
-    if (isset($_POST['accomodationHasPodCoffeeMachine']) && $_POST['accomodationHasPodCoffeeMachine'] == 1) {
+    if (isset($_POST['accomodationHasPodCoffeeMachine'])) {
         $accomodationHasPodCoffeeMachine = $_POST['accomodationHasPodCoffeeMachine'];
     } else {
         $accomodationHasPodCoffeeMachine = 0;
     }
-    if (isset($_POST['accomodationHasKettle']) && $_POST['accomodationHasKettle'] == 1) {
+    if (isset($_POST['accomodationHasKettle'])) {
         $accomodationHasKettle = $_POST['accomodationHasKettle'];
     } else {
         $accomodationHasKettle = 0;
     }
-    if (isset($_POST['accomodationHasToaster']) && $_POST['accomodationHasToaster'] == 1) {
+    if (isset($_POST['accomodationHasToaster'])) {
         $accomodationHasToaster = $_POST['accomodationHasToaster'];
     } else {
         $accomodationHasToaster = 0;
     }
-    if (isset($_POST['accomodationHasExtractorHood']) && $_POST['accomodationHasExtractorHood'] == 1) {
+    if (isset($_POST['accomodationHasExtractorHood'])) {
         $accomodationHasExtractorHood = $_POST['accomodationHasExtractorHood'];
     } else {
         $accomodationHasExtractorHood = 0;
     }
-    if (isset($_POST['animalsAllowed']) && $_POST['animalsAllowed'] == 1) {
+    if (isset($_POST['animalsAllowed'])) {
         $animalsAllowed = $_POST['animalsAllowed'];
     } else {
         $animalsAllowed = 0;
     }
-    if (isset($_POST['smokingIsAllowed']) && $_POST['smokingIsAllowed'] == 1) {
+    if (isset($_POST['smokingIsAllowed'])) {
         $smokingIsAllowed = $_POST['smokingIsAllowed'];
     } else {
         $smokingIsAllowed = 0;
     }
-    if (isset($_POST['authorizedParty']) && $_POST['authorizedParty'] == 1) {
+    if (isset($_POST['authorizedParty'])) {
         $authorizedParty = $_POST['authorizedParty'];
     } else {
         $authorizedParty = 0;
     }
-    if (isset($_POST['authorizedVisit']) && $_POST['authorizedVisit'] == 1) {
+    if (isset($_POST['authorizedVisit'])) {
         $authorizedVisit = $_POST['authorizedVisit'];
     } else {
         $authorizedVisit = 0;
@@ -592,10 +583,10 @@ function saveNewOrModifyAdvertisement()
     if (isset($_POST['idealRoommateSituation'])) {
         $idealRoommateSituation = $_POST['idealRoommateSituation'];
     }
-    if (isset($_POST['idealRoommateMinAge']) && strlen($_POST['idealRoommateMinAge']) < 3) {
+    if (isset($_POST['idealRoommateMinAge'])) {
         $idealRoommateMinAge = $_POST['idealRoommateMinAge'];
     }
-    if (isset($_POST['idealRoommateMaxAge']) && strlen($_POST['idealRoommateMaxAge']) < 3) {
+    if (isset($_POST['idealRoommateMaxAge'])) {
         $idealRoommateMaxAge = $_POST['idealRoommateMaxAge'];
     }
     if (isset($_POST['locationMinDuration'])) {
@@ -614,7 +605,7 @@ function saveNewOrModifyAdvertisement()
             $contactNameForVisit = $_POST['contactNameForVisit'];
         }
     } else {
-        $fillingError['contactNameForVisit'] = $errorEmptyField;
+        $fillingError['contactNameForVisit'] = 'Veuillez renseigner ce champ';
     }
     //contactPhoneNumberForVisit
     if (isset($_POST['contactPhoneNumberForVisit']) && !empty($_POST['contactPhoneNumberForVisit'])) {
@@ -624,38 +615,36 @@ function saveNewOrModifyAdvertisement()
             $contactPhoneNumberForVisit = $_POST['contactPhoneNumberForVisit'];
         }
     } else {
-        $fillingError['contactPhoneNumberForVisit'] = $errorEmptyField;
+        $fillingError['contactPhoneNumberForVisit'] = 'Veuillez renseigner ce champ';
     }
     //contactMailForVisit
     if (isset($_POST['contactMailForVisit']) && !empty($_POST['contactMailForVisit'])) {
         if (strlen($_POST['contactMailForVisit']) > 255) {
-            $fillingError['contactMailForVisit'] = '255 caractères maximum';
+            $fillingError['contactMailForVisit'] = '255 caractères maximum.';
         } else {
             if (filter_var($_POST['contactMailForVisit'], FILTER_VALIDATE_EMAIL)) {
                 $contactMailForVisit = $_POST['contactMailForVisit'];
             } else {
-                $fillingError['contactMailForVisit'] = 'L\'adresse mail est incomplète';
+                $fillingError['contactMailForVisit'] = 'L\'adresse mail est incomplète.';
             }
         }
     } else {
-        $fillingError['contactMailForVisit'] = $errorEmptyField;
+        $fillingError['contactMailForVisit'] = 'Veuillez renseigner ce champ.';
     }
     //Contrôle nombre de photos
+    //On récupère le nombre de photos en bdd
     $nbOfpictures = 0;
     if ($advertisementIdToModify) {
-        //On récupère le nombre de photos en bdd
         $pictureInBddArray = getAdvertisementPictures($advertisementIdToModify);
         $numberOfPictureInBdd = count($pictureInBddArray);
         $nbOfpictures+=$numberOfPictureInBdd;
-
         if (isset($_POST['pictureToDelete'])) {
             $numberPictureToDelete = count($_POST['pictureToDelete']);
             $nbOfpictures-=$numberPictureToDelete;
         }
-        if (isset($_FILES) && !empty($_FILES['file']['name'][0])) {
+        if (isset($_FILES)) {
             $numberNewPictures = count($_FILES['file']['name']);
             $nbOfpictures+=$numberNewPictures;
-
         }
     } else {
         if (isset($_FILES)) {
@@ -665,8 +654,6 @@ function saveNewOrModifyAdvertisement()
     }
     if ($nbOfpictures>10) {
         $fillingError['file'] = "Votre annonce peut contenir 10 photos maximum.";
-    } else if ($nbOfpictures < 1){
-        $fillingError['file'] = "Votre annonce doit contenir au moins une photo.";
     }
     //Résultat des contrôles
     if (!empty($fillingError)) {
@@ -674,46 +661,35 @@ function saveNewOrModifyAdvertisement()
             header('Location:index.php?page=displayAddAnAdvertisement&error=pbTechnique');
             exit;
         }
+        $_SESSION['fillingError'] = $fillingError;
+        $_SESSION['postData'] = $_POST;
         if ($advertisementIdToModify) {
-            $postData = $_POST;
-            $advertisementPicture = getAdvertisementPictures($advertisementIdToModify);
-            $picturePath = "public/pictures/users/";
-            if($_SESSION['isAdmin']){
-                require_once('view/backEnd/v_advertisementModifyFormAdmin.php');
-            }else{
-                require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
-            }
+            header('Location:index.php?page=modifyAdvertisement&advertisementId='.$advertisementIdToModify);
         } else {
-            require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
+            header('Location:index.php?page=displayAddAnAdvertisement&error=fillingError');
         }
         exit;
+    } else {
+        if (isset($_SESSION['fillingError'])) {
+            unset($_SESSION['fillingError']);
+        }
+        if (isset($_SESSION['postData'])) {
+            unset($_SESSION['postData']);
+        }
     }
-    //Verification Titre identiques si nouvelle annonce ou modification par un admin
+    //Verification Titre identiques
     //On récupère tous les titres et id des annonces isRegister=1 de l'utilisateur
-    if(($advertisementIdToModify && $_SESSION['isAdmin']) || !$advertisementIdToModify){
+    if (!$advertisementIdToModify){
         $titleVerification = getUserAdvertisementTitleRegister($userId);
         foreach ($titleVerification as $key => $value) {
             if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)) {
-                $fillingError['title'] = "Vous avez déja utilisé ce titre dans une autre annonce.";
-                $postData = $_POST;
-                if ($advertisementIdToModify) {
-                    if ($titleVerification[$key]['advertisement_id'] != $advertisementIdToModify) {
-                        $advertisementPicture = getAdvertisementPictures($advertisementIdToModify);
-                        $picturePath = "public/pictures/users/";
-                        if($_SESSION['isAdmin']){
-                            require_once('view/backEnd/v_advertisementModifyFormAdmin.php');
-                        }else{
-                            require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
-                        }
-                        exit;
-                    }
-                } else {
-                    require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
+                    $_SESSION['postData'] = $_POST;
+                    header('Location:index.php?page=displayAddAnAdvertisement&error=title');
                     exit;
-                }
             }
         }
     }
+   
     //Réorganisation du tableau $_FILES
     $filesArray = reArrayFiles($_FILES);
     //On verifie s'il y a des photos dans le tableau $filesArray
@@ -737,12 +713,15 @@ function saveNewOrModifyAdvertisement()
             ];
         //Création Tableau pour stocker nom des photos uploadées
         $fileUpload = array();
+
         //Boucle upload photos
         for ($i = 0 ; $i < count($filesArray) ; $i++) {
             $namePictureTmp = $filesArray[$i]['tmp_name'];
             $namePicture = $filesArray[$i]['name'];
+        
             //Création Tableau pour stocker les erreurs
             $errors = array();
+        
             //Vérification si un fichier a bien été téléchargé
             if ($filesArray[$i]['error'] != 0) {
                 $errors['upload_err'] = $array_upload_err[$filesArray[$i]['error']];
@@ -774,12 +753,20 @@ function saveNewOrModifyAdvertisement()
                     }
                 }
                 if (empty($errors)) {
+                    //On supprime les $_SESSIONS si existantes
+                    if (isset($_SESSION['error'])) {
+                        unset($_SESSION['error']);
+                    }
+                    if (isset($_SESSION['postData'])) {
+                        unset($_SESSION['postData']);
+                    }
                     //On génère un nom unique pour la photo
                     $namePicture = uniqid().'.'.$fileExtension;
                     //Calcul pourcentage qualité à appliquer
                     $quality=floor((1000000*100)/$filesArray[$i]['size']);
                     //Récupère la taille de la photo
                     $pictureSize = $filesArray[$i]['size'];
+        
                     //On enregistre la photo dans le dossier
                     if (move_uploaded_file($namePictureTmp, UPLOAD_REP_PHOTO . $namePicture)) {
                         //On compresse si taille plus de 1mo
@@ -804,20 +791,19 @@ function saveNewOrModifyAdvertisement()
                         //Enregistrement nom de la photo dans tableau pour ensuite enregistrer en bdd
                         $fileUpload[$i] = $namePicture;
                     } else {
-                        $error['moveUpload'] = 'Echec de l\'upload !';
-                        $postData = $_POST;
-                        require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
-                        exit;
+                        $_SESSION['fileUploadEchec'] = 'Echec de l\'upload !';
                     }
                 } else {
-                    $postData = $_POST;
-                    require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
+                    $_SESSION['postData'] = $_POST;
+                    $_SESSION['error'] = array();
+                    array_push($_SESSION['error'], $errors);
+                    header("Location: index.php?page=displayAddAnAdvertisement&error=fillingError");
                     exit;
                 }
             }
         }
     }
-    //ENREGISTREMENT EN BASE DE DONNEES
+    //ENREGISTREMENT EN BASE DE DONNEE
     //AJOUT NOUVELLE ADRESSE
     if ($advertisementIdToModify) {
         //On récupère l'id de l'adresse à modifier
@@ -825,22 +811,14 @@ function saveNewOrModifyAdvertisement()
         modifyAddress($addressIdToModify, $addressStreet, $addressZipcode, $addressCity, $addressCountry);
     } else {
         $addressId = insertNewAdress($addressStreet, $addressZipcode, $addressCity, $addressCountry);
+        echo $addressId;
     }
     //AJOUT OU MODIFICATION ANNONCE
     if ($advertisementIdToModify) {
-        if($_SESSION['isAdmin']){
-            require_once('model/backEnd/m_modifyAdvertisement.php');
-            if (saveModifyAdvertisementInBddAdmin($isActive, $availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $otherRoommateSex, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressIdToModify, $advertisementIdToModify)) {
-                $saveAdvertisement = true;
-            } else {
-                $saveAdvertisement = false;
-            }
-        }else{
-            if (saveModifyAdvertisementInBdd($isActive, $availableDate, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $otherRoommateSex, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressIdToModify, $advertisementIdToModify)) {
-                $saveAdvertisement = true;
-            } else {
-                $saveAdvertisement = false;
-            }
+        if (saveModifyAdvertisementInBdd($isActive, $availableDate, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $otherRoommateSex, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressIdToModify, $advertisementIdToModify)) {
+            $saveAdvertisement = true;
+        } else {
+            $saveAdvertisement = false;
         }
     } else {
         if (insertNewAdvertisement($availableDate, $title, $description, $type, $category, $energyClassLetter, $energyClassNumber, $gesLetter, $gesNumber, $accomodationLivingAreaSize, $accomodationFloor, $buildingNbOfFloors, $accomodationNbOfRooms, $accomodationNbOfBedrooms, $accomodationNbOfBathrooms, $nbOfBedroomsToRent, $monthlyRentExcludingCharges, $charges, $suretyBond, $financialRequirements, $guarantorLiving, $solvencyRatio, $eligibleForAids, $chargesIncludeCoOwnershipCharges, $chargesIncludeElectricity, $chargesIncludeHotWater, $chargesIncludeHeating, $chargesIncludeInternet, $chargesIncludeHomeInsurance, $chargesIncludeBoilerInspection, $chargesIncludeHouseholdGarbageTaxes, $chargesIncludeCleaningService, $isFurnished, $kitchenUse, $livingRoomUse, $bedroomSize, $bedroomType, $bedType, $bedroomHasDesk, $bedroomHasWardrobe, $bedroomHasChair, $bedroomHasTv, $bedroomHasArmchair, $bedroomHasCoffeeTable, $bedroomHasBedside, $bedroomHasLamp, $bedroomHasCloset, $bedroomHasShelf, $handicapedAccessibility, $accomodationHasElevator, $accomodationHasCommonParkingLot, $accomodationHasPrivateParkingPlace, $accomodationHasGarden, $accomodationHasBalcony, $accomodationHasTerrace, $accomodationHasSwimmingPool, $accomodationHasTv, $accomodationHasInternet, $accomodationHasWifi, $accomodationHasFiberOpticInternet, $accomodationHasNetflix, $accomodationHasDoubleGlazing, $accomodationHasAirConditioning, $accomodationHasElectricHeating, $accomodationHasIndividualGasHeating, $accomodationHasCollectiveGasHeating, $accomodationHasHotWaterTank, $accomodationHasGasWaterHeater, $accomodationHasFridge, $accomodationHasFreezer, $accomodationHasOven, $accomodationHasBakingTray, $accomodationHasWashingMachine, $accomodationHasDishwasher, $accomodationHasMicrowaveOven, $accomodationHasCoffeeMachine, $accomodationHasPodCoffeeMachine, $accomodationHasKettle, $accomodationHasToaster, $accomodationHasExtractorHood, $animalsAllowed, $smokingIsAllowed, $authorizedParty, $authorizedVisit, $nbOfOtherRoommatePresent, $otherRoommateSex, $renterSituation, $idealRoommateSex, $idealRoommateSituation, $idealRoommateMinAge, $idealRoommateMaxAge, $locationMinDuration, $rentWithoutVisit, $contactNameForVisit, $contactPhoneNumberForVisit, $contactMailForVisit, $addressId, $_SESSION['id'])) {
@@ -883,33 +861,6 @@ function saveNewOrModifyAdvertisement()
                     }
                 } else {
                     $message = 'Votre nouvelle annonce a bien été ajoutée';
-                    // On récupère l'adresse mail de l'utilisateur
-                    $userInfos = getUserById($userId);
-                    $userMail = $userInfos['user_mail'];
-                    $dayMonth = calculAccountCreationDateDayMonth($userInfos['user_accountCreationDate']);
-                    if($userInfos['user_passwordSiteWeb']){
-                        $userPassword = $userInfos['user_passwordSiteWeb'];
-                    }else{
-                        $userPassword = 'Coloc'.$userInfos['user_id'].$dayMonth;
-                    }
-                    //Création message à envoyer par mail
-                    $to = $userMail;
-                    $subject = "Asdelacoloc - Votre dépôt d'annonce";
-                    $body = 'Bonjour,'."\r\n".'';
-                    $body.= 'Votre annonce va se diffuser sur tous les sites pour lesquels votre compte a pu être créé.'."\r\n"."\r\n".'';
-                    $body.= 'D\'ici 48h environ, pour consulter vos messages sur chaques sites, merci de vous connecter avec les identifiants ci-dessous :'."\r\n".'';
-                    $body.= 'Identifiant : '.$userMail.''."\r\n".'';
-                    $body.= 'Mot de passe : '.$userPassword.''."\r\n"."\r\n".'';
-                    $body.= 'Veuillez ne jamais modifier votre titre sur les sites où l\'annonce est diffusée.'."\r\n".'';
-                    $body.= 'Si vous devez effectuer une modification de vos descriptions, veuillez le faire sur le site app.asdelacoloc.fr'."\r\n"."\r\n".'';
-                    $body.= 'Merci.'."\r\n".'';
-                    $body.= 'A bientôt'."\r\n"."\r\n".'';
-                    $body.= 'Aurélien'."\r\n".'';
-                    $body.= 'Asdelacoloc.fr';
-                    $headers[] = 'From: Asdelacoloc <no-reply@asdelacoloc.fr>'."\r\n".
-                    'Reply-To: no-reply@asdelacoloc.fr'."\r\n";
-                    //Envoi du mail à l'utilisateur
-                    mail($to, utf8_decode($subject), utf8_decode($body), implode("\r\n", $headers));
                 }
             } else {
                 $error ='Aucune annonce ne correspond pour vos photos!';
@@ -923,31 +874,6 @@ function saveNewOrModifyAdvertisement()
                 }
             } else {
                 $message = 'Votre nouvelle annonce a bien été ajoutée';
-                // On récupère l'adresse mail de l'utilisateur
-                $userInfos = getUserById($userId);
-                $userMail = $userInfos['user_mail'];
-                $dayMonth = calculAccountCreationDateDayMonth($userInfos['user_accountCreationDate']);
-                if($userInfos['user_passwordSiteWeb']){
-                    $userPassword = $userInfos['user_passwordSiteWeb'];
-                }else{
-                    $userPassword = 'Coloc'.$userInfos['user_id'].$dayMonth;
-                }
-                //Création message à envoyer par mail
-                $to = $userMail;
-                $subject = "Asdelacoloc - Votre dépôt d'annonce";
-                $body = 'Bonjour,'."\r\n".'';
-                $body.= 'Votre annonce va se diffuser sur tous les sites pour lesquels votre compte a pu être créé.'."\r\n"."\r\n".'';
-                $body.= 'D\'ici 48h environ, pour consulter vos messages sur chaques sites, merci de vous connecter avec les identifiants ci-dessous :'."\r\n".'';
-                $body.= 'Identifiant : '.$userMail.''."\r\n".'';
-                $body.= 'Mot de passe : '.$userPassword.''."\r\n"."\r\n".'';
-                $body.= 'Merci.'."\r\n".'';
-                $body.= 'A bientôt'."\r\n"."\r\n".'';
-                $body.= 'Aurélien'."\r\n".'';
-                $body.= 'Asdelacoloc.fr';
-                $headers[] = 'From: Asdelacoloc <no-reply@asdelacoloc.fr>'."\r\n".
-                'Reply-To: no-reply@asdelacoloc.fr'."\r\n";
-                //Envoi du mail à l'utilisateur
-                mail($to, $subject, $body, implode("\r\n", $headers));
             }
         }
     } else {
@@ -973,6 +899,7 @@ function saveNewOrModifyAdvertisement()
         displayMyAdvertisements();
     }
 }
+
 //Supprime une annonce
 function deleteAdvertisement($advertisementIdToDelete)
 {
