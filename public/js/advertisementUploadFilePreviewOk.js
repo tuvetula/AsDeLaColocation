@@ -4,18 +4,18 @@ function handleFiles(files, id) {
     let countNbOfFiles = 0;
     countNbOfFiles += inputDiv.children[0].files.length;
     //Calcul nombre de photos déja présente et non-cochées
-    if (document.getElementsByName('pictureToDelete[]')) {
-        let inputDivDeletePictures = document.getElementsByName('pictureToDelete[]');
-        let countNbOfFilesPresentPictures = 0;
-        if (inputDivDeletePictures != null) {
-            let nbchildrenDivDeletePictures = inputDivDeletePictures.length;
-            for (let y = 0; y < nbchildrenDivDeletePictures; y++) {
-                if (!inputDivDeletePictures[y].hasAttribute('checked')) {
-                    countNbOfFilesPresentPictures++;
-                }
+    let inputDivDeletePictures = null;
+    let countNbOfFilesPresentPictures = 0;
+    if (document.getElementsByName('pictureToDelete[]').length > 0) {
+        inputDivDeletePictures = document.getElementsByName('pictureToDelete[]');
+        let nbchildrenDivDeletePictures = inputDivDeletePictures.length;
+        for (let y = 0; y < nbchildrenDivDeletePictures; y++) {
+            if (!inputDivDeletePictures[y].hasAttribute('checked')) {
+                countNbOfFilesPresentPictures++;
             }
-            countNbOfFiles += countNbOfFilesPresentPictures;
         }
+        countNbOfFiles += countNbOfFilesPresentPictures;
+
     }
 
     let input = document.getElementById(id);
