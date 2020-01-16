@@ -4,29 +4,24 @@ ob_start();
 ?>
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron px-1 px-md-3">
-        <h1 class="pb-3 text-center">
-            <?php if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId) {
-                echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';
-            } else {
-                echo 'Modifier votre annonce'; }?>
-        </h1>
+        <h1 class="pb-3 text-center">Modifier votre annonce</h1>
         <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data"
             onsubmit="spinnerSubmitButton()">
             <!-- ----------Annonce---------- -->
             <div class="container py-3 px-0 px-md-3 border-bottom border-dark">
                 <?php if (isset($fillingError)) { ?>
                 <p class="text-danger font-weight-bold pb-1" type="error">Veuillez corriger les erreurs</p> <?php } ?>
-                <input type="hidden" name="id" value="<?php if(isset($postData['id'])){
-                        echo $postData['id'];
-                    }else{
-                        echo $advertisementData[0]['advertisement_id'];
-                    }?>">
+                <input type="hidden" name="id" value="<?php if(isset($advertisementData[0]['advertisement_id'])){
+                    echo $advertisementData[0]['advertisement_id'];
+                }else if (isset($postData['id'])){
+                    echo $postData['id'];
+                }?>">
                 <!-- IsActive, Titre, Description -->
                 <div class="container">
                     <!--Titre-->
-                    <h3 class="font-weight-bold text-center pb-3">"<?php if(isset($postData)){
-                        echo $postData['title'];
-                    }else{
+                    <h3 class="font-weight-bold text-center pb-3">"<?php if(isset($titleData)){
+                        echo $titleData['advertisement_title'];
+                    }else if(isset($advertisementData[0]['advertisement_title'])){
                         echo $advertisementData[0]['advertisement_title'];
                     }?>"
                     </h3>
@@ -36,8 +31,8 @@ ob_start();
                             echo 'checked'; }?>>
                         <label class="custom-control-label font-weight-bold" for="isActive">Activation annonce</label>
                     </div>
-                     <!--Description-->
-                     <div class="form-group pb-3">
+                    <!--Description-->
+                    <div class="form-group pb-3">
                         <label class="font-weight-bold" for="description">Description</label>
                         <textarea class="form-control" id="description" rows="6" name="description"
                             placeholder="maximum 2000 charactères" maxlength="2000" required><?php if(isset($postData['description'])){
@@ -1087,11 +1082,8 @@ ob_start();
                         <div id="zipcodeDiv" class="form-group col-md-2">
                             <label for="zipcode" class="font-weight-bold">Code postal</label>
                             <input id="zipcode" type="text" name="zipcode" title="Code postal" class="form-control"
-                                placeholder="Code postal" value="
-                                <?php if(isset($advertisementData[0]['address_zipcode'])){echo $advertisementData[0]['address_zipcode'];
-                                }else if (isset($postData['zipcode'])){
-                                    echo $postData['zipcode'];
-                                }?>" maxlength="20">
+                                placeholder="Code postal" value="<?php if(isset($advertisementData[0]['address_zipcode'])){echo $advertisementData[0]['address_zipcode'];
+                                } else if (isset($postData['zipcode'])){echo $postData['zipcode'];}?>" maxlength="20">
                             <?php
                                 if (isset($fillingError['zipcode'])) {?>
                             <p class="text-danger font-weight-bold pb-1" type="error"><?php
@@ -1102,8 +1094,7 @@ ob_start();
                         <div id="cityDiv" class="form-group col-md-6">
                             <label for="city" class="font-weight-bold">Ville</label>
                             <input id="city" type="text" name="city" title="Ville" class="form-control"
-                                placeholder="Ville" value="
-                                <?php if(isset($advertisementData[0]['address_city'])){echo $advertisementData[0]['address_city'];
+                                placeholder="Ville" value="<?php if(isset($advertisementData[0]['address_city'])){echo $advertisementData[0]['address_city'];
                                 }else if (isset($postData['city'])){echo $postData['city'];}?>" maxlength="60">
                             <?php
                                 if (isset($fillingError['city'])) {?>
@@ -1115,8 +1106,7 @@ ob_start();
                         <div id="countryDiv" class="form-group col-md-4">
                             <label for="country" class="font-weight-bold">Pays</label>
                             <input id="country" type="text" name="country" title="Pays" class="form-control"
-                                placeholder="Pays" value="
-                                <?php if(isset($advertisementData[0]['address_country'])){echo $advertisementData[0]['address_country'];
+                                placeholder="Pays" value="<?php if(isset($advertisementData[0]['address_country'])){echo $advertisementData[0]['address_country'];
                                 }else if (isset($postData['country'])){
                                     echo $postData['country'];}?>" maxlength="60">
                             <?php
@@ -1986,8 +1976,8 @@ ob_start();
                             <div id="bedroomSizeDiv" class="input-group">
                                 <input id="bedroomSize" type="number" min="1" name="bedroomSize" class="form-control"
                                     placeholder="0" aria-describedby="basic-addon2" value="<?php if (isset($advertisementData[0]['advertisement_bedroomSize'])){echo $advertisementData[0]['advertisement_bedroomSize'];}
-                                    else if (isset($postData['advertisement_bedroomSize'])){
-                                        echo $postData['advertisement_bedroomSize'];
+                                    else if (isset($postData['bedroomSize'])){
+                                        echo $postData['bedroomSize'];
                                     }?>" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="basic-addon2">m²</span>
