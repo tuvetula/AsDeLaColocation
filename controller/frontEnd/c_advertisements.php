@@ -148,7 +148,19 @@ function saveNewOrModifyAdvertisement()
             if (strlen($_POST['title'])>80) {
                 $fillingError['title'] = '80 caractères maximum';
             } else {
-                $title = $_POST['title'];
+                //Verification Titre identiques si nouvelle annonce ou modification par un admin
+                //On récupère tous les titres et id des annonces isRegister=1 de l'utilisateur
+                if(($advertisementIdToModify && $_SESSION['isAdmin']) || !$advertisementIdToModify){
+                    $titleVerification = getUserAdvertisementTitleRegister($userId);
+                    foreach ($titleVerification as $key => $value) {
+                        if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($_POST['title'])) {
+                            $fillingError['title'] = "Vous avez déja utilisé ce titre dans une autre annonce.";
+                        }
+                    }
+                    if(!isset($fillingError['title'])){
+                        $title = $_POST['title'];
+                    }
+                }
             }
         } else {
             $fillingError['title'] = $errorEmptyField;
@@ -679,40 +691,18 @@ function saveNewOrModifyAdvertisement()
             $advertisementPicture = getAdvertisementPictures($advertisementIdToModify);
             $picturePath = "public/pictures/users/";
             if($_SESSION['isAdmin']){
+                if ($userId != $_SESSION['id']){
+                    $userData = getUserById($userId);
+                }
                 require_once('view/backEnd/v_advertisementModifyFormAdmin.php');
             }else{
+                $titleData = getTitleFromAdvertisement($advertisementIdToModify);
                 require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
             }
         } else {
             require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
         }
         exit;
-    }
-    //Verification Titre identiques si nouvelle annonce ou modification par un admin
-    //On récupère tous les titres et id des annonces isRegister=1 de l'utilisateur
-    if(($advertisementIdToModify && $_SESSION['isAdmin']) || !$advertisementIdToModify){
-        $titleVerification = getUserAdvertisementTitleRegister($userId);
-        foreach ($titleVerification as $key => $value) {
-            if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($title)) {
-                $fillingError['title'] = "Vous avez déja utilisé ce titre dans une autre annonce.";
-                $postData = $_POST;
-                if ($advertisementIdToModify) {
-                    if ($titleVerification[$key]['advertisement_id'] != $advertisementIdToModify) {
-                        $advertisementPicture = getAdvertisementPictures($advertisementIdToModify);
-                        $picturePath = "public/pictures/users/";
-                        if($_SESSION['isAdmin']){
-                            require_once('view/backEnd/v_advertisementModifyFormAdmin.php');
-                        }else{
-                            require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
-                        }
-                        exit;
-                    }
-                } else {
-                    require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
-                    exit;
-                }
-            }
-        }
     }
     //Réorganisation du tableau $_FILES
     $filesArray = reArrayFiles($_FILES);

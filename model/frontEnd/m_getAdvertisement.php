@@ -20,6 +20,18 @@ function getLastAdvertisementId($userId){
     $request->closeCursor();
     return $lastAdvertisementId;
 }
+//Récupère le titre d'une annonce (affichage page modifier annonce utilisateur non admin)
+function getTitleFromAdvertisement($advertisementId){
+    $db = connectBdd();
+    $request = $db->prepare('SELECT advertisement_title
+    FROM advertisements
+    WHERE advertisement_id=:advertisementId');
+    $request->execute([
+        ':advertisementId'=>$advertisementId
+    ]);
+    $advertisementTitle = $request->fetch(PDO::FETCH_ASSOC);
+    return $advertisementTitle;
+}
 //Récupere tous les titres des annonces isRegister=1 d'un utilisateur
 function getUserAdvertisementTitleRegister($userId){
     $db = connectBdd();
