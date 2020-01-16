@@ -151,7 +151,11 @@ function saveNewOrModifyAdvertisement()
                 //Verification Titre identiques si nouvelle annonce ou modification par un admin
                 //On récupère tous les titres et id des annonces isRegister=1 de l'utilisateur
                 if(($advertisementIdToModify && $_SESSION['isAdmin']) || !$advertisementIdToModify){
-                    $titleVerification = getUserAdvertisementTitleRegister($userId);
+                    if($advertisementIdToModify){
+                        $titleVerification = getUserAdvertisementTitleRegister($userId,$advertisementIdToModify);
+                    }else{
+                        $titleVerification = getUserAdvertisementTitleRegister($userId);
+                    }
                     foreach ($titleVerification as $key => $value) {
                         if (strtolower($titleVerification[$key]['advertisement_title']) == strtolower($_POST['title'])) {
                             $fillingError['title'] = "Vous avez déja utilisé ce titre dans une autre annonce.";
@@ -700,6 +704,7 @@ function saveNewOrModifyAdvertisement()
                 require_once('view/frontEndUserConnected/v_advertisementModifyForm.php');
             }
         } else {
+            $postData = $_POST;
             require_once('view/frontEndUserConnected/v_advertisementAddForm.php');
         }
         exit;
