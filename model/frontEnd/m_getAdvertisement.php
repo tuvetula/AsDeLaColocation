@@ -32,12 +32,18 @@ function getTitleFromAdvertisement($advertisementId){
     $advertisementTitle = $request->fetch(PDO::FETCH_ASSOC);
     return $advertisementTitle;
 }
-//Récupere tous les titres des annonces isRegister=1 d'un utilisateur
-function getUserAdvertisementTitleRegister($userId){
+//Récupere tous les titres des annonces isRegister=1 d'un utilisateur sauf celui de l'annonce à modifier si modification
+function getUserAdvertisementTitleRegister($userId,$advertisementIdToModify=null){
     $db = connectBdd();
-    $request = $db->query('SELECT a.advertisement_id,a.advertisement_title 
-    FROM advertisements AS a
-    WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1"');
+    if($advertisementIdToModify){
+        $request = $db->query('SELECT a.advertisement_id,a.advertisement_title 
+        FROM advertisements AS a 
+        WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1" && advertisement_id!='.$advertisementIdToModify.'');
+    }else{
+        $request = $db->query('SELECT a.advertisement_id,a.advertisement_title 
+        FROM advertisements AS a 
+        WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1"');
+    }
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
     return $userAdvertisements;
 }
