@@ -5,7 +5,9 @@ ob_start();
 <div class="screen container px-1 px-md-3">
     <div class="jumbotron px-1 px-md-3">
         <h1 class="pb-3 text-center">
-            <?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId){echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';}else{echo 'Modifier votre annonce';}?>
+            <?php if(isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] && $_SESSION['id']!=$userId){if (isset($userData)){
+                echo 'Modifier l\'annonce de '.$userData['user_name'].' '.$userData['user_firstName'].'';
+            }else{echo 'Modifier l\'annonce de '.$advertisementData[0]['user_name'].' '.$advertisementData[0]['user_firstName'].'';}}else{echo 'Modifier votre annonce';}?>
         </h1>
         <form method="post" action="index.php?page=saveModificationAdvertisement" enctype="multipart/form-data"
             onsubmit="spinnerSubmitButton()">
@@ -14,12 +16,12 @@ ob_start();
                 <?php if (isset($fillingError)){ ?>
                 <p class="text-danger font-weight-bold pb-1">Veuillez corriger les erreurs</p> <?php } ?>
                 <h2>Annonce</h2>
-                <!-- IsActive, Titre, Description -->
                 <input type="hidden" name="id" value="<?php if(isset($advertisementData[0]['advertisement_id'])){
                     echo $advertisementData[0]['advertisement_id'];
                 }else if (isset($postData['id'])){
                     echo $postData['id'];
                 }?>">
+                <!-- IsActive, Titre, Description -->
                 <div class="container">
                     <!-- isActive -->
                     <div class=" custom-control custom-checkbox pb-3">
