@@ -1,4 +1,4 @@
-/model/bdd/bddConfig.php
+/model/bdd/config.php
 /public/pictures/
 /private/
 *.htaccess
