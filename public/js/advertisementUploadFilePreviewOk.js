@@ -1,15 +1,13 @@
 function handleFiles(files, id) {
     //Calcul nombre de nouvelles photos selectionnées
     let inputDiv = document.getElementById('inputDiv');
-    let nbchildrenDivInput = inputDiv.children.length;
     let countNbOfFiles = 0;
-    for (let z = 0; z < nbchildrenDivInput; z++) {
-        countNbOfFiles += inputDiv.children[z].files.length;
-    }
+    countNbOfFiles += inputDiv.children[0].files.length;
     //Calcul nombre de photos déja présente et non-cochées
-    let inputDivDeletePictures = document.getElementsByName('pictureToDelete[]');
+    let inputDivDeletePictures = null;
     let countNbOfFilesPresentPictures = 0;
-    if (inputDivDeletePictures != null) {
+    if (document.getElementsByName('pictureToDelete[]').length > 0) {
+        inputDivDeletePictures = document.getElementsByName('pictureToDelete[]');
         let nbchildrenDivDeletePictures = inputDivDeletePictures.length;
         for (let y = 0; y < nbchildrenDivDeletePictures; y++) {
             if (!inputDivDeletePictures[y].hasAttribute('checked')) {
@@ -17,6 +15,7 @@ function handleFiles(files, id) {
             }
         }
         countNbOfFiles += countNbOfFilesPresentPictures;
+
     }
 
     let input = document.getElementById(id);
@@ -34,8 +33,8 @@ function handleFiles(files, id) {
 
                 let imgDiv = document.createElement("div");
                 imgDiv.classList.add("imageAddPreview");
-                imgDiv.classList.add("col-sm-6");
-                imgDiv.classList.add("col-md-4");
+                imgDiv.classList.add("col-md-6");
+                imgDiv.classList.add("col-lg-4");
                 imgDiv.classList.add("p-0");
                 preview.appendChild(imgDiv);
 

@@ -20,12 +20,30 @@ function getLastAdvertisementId($userId){
     $request->closeCursor();
     return $lastAdvertisementId;
 }
-//Récupere tous les titres des annonces isRegister=1 d'un utilisateur
-function getUserAdvertisementTitleRegister($userId){
+//Récupère le titre d'une annonce (affichage page modifier annonce utilisateur non admin)
+function getTitleFromAdvertisement($advertisementId){
     $db = connectBdd();
-    $request = $db->query('SELECT a.advertisement_id,a.advertisement_title 
-    FROM advertisements AS a
-    WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1"');
+    $request = $db->prepare('SELECT advertisement_title
+    FROM advertisements
+    WHERE advertisement_id=:advertisementId');
+    $request->execute([
+        ':advertisementId'=>$advertisementId
+    ]);
+    $advertisementTitle = $request->fetch(PDO::FETCH_ASSOC);
+    return $advertisementTitle;
+}
+//Récupere tous les titres des annonces isRegister=1 d'un utilisateur sauf celui de l'annonce à modifier si modification
+function getUserAdvertisementTitleRegister($userId,$advertisementIdToModify=null){
+    $db = connectBdd();
+    if($advertisementIdToModify){
+        $request = $db->query('SELECT a.advertisement_id,a.advertisement_title 
+        FROM advertisements AS a 
+        WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1" && advertisement_id!='.$advertisementIdToModify.'');
+    }else{
+        $request = $db->query('SELECT a.advertisement_id,a.advertisement_title 
+        FROM advertisements AS a 
+        WHERE a.user_id="'.$userId.'" && a.advertisement_isRegister="1"');
+    }
     $userAdvertisements = $request->fetchAll(PDO::FETCH_ASSOC);
     return $userAdvertisements;
 }
