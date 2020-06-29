@@ -1,4 +1,11 @@
 /model/bdd/config.php
+/model/bdd/.htaccess
+/model/backEnd/.htaccess
+/model/frontEnd/.htaccess
+/model/ajax/m_robotsGetAccountToCreate.php
+/model/ajax/m_robotsGetAdvertisements.php
+/model/ajax/m_changeDateAfterDiffusion.php
+/model/ajax/m_saveLogRobots.php
+/model/bdd
 /public/pictures/
 /private/
-*.htaccess
