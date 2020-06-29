@@ -6,6 +6,5 @@
 /model/ajax/m_robotsGetAdvertisements.php
 /model/ajax/m_changeDateAfterDiffusion.php
 /model/ajax/m_saveLogRobots.php
-/model/bdd
 /public/pictures/
 /private/
